@@ -1,0 +1,28 @@
+@charset "UTF-8";
+#header3nav {
+	width: 800px;
+	margin: auto;
+	background-color: #ff4473;
+}
+
+.header3text {
+	font-weight: bolder;
+	font-size: 20px;
+	text-align: center;
+	margin: auto;
+	margin-right: 80px;
+}
+
+.header3white {
+	color: #ffffff;
+}
+
+.header3a {
+	text-decoration: none;
+	color: black;
+	font-weight: bolder;
+}
+
+.header3a:hover {
+	color: #ffffff;
+}

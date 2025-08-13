@@ -1,0 +1,13 @@
+<nav th:fragment="banner" class="navbar" id="banner-container">
+	<div class="container-fluid">
+        <p class="banner-text" id="banner-left">
+            <img alt="왕관" th:src="@{/svg/crown.svg}" class="banner-image">
+            <span th:text="${bannerText1}">이력서 및 자기소개서, 포트폴리오를 첨삭받을 수 있는 게시판 입니다.</span>
+        </p>
+        <p class="banner-text" id="banner-left-float">
+            <span th:text="${bannerText2}">관련 없는 게시글 및 광고성 정보, 욕설이 포함된 게시글은 예고 없이 삭제될 수 있습니다.</span> 
+            <br /> <br /> <br /> 
+            <span th:text="${bannerText3}">첨삭 시 반드시 매너를 지켜주세요!</span>
+        </p>
+    </div>
+</nav>
