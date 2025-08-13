@@ -1,0 +1,35 @@
+body {
+	margin: 0;
+	font-family: Arial, sans-serif;
+}
+
+.navbar {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: white;
+	padding: 0.5rem 1rem;
+	border: solid #ff4473;
+	border-width: 0 0 3px;
+}
+
+.nav-links {
+	list-style: none;
+	display: flex;
+	gap: 1rem;
+	margin: 0;
+	padding: 0;
+	left: 50%;
+}
+
+.nav-links a {
+	color: black;
+	text-decoration: none;
+	font-size: 30px;
+	padding: 0.5rem 0.75rem;
+}
+
+.nav-links a:hover {
+	color: #ff4473;
+	border-radius: 4px;
+}

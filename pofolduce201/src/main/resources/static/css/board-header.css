@@ -1,0 +1,8 @@
+h1 {
+ 	margin: 0;
+	line-height: 1; /* 글자 높이에 맞춤 */
+ 	
+	display: inline-block;
+	border-bottom: 3px solid #ff4473; /* 하단만 핑크 밑줄 */
+	white-space: nowrap;
+}
