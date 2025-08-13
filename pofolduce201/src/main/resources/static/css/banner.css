@@ -1,0 +1,25 @@
+@charset "UTF-8";
+
+#banner-container {
+	width: 800px;
+	margin: auto;
+	background-color: #ffeded;
+	 border-radius: 20px;
+}
+
+.banner-text {
+	font-size: 12px;
+	font-weight: 550;
+}
+
+.banner-image{
+	float:left;
+	margin-top:4px;
+	margin-right:10px;
+}
+#banner-left-float{
+	margin-left:36px;
+}
+#banner-left{
+	margin-bottom:1px;
+}

@@ -1,0 +1,27 @@
+@charset "UTF-8";
+
+.footer {
+	background-color: #f9f9f9;
+	color: #333;
+}
+
+.footer-text {
+	margin: 40px 0px 40px 0px;
+}
+
+.footer-text p {
+	font-size: 18px;
+	margin-bottom: 2px;
+	color: #c5c5c5;
+}
+
+.footer-title {
+	color: #333;
+	font-weight: bolder;
+	font-size: 21px;
+}
+
+.footer-small {
+	font-size: 15px;
+	color: #dedede;
+}
