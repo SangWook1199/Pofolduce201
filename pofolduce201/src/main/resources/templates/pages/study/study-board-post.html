@@ -1,10 +1,80 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+<link th:href="@{/css/board-header.css}" rel="stylesheet">
+<title>게시글</title>
+<style type="text/css">
+.main-content {
+	width: 1000px;
+	margin: auto;
+	margin-top: 40px;
+}
+.title-area{
+	border-top: 1px solid black; 
+	border-bottom: 1px solid #DEE2E6;
+	margin-top: 80px;
+	padding-top: 20px;
+	padding-left: 30px;
+	padding-bottom: 15px;
+	margin-bottom:30px;
+}
+.profile{
+	width:45px;
+	height:45px;
+	float:left;
+	margin-right: 10px;
+}
+.title-area p{
+	margin: 0px;
+	font-size:20px;
+}
+.title-area .small{
+	font-size:14px;
+	color: #B4B4B4;
+}
+.profile-right{
+	float:right;
+	width:30px;
+	height:30px;
+}
+.board-title{
+	margin-bottom:30px;
+}
+.content-area{
+	padding-left:30px;
+	border-bottom:1px solid;
+}
+/* 일단 margin-bottom 주는 데 나중에 지도와 좋아요 추가 */
+.board-content{
+	font-size:25px;
+	margin-bottom:200px;
+}
+</style>
 </head>
-<body>
+<!--/* 
+		body tag 는 명시하지 않는다  layout.html 의 content fragment 영역에 삽입될 부분이기 때문 
+ */-->
+<div layout:fragment="content" class="main-content">
+	<div
+		th:replace="fragments/html/board-header :: board-header('스터디 게시판 > 게시글 보기')"></div>
+	<div class="title-area">
+		<h3 th:text="${post.title}" class="board-title">게시글 제목</h3>
+		
+		<img alt="김세정" th:src="@{/svg/sejung.svg}" class="profile">
+		<img alt="김세정" th:src="@{/svg/report-button.svg}" class="profile-right">
+		<p th:text="${post.userId}">김세정</p>
+		<p th:text="${post.postDate}" class="small"></p>
+		
+	</div>
+	<div class = "content-area">
+		<div th:text="${post.postHtml}" class="board-content">content</div>
+	
+	</div>
 
-</body>
+
+
+</div>
+
 </html>

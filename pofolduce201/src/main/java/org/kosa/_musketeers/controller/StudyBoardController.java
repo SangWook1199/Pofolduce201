@@ -55,7 +55,7 @@ public class StudyBoardController {
 	public String studyBoardPost(@PathVariable int studyId, Model model) {
 	    StudyBoard post = studyBoardService.getPostById(studyId);
 	    model.addAttribute("post", post);
-	    return "pages/study/study-board-post"; // 상세 페이지 HTML
+	    return "pages/study/study-board-post";
 	}
 	
 
