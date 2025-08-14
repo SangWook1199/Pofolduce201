@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<!--/*  layout 선언부 추가    */-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+	crossorigin="anonymous">
+<link th:href="@{/css/header1.css}" rel="stylesheet">
+<link th:href="@{/css/header2.css}" rel="stylesheet">
+<link th:href="@{/css/header3.css}" rel="stylesheet">
+<link th:href="@{/css/footer.css}" rel="stylesheet">
+
+
+
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-8 offset-sm-2" align="right">
+				<!-- fragments 디렉토리 html 파일에 명시한 fragment(조각) 요소를 가지고 와서 사용  
+           		   th:replace="fragments/header" => header란 html 파일명을 말함   
+           		   :: headerFragment ( 요소 id 를 명시 , 여러개 중에 선택이 가능 )
+              -->
+				<div th:replace="fragments/html/header1 :: header1"></div>
+				<div th:replace="fragments/html/header2 :: header2"></div>
+				<div th:replace="fragments/html/header3 :: header3('/')"></div>
+			</div>
+		</div>
+		<!--  메인 컨텐트 화면으로 변경될 부분  -->
+		<div class="row main">
+			<div class="col-sm-8 offset-sm-2">
+				<!--/* 
+		다양한 컨텐츠로 변경되는 부분 : 개발자들이 각각의 main 영역 content를 구성한다
+		*/-->
+				<div layout:fragment="content"></div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-8 offset-sm-2">
+				<!-- fragments 디렉토리 html 파일에 명시한 fragment(조각) 요소를 가지고 와서 사용  
+           		   th:replace="fragments/footer" => footer란 html 파일명을 말함   
+           		   :: footerFragment (요소 id를 명시 , 여러개 중 선택 가능 )
+              -->
+			<div th:replace="fragments/html/footer :: footer"></div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
