@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<head>
+
+<link th:href="@{/css/board-header.css}" rel="stylesheet">
+<link rel="stylesheet" th:href="@{/css/page-css/mypage-menu.css}" />
+<link rel="stylesheet" th:href="@{/css/page-css/mypage-mypost.css}" />
+<title>마이페이지</title>
+</head>
+
+<div layout:fragment="content">
+
+	<div class="mypage-mypost">
+		<div class="mypage-main">
+			<div
+				th:replace="fragments/html/board-header :: board-header('마이페이지')"></div>
+			<div class="mypage-main-side">
+				<div th:replace="fragments/html/mypage-menu :: mypage-menu"></div>
+				<div>
+
+					<div class="mypage-main-container">
+						<h1 id="mypage-title2">내 정보 > 내 게시글 목록</h1>
+
+
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th scope="col">#</th>
+									<th scope="col">First</th>
+									<th scope="col">Last</th>
+									<th scope="col">Handle</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">1</th>
+									<td>Mark</td>
+									<td>Otto</td>
+									<td>@mdo</td>
+								</tr>
+								<tr>
+									<th scope="row">2</th>
+									<td>Jacob</td>
+									<td>Thornton</td>
+									<td>@fat</td>
+								</tr>
+								<tr>
+									<th scope="row">3</th>
+									<td colspan="2">Larry the Bird</td>
+									<td>@twitter</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+
+
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+</html>
