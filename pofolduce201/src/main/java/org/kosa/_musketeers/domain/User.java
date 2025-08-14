@@ -3,187 +3,173 @@ package org.kosa._musketeers.domain;
 import java.time.LocalDateTime;
 
 public class User {
-	private Integer user_id;
+	private int userId;
 	private String email;
 	private String nickname;
 	private String password;
-	private String user_type;
-	private String company_certification;
-	private String company_name;
-	private Integer point;
-	private Integer sanction_count;
-	private String sanction_type;
-	private Integer sanction_period;
+	private String userType;
+	private String companyCertification;
+	private String companyName;
+	private int point;
+	private int sanctionCount;
+	private String sanctionType;
+	private int sanctionPeriod;
 	private LocalDateTime date;
-	private String user_image_location;
-	
-	
+	private String userImageLocation;
+
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	
-
-	public User(Integer user_id, String email, String nickname, String password, String user_type,
-			String company_certification, String company_name, Integer point, Integer sanction_count,
-			String sanction_type, Integer sanction_period, LocalDateTime date, String user_image_location) {
+	public User(int userId, String email, String nickname, String password, String userType,
+			String companyCertification, String companyName, int point, int sanctionCount, String sanctionType,
+			int sanctionPeriod, LocalDateTime date, String userImageLocation) {
 		super();
-		this.user_id = user_id;
+		this.userId = userId;
 		this.email = email;
 		this.nickname = nickname;
 		this.password = password;
-		this.user_type = user_type;
-		this.company_certification = company_certification;
-		this.company_name = company_name;
+		this.userType = userType;
+		this.companyCertification = companyCertification;
+		this.companyName = companyName;
 		this.point = point;
-		this.sanction_count = sanction_count;
-		this.sanction_type = sanction_type;
-		this.sanction_period = sanction_period;
+		this.sanctionCount = sanctionCount;
+		this.sanctionType = sanctionType;
+		this.sanctionPeriod = sanctionPeriod;
 		this.date = date;
-		this.user_image_location = user_image_location;
+		this.userImageLocation = userImageLocation;
 	}
 
-
-
-	public Integer getUser_id() {
-		return user_id;
+	public User(String email, String nickname, String password, String userType, String companyCertification,
+			String companyName, int point, int sanctionCount, String sanctionType, int sanctionPeriod,
+			LocalDateTime date, String userImageLocation) {
+		super();
+		this.email = email;
+		this.nickname = nickname;
+		this.password = password;
+		this.userType = userType;
+		this.companyCertification = companyCertification;
+		this.companyName = companyName;
+		this.point = point;
+		this.sanctionCount = sanctionCount;
+		this.sanctionType = sanctionType;
+		this.sanctionPeriod = sanctionPeriod;
+		this.date = date;
+		this.userImageLocation = userImageLocation;
 	}
 
-
-	public void setUser_id(Integer user_id) {
-		this.user_id = user_id;
+	public int getUserId() {
+		return userId;
 	}
 
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
 
 	public String getEmail() {
 		return email;
 	}
 
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
 
 	public String getNickname() {
 		return nickname;
 	}
 
-
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
-
 
 	public String getPassword() {
 		return password;
 	}
 
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
-
-	public String getUser_type() {
-		return user_type;
+	public String getUserType() {
+		return userType;
 	}
 
-
-	public void setUser_type(String user_type) {
-		this.user_type = user_type;
+	public void setUserType(String userType) {
+		this.userType = userType;
 	}
 
-
-	public String getCompany_certification() {
-		return company_certification;
+	public String getCompanyCertification() {
+		return companyCertification;
 	}
 
-
-	public void setCompany_certification(String company_certification) {
-		this.company_certification = company_certification;
+	public void setCompanyCertification(String companyCertification) {
+		this.companyCertification = companyCertification;
 	}
 
-
-	public String getCompany_name() {
-		return company_name;
+	public String getCompanyName() {
+		return companyName;
 	}
 
-
-	public void setCompany_name(String company_name) {
-		this.company_name = company_name;
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
 
-
-	public Integer getPoint() {
+	public int getPoint() {
 		return point;
 	}
 
-
-	public void setPoint(Integer point) {
+	public void setPoint(int point) {
 		this.point = point;
 	}
 
-
-	public Integer getSanction_count() {
-		return sanction_count;
+	public int getSanctionCount() {
+		return sanctionCount;
 	}
 
-
-	public void setSanction_count(Integer sanction_count) {
-		this.sanction_count = sanction_count;
+	public void setSanctionCount(int sanctionCount) {
+		this.sanctionCount = sanctionCount;
 	}
 
-
-	public String getSanction_type() {
-		return sanction_type;
+	public String getSanctionType() {
+		return sanctionType;
 	}
 
-
-	public void setSanction_type(String sanction_type) {
-		this.sanction_type = sanction_type;
+	public void setSanctionType(String sanctionType) {
+		this.sanctionType = sanctionType;
 	}
 
-
-	public Integer getSanction_period() {
-		return sanction_period;
+	public int getSanctionPeriod() {
+		return sanctionPeriod;
 	}
 
-
-	public void setSanction_period(Integer sanction_period) {
-		this.sanction_period = sanction_period;
+	public void setSanctionPeriod(int sanctionPeriod) {
+		this.sanctionPeriod = sanctionPeriod;
 	}
-
 
 	public LocalDateTime getDate() {
 		return date;
 	}
 
-
 	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 
-
-	public String getUser_image_location() {
-		return user_image_location;
+	public String getUserImageLocation() {
+		return userImageLocation;
 	}
 
-
-	public void setUser_image_location(String user_image_location) {
-		this.user_image_location = user_image_location;
+	public void setUserImageLocation(String userImageLocation) {
+		this.userImageLocation = userImageLocation;
 	}
-
-
 
 	@Override
 	public String toString() {
-		return "User [user_id=" + user_id + ", email=" + email + ", nickname=" + nickname + ", password=" + password
-				+ ", user_type=" + user_type + ", company_certification=" + company_certification + ", company_name="
-				+ company_name + ", point=" + point + ", sanction_count=" + sanction_count + ", sanction_type="
-				+ sanction_type + ", sanction_period=" + sanction_period + ", date=" + date + ", user_image_location="
-				+ user_image_location + "]";
+		return "User [userId=" + userId + ", email=" + email + ", nickname=" + nickname + ", password=" + password
+				+ ", userType=" + userType + ", companyCertification=" + companyCertification + ", companyName="
+				+ companyName + ", point=" + point + ", sanctionCount=" + sanctionCount + ", sanctionType="
+				+ sanctionType + ", sanctionPeriod=" + sanctionPeriod + ", date=" + date + ", userImageLocation="
+				+ userImageLocation + "]";
 	}
-	
+
 }
