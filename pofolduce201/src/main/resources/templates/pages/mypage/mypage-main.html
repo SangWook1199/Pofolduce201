@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<head>
+
+<link th:href="@{/css/board-header.css}" rel="stylesheet">
+<link rel="stylesheet" th:href="@{/css/page-css/mypage-menu.css}" />
+<link rel="stylesheet" th:href="@{/css/page-css/mypage-main.css}" />
+
+<title>마이페이지</title>
+</head>
+
+<div layout:fragment="content">
+	<div class="mypage">
+		<div class="mypage-main">
+			<div
+				th:replace="fragments/html/board-header :: board-header('마이페이지')"></div>
+			<div class="mypage-main-side">
+				<div th:replace="fragments/html/mypage-menu :: mypage-menu"></div>
+				<div>
+
+					<div class="mypage-main-container">
+						<h1 id="mypage-title2">내 정보 ></h1>
+						<div class="box">
+							<div id="person-svg">
+								<img th:src="@{svg/person.svg}" width=130 height=130>
+							</div>
+						</div>
+						<div class="box-left">
+
+							<button type="button" class="btn btn-outline-primary btn-custom">사진
+								수정</button>
+						</div>
+					</div>
+
+					<div class="mypage-main-container">
+
+						<div class="mypage-main-info">
+							<div class="mypage-main-info-box">
+								<h2 id="id-box">닉네임</h2>
+								<h2 id="id-box">이메일</h2>
+								<h2 id="id-box">회사 인증</h2>
+								<h2 id="id-box">등급</h2>
+
+							</div>
+
+
+							<div class="mypage-main-info-box">
+								<input id="input" type="text" placeholder="소상123" disabled>
+								<input id="input" type="text"
+									placeholder="thisisemail@gmail.com" disabled>
+
+								<div id="verify-box">
+									<button type="button"
+										class="btn btn-outline-primary btn-custom2">인증하기</button>
+								</div>
+
+								<input id="input" type="text" placeholder="데뷔조" disabled>
+
+							</div>
+
+						</div>
+						<div class="box-left">
+							<button type="button" class="btn btn-outline-primary btn-custom"
+								id="btn-box">정보 수정</button>
+
+							<button type="button" id="deleteBtn"
+								class="btn btn-outline-primary btn-custom" >회원 탈퇴</button>
+
+							<div
+								th:replace="fragments/html/mypage-modal :: mypage-modal('deleteModal', '정말 탈퇴하시겠습니까?', '확인')"></div>
+
+						</div>
+					</div>
+
+
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+<script th:src="@{/js/mypage.js}"></script>
+
+</html>
