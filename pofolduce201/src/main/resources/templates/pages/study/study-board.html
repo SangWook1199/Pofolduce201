@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<head>
+<script type="text/javascript"
+	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=70c0de37da587509ef9f5d9da9f64303"></script>
+<link th:href="@{/css/board-header.css}" rel="stylesheet">
+<link th:href="@{/css/banner.css}" rel="stylesheet">
+<link th:href="@{/css/story-board.css}" rel="stylesheet">
+
+<title>study-board</title>
+
+</head>
+<!--/* 
+		body tag 는 명시하지 않는다  layout.html 의 content fragment 영역에 삽입될 부분이기 때문 
+ */-->
+<div layout:fragment="content" class="main-content">
+	<div
+		th:replace="fragments/html/board-header :: board-header('스터디 게시판')"></div>
+	<div 
+		th:replace="fragments/html/banner :: banner('이력서 및 자기소개서, 포트폴리오를 첨삭받을 수 있는 게시판 입니다.', '관련 없는 게시글 및 광고성 정보, 욕설이 포함된 게시글은 예고 없이 삭제될 수 있습니다.','첨삭 시 반드시 매너를 지켜주세요!')"></div>
+	
+	<table class="table table-hover">
+	<colgroup>
+	<col class="col-center" style="width: 3%">
+    <col class="col-center" style="width: 10%">
+    <col class="col-center" style="width: 20%">
+    <col class="col-center" style="width: 52%">
+    <col class="col-center" style="width: 15%">
+  </colgroup>
+  <thead>
+    <tr>
+    <th></th>
+      <th scope="col">#</th>
+      <th scope="col">작성자</th>
+      <th scope="col">제목</th>
+      <th scope="col">조회수</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="clickable-row" th:onclick="|window.location='/study/' + [[${first.studyId}]]|">
+    <td><img alt="왕관" th:src="@{/svg/crown.svg}" class="banner-image"></td>
+    <th scope="row">1</th>
+    <td th:text="${first.userId}"></td>
+    <td th:text="${first.title}"></td>
+    <td th:text="${first.viewCount}"></td>
+</tr>
+    <tr>
+    <td><img alt="왕관" th:src="@{/svg/2nd-crown.svg}" class="banner-image"></td>
+      <th scope="row">2</th>
+      <td th:text="${second.userId}">Jacob</td>
+      <td th:text="${second.title}">Thornton</td>
+      <td th:text="${second.viewCount}">@fat</td>
+    </tr>
+    <tr class="line">
+    <td><img alt="왕관" th:src="@{/svg/3rd-crown.svg}" class="banner-image"></td>
+      <th scope="row">3</th>
+      <td th:text="${third.userId}">haha</td>
+      <td th:text="${third.title}">Larry the Bird</td>
+      <td th:text="${third.viewCount}">@twitter</td>
+    </tr>
+
+    <tr th:each="list:${dateList}">
+    <td></td>
+      <td th:text="${listStat.count}">#</td>
+      <td th:text="${list.userId}">작성자</td>
+      <td th:text="${list.title}">제목</td>
+      <td th:text="${list.viewCount}">조회수</td>
+    </tr> 
+  </tbody>
+</table>
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    <!-- 이전 페이지 -->
+    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+      <a class="page-link" th:href="@{/(page=${currentPage - 1})}" tabindex="-1" aria-disabled="true">Previous</a>
+    </li>
+
+    <!-- 페이지 번호 반복 -->
+    <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
+    th:classappend="${i == currentPage} ? 'active'">
+    <a class="page-link" th:href="@{/(page=${i})}" th:text="${i}">1</a>
+</li>
+
+    <!-- 다음 페이지 -->
+    <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+      <a class="page-link" th:href="@{/(page=${currentPage + 1})}">Next</a>
+    </li>
+  </ul>
+</nav>
+</div>
+</html>
