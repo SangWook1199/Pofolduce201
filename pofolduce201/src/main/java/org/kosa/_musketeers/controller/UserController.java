@@ -5,10 +5,10 @@ import org.kosa._musketeers.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -30,20 +30,20 @@ public class UserController {
 	}
 	
 	@PostMapping("/login/processing")
-	public String loginProcessing(@RequestParam String email, @RequestParam String password, HttpServletRequest request, Model model) {
+	public String loginProcessing(@RequestParam String email, @RequestParam String password, HttpServletRequest request,  RedirectAttributes redirectAttributes) {
 		
 		logger.info("email:" + email + " password" + password);
 		User user = userService.login(email, password);
-		String redirectURL = "pages/login/login";
+		String page = "redirect:/login";
 		if(user != null) {
 			HttpSession httpSession = request.getSession();
 			httpSession.setAttribute("userId", user.getUserId());
-			redirectURL = "redirect:/home";
+			page = "redirect:/home";
 		}else {
-			model.addAttribute("loginFailMessage", "아이디 or 비밀번호가 잘못입력되었습니다");
+			redirectAttributes.addFlashAttribute("loginFailMessage", "아이디 or 비밀번호가 잘못입력되었습니다");
 		}
 		
-		return redirectURL;
+		return page;
 	}
 	
 	@GetMapping("/home")

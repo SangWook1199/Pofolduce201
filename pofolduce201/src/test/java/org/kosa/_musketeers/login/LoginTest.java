@@ -2,10 +2,13 @@ package org.kosa._musketeers.login;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import org.junit.jupiter.api.Test;
+import org.kosa._musketeers.domain.User;
 import org.kosa._musketeers.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -24,13 +27,36 @@ public class LoginTest {
 	private UserMapper mapper;
 	
 	@Test
-	public void loginTest() throws Exception {
+	public void loginSuccessTest() throws Exception {
 		
+		//given
+		String email = "user1@example.com";
+		String password = "pass1234";
+		
+		//when
 		mockMvc.perform(post("/login/processing")
-				.param("email", "email")
-				.param("password", "1234")
+				.param("email", email)
+				.param("password", password)
+				
+		//then
 		).andExpect(status().isFound())
 		.andExpect(redirectedUrl("/home"));
+	}
+	
+	@Test
+	public void loginFailTest() throws Exception {
+		String email = "wrongemail";
+		String password = "pass1234";
+		
+		//when
+		mockMvc.perform(post("/login/processing")
+				.param("email", email)
+				.param("password", password)
+				
+		//then
+		).andExpect(status().isOk())
+        .andExpect(view().name("pages/login/login"))
+        .andExpect(model().attributeExists("loginFailMessage"));
 	}
 	
 	@Test
@@ -41,10 +67,11 @@ public class LoginTest {
 		String password = "pass1234";
 		
 		//when
-		int id = mapper.getUserIdByEmailPwd(email, password);
+		User user = mapper.getUserIdByEmailPwd(email, password);
 		
 		//then
-		assertThat(id).isEqualTo(1);
+		assertThat(user).isNotNull();
+		assertThat(user.getUserId()).isEqualTo(1);
 	}
 
 }
