@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<head>
+<title>main1</title>
+</head>
+<!--/* 
+		body tag 는 명시하지 않는다  layout.html 의 content fragment 영역에 삽입될 부분이기 때문 
+ */-->
+<div layout:fragment="content">
+	<div>
+		<form action="/login/processing" method="post">
+			<input type="text" name="email"><br> <input type="password"
+				name="password"><br>
+			<button type="button" id="register">회원가입</button>
+			<button type="submit">로그인</button>
+		</form>
+	</div>
+	<div th:if="${loginFailMessage}" th:inline="javascript">
+		<script>
+        alert([[${loginFailMessage}]]);
+		</script>
+	</div>
+</div>
+</html>
