@@ -1,0 +1,40 @@
+.mypage-mypost {
+	display: flex;
+	justify-content: center;
+}
+
+.mypage-main {
+	margin-top: 5%;
+	width: 1000px;
+	height: 100%;
+}
+
+.mypage-main-side {
+	margin-top: 3%;
+	display: grid;
+	width: 100%;
+	height: 100%;
+	grid-template-columns: 23% 1fr;
+	gap: 20px;
+	justify-content: center;
+}
+
+.mypage-main-container {
+	border-radius: 20px;
+	padding: 3%;
+	border: 2px solid #CACACA;
+	width: 100%;
+	height: auto;
+	margin-bottom: 4%;
+}
+
+#mypage-title2 {
+	margin: 0;
+	line-height: 1; /* 글자 높이에 맞춤 */
+	display: inline-block;
+	border-bottom: 3px solid #ff4473; /* 하단만 핑크 밑줄 */
+	white-space: nowrap;
+	font-size: 30px;
+	margin-bottom:3%;
+}
+
