@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.kosa._musketeers.mapper.StudyBoardMapper">
+	<insert id="createPost"
+		parameterType="org.kosa._musketeers.domain.StudyBoard"
+		useGeneratedKeys="true" keyProperty="studyId">
+		INSERT INTO study_post (title,
+		view_count, post_html, like_count, address, user_id)
+		VALUES (#{title},
+		#{viewCount},
+		#{postHtml},#{likeCount},#{address}, #{userId})
+	</insert>
+
+	<select id="getPostOrderByViewCount"
+		resultType="org.kosa._musketeers.domain.StudyBoard">
+		SELECT * FROM study_post ORDER BY view_count DESC;
+	</select>
+
+	<select id="getPostOrderByDate"
+		resultType="org.kosa._musketeers.domain.StudyBoard">
+		SELECT * FROM study_post ORDER BY post_date DESC;
+	</select>
+
+	<select id="getPostsByPage"
+		resultType="org.kosa._musketeers.domain.StudyBoard">
+		SELECT * FROM study_post
+		ORDER BY post_date DESC
+		LIMIT
+		#{size} OFFSET #{offset}
+	</select>
+
+	<select id="countPosts" resultType="int">
+		SELECT COUNT(*) FROM
+		study_post
+	</select>
+
+	<select id="getPostById" parameterType="int"
+		resultType="org.kosa._musketeers.domain.StudyBoard">
+		SELECT * FROM study_post WHERE study_id = #{studyId}
+	</select>
+</mapper>
