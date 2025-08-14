@@ -1,6 +1,6 @@
 @charset "UTF-8";
 #header3nav {
-	width: 800px;
+	width: 1000px;
 	margin: auto;
 	background-color: #ff4473;
 }
@@ -10,7 +10,7 @@
 	font-size: 20px;
 	text-align: center;
 	margin: auto;
-	margin-right: 80px;
+	margin-right: 190px;
 }
 
 .header3white {
