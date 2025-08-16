@@ -10,15 +10,15 @@ public class StudyBoard {
 	private LocalDateTime postDate;
 	private int likeCount;
 	private String address;
-	private int userId;
-	
+	private User userId;
+
 	public StudyBoard() {
 		super();
-		
+
 	}
 
 	public StudyBoard(int studyId, String title, int viewCount, String postHtml, LocalDateTime postDate, int likeCount,
-			String address, int userId) {
+			String address, User userId) {
 		super();
 		this.studyId = studyId;
 		this.title = title;
@@ -29,9 +29,8 @@ public class StudyBoard {
 		this.address = address;
 		this.userId = userId;
 	}
-	
-	
-	public StudyBoard(String title, int viewCount, String postHtml, int likeCount, String address, int userId) {
+
+	public StudyBoard(String title, int viewCount, String postHtml, int likeCount, String address, User userId) {
 		super();
 		this.title = title;
 		this.viewCount = viewCount;
@@ -97,14 +96,19 @@ public class StudyBoard {
 		this.address = address;
 	}
 
-	public int getUserId() {
+	public User getUserId() {
 		return userId;
 	}
 
-	public void setUserId(int userId) {
+	public void setUserId(User userId) {
 		this.userId = userId;
 	}
-	
-	
-	
+
+	@Override
+	public String toString() {
+		return "StudyBoard [studyId=" + studyId + ", title=" + title + ", viewCount=" + viewCount + ", postHtml="
+				+ postHtml + ", postDate=" + postDate + ", likeCount=" + likeCount + ", address=" + address
+				+ ", userId=" + userId + "]";
+	}
+
 }
