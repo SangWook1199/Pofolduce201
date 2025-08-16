@@ -4,54 +4,11 @@
 	layout:decorate="~{layouts/layout}">
 <head>
 <link th:href="@{/css/board-header.css}" rel="stylesheet">
-<title>게시글</title>
-<style type="text/css">
-.main-content {
-	width: 1000px;
-	margin: auto;
-	margin-top: 40px;
-}
-.title-area{
-	border-top: 1px solid black; 
-	border-bottom: 1px solid #DEE2E6;
-	margin-top: 80px;
-	padding-top: 20px;
-	padding-left: 30px;
-	padding-bottom: 15px;
-	margin-bottom:30px;
-}
-.profile{
-	width:45px;
-	height:45px;
-	float:left;
-	margin-right: 10px;
-}
-.title-area p{
-	margin: 0px;
-	font-size:20px;
-}
-.title-area .small{
-	font-size:14px;
-	color: #B4B4B4;
-}
-.profile-right{
-	float:right;
-	width:30px;
-	height:30px;
-}
-.board-title{
-	margin-bottom:30px;
-}
-.content-area{
-	padding-left:30px;
-	border-bottom:1px solid;
-}
-/* 일단 margin-bottom 주는 데 나중에 지도와 좋아요 추가 */
-.board-content{
-	font-size:25px;
-	margin-bottom:200px;
-}
-</style>
+<link th:href="@{/css/study-board-post.css}" rel="stylesheet">
+<script type="text/javascript"
+	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=70c0de37da587509ef9f5d9da9f64303"></script>
+
+<title>study-board-post</title>
 </head>
 <!--/* 
 		body tag 는 명시하지 않는다  layout.html 의 content fragment 영역에 삽입될 부분이기 때문 
@@ -59,22 +16,141 @@
 <div layout:fragment="content" class="main-content">
 	<div
 		th:replace="fragments/html/board-header :: board-header('스터디 게시판 > 게시글 보기')"></div>
+	<!-- 게시글 정보 -->
 	<div class="title-area">
 		<h3 th:text="${post.title}" class="board-title">게시글 제목</h3>
-		
+
 		<img alt="김세정" th:src="@{/svg/sejung.svg}" class="profile">
-		<img alt="김세정" th:src="@{/svg/report-button.svg}" class="profile-right">
-		<p th:text="${post.userId}">김세정</p>
-		<p th:text="${post.postDate}" class="small"></p>
-		
+		<!-- 나중에 신고버튼 -->
+		<img alt="김세정" th:src="@{/svg/report-button.svg}"
+			class="profile-right">
+		<p th:text="${post.userId.nickname}">김세정</p>
+		<p th:text="${postDateFormatted}" class="small"></p>
+
 	</div>
-	<div class = "content-area">
+	<!-- 게시글 내용 -->
+	<div class="content-area">
 		<div th:text="${post.postHtml}" class="board-content">content</div>
-	
+
+		<div class="map-area">
+			<p class="map-title">위치 정보</p>
+			<div id="map" style="width: 800px; height: 300px;"></div>
+		</div>
+		<!-- 나중에 좋아요 기능 추가 -->
+		<div class="text-center like-button">
+			<button class="btn btn-primary" type="button">종아요</button>
+		</div>
 	</div>
+	<div class="comment-area">
+		<div class="col text-end">
+			<a class="btn btn-primary" href="/study" id="list-button">목록보기</a>
+		</div>
+		<div class="col">
+			<p class="comment-title">댓글 목록</p>
+		</div>
+		<!-- 댓글 입력창 -->
+		<div class="row">
+			<form
+				th:action="@{/study/{studyId}/comments(studyId=${post.studyId})}"
+				method="post">
+				<input type="hidden" name="userId" th:value="${session.userId}">
+				<textarea class="form-control ps-3 pt-1" id="comment-content"
+					name="comment-content" placeholder="댓글을 입력하세요." required></textarea>
+				<div class="col text-end">
+					<button class="btn btn-sm btn-primary" id="list-button"
+						type="submit">댓글 작성</button>
+				</div>
+			</form>
+		</div>
+		<!-- 댓글 리스트 -->
+		<div class="row comment-list" th:each="comment : ${comments}">
+			<!-- 댓글 작성자 정보 -->
+			<p>
+				<strong th:text="${comment.userId.nickname}"
+					class="comment-userName">작성자</strong> <span class="small"
+					th:text="${#temporals.format(comment.commentsDate, 'yyyy-MM-dd HH:mm')}">작성일</span>
+			</p>
+			<p th:text="${comment.commentsContents}">댓글 내용</p>
+			<!-- 수정, 삭제, 신고 버튼 -->
+			<div class="col text-end">
+				<div
+					th:if="${session.userId != null and session.userId == comment.userId.userId}">
+					<div class="d-flex justify-content-end align-items-center gap-2">
+						<!-- 수정 버튼 -->
+						<button class="btn btn-sm btn-primary" type="button"
+							th:onclick="|toggleEdit(${comment.commentsId})|">수정</button>
+						<!-- 삭제 -->
+						<form
+							th:action="@{/study/{studyId}/comments/{commentId}/delete(studyId=${post.studyId}, commentId=${comment.commentsId})}"
+							method="post" onsubmit="return confirmDelete();">
+							<button class="btn btn-sm btn-primary" type="submit">삭제</button>
+						</form>
+					</div>
+					<!-- 숨겨진 수정창 -->
+					<div th:id="|edit-box-${comment.commentsId}|" class="hidden-update">
+						<form
+							th:action="@{/study/{studyId}/comments/{commentId}/edit(studyId=${post.studyId}, commentId=${comment.commentsId})}"
+							method="post">
+							<textarea class="form-control" name="comment-content"
+								id="comment-content" th:text="${comment.commentsContents}"></textarea>
+							<button class="btn btn-primary btn-sm mt-2" type="submit">수정
+								완료</button>
+						</form>
+					</div>
 
 
+				</div>
+				<div
+					th:if="${session.userId != null and session.userId != comment.userId.userId}">
+					<img alt="김세정" th:src="@{/svg/report-button.svg}" id="list-button">
+				</div>
+			</div>
+		</div>
+		<div class="comment-line"></div>
+		<!-- 페이지네이션 -->
+		<div class="comment-pagination mt-3">
+			<ul class="pagination justify-content-center">
+				<li class="page-item"
+					th:classappend="${currentPage == 1}? 'disabled'"><a
+					class="page-link"
+					th:href="@{/study/{studyId}(studyId=${post.studyId}, page=${currentPage - 1})}">이전</a>
+				</li>
+				<li class="page-item"
+					th:each="i : ${#numbers.sequence(1, totalPages)}"
+					th:classappend="${i == currentPage}? 'active'"><a
+					class="page-link"
+					th:href="@{/study/{studyId}(studyId=${post.studyId}, page=${i})}"
+					th:text="${i}">1</a></li>
+				<li class="page-item"
+					th:classappend="${currentPage == totalPages}? 'disabled'"><a
+					class="page-link"
+					th:href="@{/study/{studyId}(studyId=${post.studyId}, page=${currentPage + 1})}">다음</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<script>
+		var container = document.getElementById('map');
+		var options = {
+			center : new kakao.maps.LatLng(37.583743027324, 126.999963317958),
+			level : 1
+		};
 
+		var map = new kakao.maps.Map(container, options);
+		function toggleEdit(commentId) {
+			const editBox = document.getElementById("edit-box-" + commentId);
+			// display가 none이면 보여주고, 아니면 숨김
+			if (editBox.style.display === "none"
+					|| editBox.style.display === "") {
+				editBox.style.display = "block";
+			} else {
+				editBox.style.display = "none";
+			}
+		}
+		function confirmDelete() {
+			return confirm('정말 삭제하시겠습니까?');
+		}
+	</script>
 </div>
 
 </html>

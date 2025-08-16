@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="org.kosa._musketeers.mapper.StudyBoardCommentMapper">
+
+	<resultMap id="commentMap"
+		type="org.kosa._musketeers.domain.StudyBoardComment">
+		<id property="commentsId" column="comments_id" />
+		<result property="commentsContents" column="comments_contents" />
+		<result property="commentsDate" column="comments_date" />
+		<association property="userId"
+			javaType="org.kosa._musketeers.domain.User">
+			<id property="userId" column="user_id" />
+			<result property="nickname" column="nickname" />
+		</association>
+	</resultMap>
+
+	<insert id="createStudyComment"
+		parameterType="org.kosa._musketeers.domain.StudyBoardComment"
+		useGeneratedKeys="true" keyProperty="commentsId">
+		INSERT INTO study_post_comments
+		(comments_contents, study_id, user_id)
+		VALUES (#{commentsContents},
+		#{studyId.studyId}, #{userId.userId})
+	</insert>
+
+	<select id="getStudyComments" resultMap="commentMap">
+		SELECT c.comments_id, c.comments_contents, c.comments_date,
+		u.user_id, u.nickname, u.email, c.study_id
+		FROM study_post_comments c
+		JOIN users u ON c.user_id = u.user_id
+		WHERE c.study_id = #{studyId}
+		ORDER BY c.comments_date ASC
+		LIMIT #{pageSize} OFFSET #{offset}
+	</select>
+
+	<select id="countStudyComments" resultType="int">
+		SELECT COUNT(*) FROM study_post_comments
+		WHERE study_id = #{studyId}
+	</select>
+
+	<update id="updateStudyComment"
+		parameterType="org.kosa._musketeers.domain.StudyBoardComment">
+		UPDATE study_post_comments
+		SET comments_contents =
+		#{commentsContents}, comments_date = NOW()
+		WHERE comments_id =
+		#{commentsId}
+	</update>
+
+	<delete id="deleteStudyComment" parameterType="int">
+		DELETE FROM
+		study_post_comments
+		WHERE comments_id = #{commentsId}
+	</delete>
+
+</mapper>
