@@ -28,32 +28,53 @@
 							<thead>
 								<tr>
 									<th scope="col">#</th>
-									<th scope="col">First</th>
-									<th scope="col">Last</th>
-									<th scope="col">Handle</th>
+									<th scope="col">게시판</th>
+									<th scope="col">제목</th>
+
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<th scope="row">1</th>
-									<td>Mark</td>
-									<td>Otto</td>
-									<td>@mdo</td>
-								</tr>
-								<tr>
-									<th scope="row">2</th>
-									<td>Jacob</td>
-									<td>Thornton</td>
-									<td>@fat</td>
-								</tr>
-								<tr>
-									<th scope="row">3</th>
-									<td colspan="2">Larry the Bird</td>
-									<td>@twitter</td>
+								<tr th:each="post, iterStat : ${myPagePostList}">
+									<!-- (현재 페이지 - 1) * 페이지당 크기 + 현재 인덱스 + 1 -->
+									<th scope="row"
+										th:text="${(currentPage - 1) * size + iterStat.index + 1}">
+									</th>
+									<td
+										th:text="${post.boardType == 'study' ? '스터디 게시판' : '첨삭 게시판'}"></td>
+									<td th:text="${post.title}"></td>
 								</tr>
 							</tbody>
+
 						</table>
+						<nav aria-label="Page navigation example">
+						<ul class="pagination justify-content-center">
+
+							<!-- 이전 페이지 -->
+							<li class="page-item"
+								th:classappend="${currentPage == 1} ? 'disabled'"><a
+								class="page-link"
+								th:href="@{/mypage/mypost(page=${currentPage - 1}, size=${size})}"
+								tabindex="-1" aria-disabled="true">Previous</a></li>
+
+							<!-- 페이지 번호 반복 -->
+							<li class="page-item"
+								th:each="i : ${#numbers.sequence(1, totalPages)}"
+								th:classappend="${i == currentPage} ? 'active'"><a
+								class="page-link"
+								th:href="@{/mypage/mypost(page=${i}, size=${size})}"
+								th:text="${i}">1</a></li>
+
+							<!-- 다음 페이지 -->
+							<li class="page-item"
+								th:classappend="${currentPage == totalPages} ? 'disabled'">
+								<a class="page-link"
+								th:href="@{/mypage/mypost(page=${currentPage + 1}, size=${size})}">Next</a>
+							</li>
+						</ul>
+					</nav>
+						
 					</div>
+					
 
 
 

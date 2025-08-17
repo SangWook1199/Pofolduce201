@@ -6,4 +6,18 @@
 		FROM users
 		WHERE email=#{email} and password=#{password}
 	</select>
+	
+	<select id="getUserInformation" parameterType="int">
+	SELECT email, nickname, company_name, company_certification, point, user_image_location 
+		FROM users
+		WHERE user_id=#{userId}
+	</select>
+	
+	
+	<delete id="deleteAccount" parameterType="int">
+	delete FROM users
+	where user_id=#{userId};
+	</delete>
+	
+	
 </mapper>

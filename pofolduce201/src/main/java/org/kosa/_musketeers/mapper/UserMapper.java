@@ -8,4 +8,8 @@ import org.kosa._musketeers.domain.User;
 public interface UserMapper {
 
 	User getUserIdByEmailPwd(@Param("email") String email, @Param("password") String password);
+
+	User getUserInformation(int userId);
+
+	boolean deleteAccount(int userId);
 }
