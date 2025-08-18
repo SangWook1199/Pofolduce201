@@ -47,16 +47,16 @@
 
 
 							<div class="mypage-main-info-box">
-								<input id="input" type="text" placeholder="소상123" disabled>
+								<input id="input" type="text" th:placeholder="${userData.nickname}" disabled>
 								<input id="input" type="text"
-									placeholder="thisisemail@gmail.com" disabled>
+									th:placeholder="${userData.email}" disabled>
 
 								<div id="verify-box">
 									<button type="button"
 										class="btn btn-outline-primary btn-custom2">인증하기</button>
 								</div>
 
-								<input id="input" type="text" placeholder="데뷔조" disabled>
+								<input id="input" type="text" th:placeholder="${userData.point}" disabled>
 
 							</div>
 
@@ -68,10 +68,7 @@
 							<button type="button" id="deleteBtn"
 								class="btn btn-outline-primary btn-custom" >회원 탈퇴</button>
 
-							<div
-								th:replace="fragments/html/mypage-modal :: mypage-modal('deleteModal', '정말 탈퇴하시겠습니까?', '확인')"></div>
-
-						</div>
+							
 					</div>
 
 
