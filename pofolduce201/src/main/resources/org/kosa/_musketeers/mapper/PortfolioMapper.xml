@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.kosa._musketeers.mapper.PortfolioMapper">
+	<resultMap id="portfolioMap"
+		type="org.kosa._musketeers.domain.Portfolio">
+		<id property="portfolioId" column="portfolio_id" />
+		<result property="portfolioName" column="portfolio_name" />
+		<result property="fileLocation" column="file_location" />
+		<result property="uploadDate" column="upload_date" />
+		<association property="userId"
+			javaType="org.kosa._musketeers.domain.User">
+			<id property="userId" column="user_id" />
+			<result property="nickname" column="nickname" />
+			<result property="email" column="email" />
+		</association>
+	</resultMap>
+
+	<insert id="createPortfolio"
+		parameterType="org.kosa._musketeers.domain.Portfolio"
+		useGeneratedKeys="true" keyProperty="portfolioId">
+		INSERT INTO portfolio (portfolio_name, user_id)
+		VALUES (#{portfolioName}, #{userId.userId})
+	</insert>
+
+	<select id="getPortfolio" parameterType="int"
+		resultMap="portfolioMap">
+		SELECT p.*, u.user_id, u.nickname, u.email
+		FROM portfolio p
+		JOIN users u ON p.user_id = u.user_id
+		WHERE p.portfolio_id = #{portfolioId}
+	</select>
+
+</mapper>

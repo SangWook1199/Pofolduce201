@@ -4,52 +4,10 @@
 	layout:decorate="~{layouts/layout}">
 <head>
 <link th:href="@{/css/board-header.css}" rel="stylesheet">
+<link th:href="@{/css/study/study-board-update.css}" rel="stylesheet">
 <script
 	src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
-<title>study-board-write</title>
-<style type="text/css">
-#main-content {
-	width: 1000px;
-	margin: auto;
-	margin-top: 40px;
-}
-
-.post-title {
-	margin-top: 40px;
-	border: 1px solid black;
-}
-
-.post-input {
-	border-radius: 10px;
-	border: 1px solid #DEE2E6;
-}
-
-.post-input::placeholder {
-	color: #B4B4B4;
-	text-align: center;
-}
-
-.post-address {
-	font-size: 20px;
-	color: #B4B4B4;
-	text-align: center;
-}
-
-.post-content {
-	margin-top: 10px;
-	border: 1px solid black;
-	height: 580px;
-}
-
-.ck-editor__editable {
-	min-height: 500px; /* 최소 높이 500px */
-}
-
-.post-button {
-	margin-top: 10px;
-	margin-bottom: 40px;
-}
-</style>
+<title>게시글 업데이트</title>
 </head>
 <div layout:fragment="content" class="page-wrap" id="main-content">
 	<div
@@ -83,7 +41,7 @@
 		</div>
 		<!-- 버튼 -->
 		<div class="d-flex justify-content-between mb-3 post-button">
-			<a class="btn btn-primary" href="/study" id="list-button">목록보기</a>
+			<a class="btn btn-primary" th:href="@{/study/{studyId}(studyId=${post.studyId})}" id="list-button">취소하기</a>
 			<button type="submit" class="btn btn-primary">수정하기</button>
 		</div>
 		<script>

@@ -1,16 +1,28 @@
 package org.kosa._musketeers.service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+
+import org.kosa._musketeers.domain.Portfolio;
 import org.kosa._musketeers.domain.User;
+import org.kosa._musketeers.mapper.PortfolioMapper;
 import org.kosa._musketeers.mapper.UserMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class UserService {
 
 	private UserMapper userMapper;
+	private PortfolioMapper portfolioMapper;
 
-	UserService(UserMapper userMapper) {
+	public UserService(UserMapper userMapper, PortfolioMapper portfolioMapper) {
+		super();
 		this.userMapper = userMapper;
+		this.portfolioMapper = portfolioMapper;
 	}
 
 	public User login(String email, String password) {
@@ -54,6 +66,18 @@ public class UserService {
 		boolean result = userMapper.deleteAccount(userId);
 
 		return false;
+	}
+
+	public Portfolio createPortfolio(MultipartFile file, String portfolioName, User user) throws IOException {
+		// 1. DB에 portfolio 레코드 먼저 생성 (파일 경로는 아직 비워둠)
+        Portfolio portfolio = new Portfolio(portfolioName, user);
+        portfolioMapper.createPortfolio(portfolio);
+
+        // 2. 파일 저장 (portfolioId.pdf)
+        Path uploadPath = Paths.get("src/main/resources/static/uploads/" + portfolio.getPortfolioId() + ".pdf");
+        Files.copy(file.getInputStream(), uploadPath, StandardCopyOption.REPLACE_EXISTING);
+
+        return portfolio;
 	}
 
 }

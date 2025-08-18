@@ -1,5 +1,6 @@
 package org.kosa._musketeers.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.kosa._musketeers.domain.MyPageComment;
@@ -15,6 +16,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -194,6 +197,21 @@ public class UserController {
 			
 			
 		}
+	
+		@GetMapping("/mypage/myportfolio")
+		public String getMyPortfolio() {
+			return "/pages/mypage/mypage-myportfolio";
+		}
 		
+		@PostMapping("/mypage/myportfolio/upload")
+		public String uploadPortfolio(@RequestParam("file") MultipartFile file,
+                @RequestParam("portfolioName") String portfolioName,
+                @SessionAttribute("userId") int userId) throws IOException {
+			User user = new User();
+			user.setUserId(userId);
+			
+			userService.createPortfolio(file,portfolioName,user);
+			return "redirect:/mypage/myportfolio";
+		}
 		
 }

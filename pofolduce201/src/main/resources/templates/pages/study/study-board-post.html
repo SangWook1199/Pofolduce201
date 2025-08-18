@@ -4,11 +4,11 @@
 	layout:decorate="~{layouts/layout}">
 <head>
 <link th:href="@{/css/board-header.css}" rel="stylesheet">
-<link th:href="@{/css/study-board-post.css}" rel="stylesheet">
+<link th:href="@{/css/study/study-board-post.css}" rel="stylesheet">
 <script type="text/javascript"
 	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=70c0de37da587509ef9f5d9da9f64303"></script>
 
-<title>study-board-post</title>
+<title>게시글</title>
 </head>
 <!--/* 
 		body tag 는 명시하지 않는다  layout.html 의 content fragment 영역에 삽입될 부분이기 때문 
@@ -59,7 +59,7 @@
 	</div>
 	<!-- 게시글 내용 -->
 	<div class="content-area">
-		<div th:text="${post.postHtml}" class="board-content">content</div>
+		<div th:utext="${post.postHtml}" class="board-content">content</div>
 
 		<div class="map-area">
 			<p class="map-title">위치 정보</p>

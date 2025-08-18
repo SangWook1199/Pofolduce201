@@ -7,11 +7,11 @@
 	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=70c0de37da587509ef9f5d9da9f64303"></script>
 <link th:href="@{/css/board-header.css}" rel="stylesheet">
 <link th:href="@{/css/banner.css}" rel="stylesheet">
-<link th:href="@{/css/story-board.css}" rel="stylesheet">
+<link th:href="@{/css/study/story-board.css}" rel="stylesheet">
 <script type="text/javascript"
 	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=70c0de37da587509ef9f5d9da9f64303"></script>
 
-<title>study-board</title>
+<title>스터디 게시판</title>
 
 </head>
 <!--/* 
@@ -72,7 +72,7 @@
 				<tr th:each="list:${dateList}"
 					th:onclick="|window.location='/study/' + [[${list.studyId}]]|">
 					<td></td>
-					<td th:text="${list.studyId}">#</td>
+					<td th:text="${listStat.count}">#</td>
 					<td th:text="${list.userId.nickname}">작성자</td>
 					<td th:text="${list.title}">제목</td>
 					<td th:text="${list.viewCount}">조회수</td>
@@ -81,7 +81,7 @@
 		</table>
 	</div>
 	<div class="col text-end">
-		<a class="btn btn-primary" href="/study/write" id="write-button">게시글 작성</a>
+		<a class="btn btn-primary" href="/study/write" id="write-button">+</a>
 	</div>
 	<nav aria-label="Page navigation example">
 		<ul class="pagination justify-content-center">
