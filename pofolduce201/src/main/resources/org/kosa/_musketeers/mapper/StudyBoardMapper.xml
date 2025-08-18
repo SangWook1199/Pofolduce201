@@ -28,27 +28,21 @@
 		#{postHtml},#{likeCount},#{address}, #{userId.userId})
 	</insert>
 
-	<select id="getPostOrderByViewCount"
-		resultMap="studyBoardMap">
-		SELECT b.*, u.user_id, u.nickname, u.email
+	<select id="getPostOrderByViewCount" resultMap="studyBoardMap">
+		SELECT b.*,
+		u.user_id, u.nickname, u.email
 		FROM study_post b
-		JOIN users u ON b.user_id = u.user_id
+		JOIN users u ON
+		b.user_id = u.user_id
 		ORDER BY b.view_count DESC
 	</select>
 
-	<select id="getPostOrderByDate"
-		resultMap="studyBoardMap">
-		SELECT b.*, u.user_id, u.nickname, u.email
+	<select id="getPostsByPage" resultMap="studyBoardMap">
+		SELECT b.*, u.user_id,
+		u.nickname, u.email
 		FROM study_post b
-		JOIN users u ON b.user_id = u.user_id
-		ORDER BY b.post_date DESC
-	</select>
-
-	<select id="getPostsByPage"
-		resultMap="studyBoardMap">
-		SELECT b.*, u.user_id, u.nickname, u.email
-		FROM study_post b
-		JOIN users u ON b.user_id = u.user_id
+		JOIN users u ON b.user_id =
+		u.user_id
 		ORDER BY b.post_date DESC
 		LIMIT #{size} OFFSET #{offset}
 	</select>
@@ -65,4 +59,18 @@
 		JOIN users u ON b.user_id = u.user_id
 		WHERE b.study_id = #{studyId}
 	</select>
+
+	<update id="updatePost"
+		parameterType="org.kosa._musketeers.domain.StudyBoard">
+		UPDATE study_post
+		Set title = #{title}, post_html =
+		#{postHtml}, address=#{address}
+		WHERE study_id = #{studyId}
+	</update>
+	
+	<delete id="deletePost" parameterType="int">
+		DELETE FROM
+		study_post
+		WHERE study_id = #{studyId}
+	</delete>
 </mapper>

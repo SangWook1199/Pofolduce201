@@ -152,4 +152,10 @@ public class StudyBoardController {
 		studyBoardService.updatePost(board);
 		return "redirect:/study/" + studyId;
 	}
+	
+	@PostMapping("/study/{studyId}/delete")
+	public String deletePost(@PathVariable int studyId) {
+		studyBoardService.deletePost(studyId);
+		return "redirect:/study";
+	}
 }

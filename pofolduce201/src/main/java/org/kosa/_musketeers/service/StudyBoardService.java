@@ -1,5 +1,6 @@
 package org.kosa._musketeers.service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,10 +33,9 @@ public class StudyBoardService {
 
 	// 상위 3개 제외, 날짜순으로 페이지 단위 조회
 	public List<StudyBoard> getPostsByPage(int page, int pageSize) {
-		int offset = (page - 1) * pageSize + 3; // 상위 3개 제외
+		int offset = (page - 1) * pageSize;
 		return studyBoardMapper.getPostsByPage(offset, pageSize);
 	}
-
 	// 상위 3개 제외 후 게시글 총 개수
 	public int countPosts() {
 		return studyBoardMapper.countPosts() - 3;
@@ -44,4 +44,21 @@ public class StudyBoardService {
 	public StudyBoard getPostById(int studyId) {
 	    return studyBoardMapper.getPostById(studyId);
 	}
+	
+    public void createPost(StudyBoard board) {
+        board.setViewCount(0);
+        board.setLikeCount(0);
+        board.setPostDate(LocalDateTime.now());
+
+        studyBoardMapper.createPost(board);
+    }
+    
+    public void updatePost(StudyBoard board) {
+    	studyBoardMapper.updatePost(board);
+    }
+
+	public void deletePost(int studyId) {
+		studyBoardMapper.deletePost(studyId);
+	}
+	
 }

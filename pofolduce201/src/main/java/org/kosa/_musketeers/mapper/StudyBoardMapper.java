@@ -20,4 +20,6 @@ public interface StudyBoardMapper {
 
 	void updatePost(StudyBoard board);
 
+	void deletePost(int studyId);
+
 }
