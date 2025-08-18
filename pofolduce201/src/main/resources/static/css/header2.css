@@ -3,7 +3,7 @@ body {
 	font-family: Arial, sans-serif;
 }
 
-.navbar {
+/* .navbar {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -11,7 +11,7 @@ body {
 	padding: 0.5rem 1rem;
 	border: solid #ff4473;
 	border-width: 0 0 3px;
-}
+} */
 
 .nav-links {
 	list-style: none;

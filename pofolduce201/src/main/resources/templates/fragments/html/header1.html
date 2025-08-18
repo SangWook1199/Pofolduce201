@@ -4,35 +4,34 @@
 </head>
 <body>
 	<div class="header1" th:fragment="header1">
-
-		<div id="headerdiv1">
-			<a th:href="@{/home}"> <img id="logo"
-				th:src="@{/svg/pofolduce201Logo.svg}" alt="아이콘" width="50"
-				height="50">
-			</a>
-			<div id="headerdiv2">
-				<input id="search-input" /> <img id="svg-search"
-					th:src="@{/svg/search.svg}">
+		<div class="row m-2" id="headerdiv1">
+			<div class="col-2 col-md-3 d-flex justify-content-start">
+				<img class="img-fluid" th:src="@{/svg/pofolduce201Logo.svg}"
+					alt="아이콘" width="50" height="50" onclick="location.href='/home'">
 			</div>
-
-			<div id = "header-buttons">
-
-				<a th:href="${session.userId != null} ? @{/logout} : @{/login}">
-					<button type="button"
-						class="btn btn-outline-primary btn-custom-header" id="btn-box"
-						th:text="${session.userId != null} ? '로그아웃' : '로그인'"></button>
-				</a> <a th:href="@{/mypage}">
-
-					<div id="headerdiv3">
-
-						<img th:src="@{/svg/person.svg}" style="width: 70%; height: 70%;">
-
+			<div class="col-7 col-md-6 row" id='headerdiv2'>
+				<div class="col-9 col-md-10 d-flex justify-content-start">
+					<input class="flex-grow-1 border-0" type="text" />
+				</div>
+				<div class="col-3 col-md-2 d-flex justify-content-end">
+					<img class="img-fluid" th:src="@{/svg/search.svg}">
+				</div>
+			</div>
+			<div class="col-3 col-md-3 d-flex justify-content-end">
+				<div th:if="${session.userId == null}">
+					<button class="btn-sm btn-primary" onclick="location.href='/login'">Login</button>
+				</div>
+				<div th:if="${session.userId != null}">
+					<div class="d-flex">
+						<button class="btn-sm btn-primary m-1"
+							onclick="location.href='/logout'">Log-out</button>
+						<img class="img-fluid m-1" th:src="@{/svg/person.svg}"
+							onclick="location.href='/mypage'">
 					</div>
-				</a>
-
+				</div>
 			</div>
 		</div>
-		<div id="header-line"></div>
-
+		<!-- 			<div id="header-line"></div>
+ -->
 	</div>
 </body>

@@ -19,36 +19,29 @@
 
 </head>
 <body>
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-sm-8 offset-sm-2" align="right">
-				<!-- fragments 디렉토리 html 파일에 명시한 fragment(조각) 요소를 가지고 와서 사용  
+	<div class="container">
+		<!-- fragments 디렉토리 html 파일에 명시한 fragment(조각) 요소를 가지고 와서 사용  
            		   th:replace="fragments/header" => header란 html 파일명을 말함   
            		   :: headerFragment ( 요소 id 를 명시 , 여러개 중에 선택이 가능 )
               -->
-				<div th:replace="fragments/html/header1 :: header1"></div>
-				<div th:replace="fragments/html/header2 :: header2"></div>
-				<div th:replace="fragments/html/header3 :: header3('/')"></div>
-			</div>
-		</div>
+		<div th:replace="fragments/html/header1 :: header1"></div>
+		<div th:replace="fragments/html/header2 :: header2"></div>
+		<div th:replace="fragments/html/header3 :: header3('/')"></div>
+
 		<!--  메인 컨텐트 화면으로 변경될 부분  -->
-		<div class="row main">
-			<div class="col-sm-8 offset-sm-2">
-				<!--/* 
+		<!--/* 
 		다양한 컨텐츠로 변경되는 부분 : 개발자들이 각각의 main 영역 content를 구성한다
 		*/-->
-				<div layout:fragment="content"></div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-sm-8 offset-sm-2">
-				<!-- fragments 디렉토리 html 파일에 명시한 fragment(조각) 요소를 가지고 와서 사용  
+		<div layout:fragment="content"></div>
+
+		<!-- fragments 디렉토리 html 파일에 명시한 fragment(조각) 요소를 가지고 와서 사용  
            		   th:replace="fragments/footer" => footer란 html 파일명을 말함   
            		   :: footerFragment (요소 id를 명시 , 여러개 중 선택 가능 )
               -->
-			<div th:replace="fragments/html/footer :: footer"></div>
-			</div>
-		</div>
+		<div th:replace="fragments/html/footer :: footer"></div>
 	</div>
+	<script>
+		
+	</script>
 </body>
 </html>
