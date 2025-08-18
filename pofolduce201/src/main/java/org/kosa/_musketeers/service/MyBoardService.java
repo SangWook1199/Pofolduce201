@@ -43,13 +43,13 @@ public class MyBoardService {
 		}
 
 		// 스터디게시판에서 게시글 찾기
-		for (StudyBoard sb : myBoardMapper.findMyStudyPost(userId)) {
-			result.add(new MyPagePost(sb.getStudyId(), "study", // 게시판 타입
-					sb.getTitle(), sb.getViewCount(), sb.getPostHtml(), sb.getPostDate(), sb.getLikeCount(),
-					sb.getUserId(), null, // Review 전용 없음
-					sb.getAddress() // Study 전용
-			));
-		}
+//				for (StudyBoard sb : myBoardMapper.findMyStudyPost(userId)) {
+//					result.add(new MyPagePost(sb.getStudyId(), "study", // 게시판 타입
+//							sb.getTitle(), sb.getViewCount(), sb.getPostHtml(), sb.getPostDate(), sb.getLikeCount(),
+//							sb.getUserId(), null, // Review 전용 없음
+//							sb.getAddress() // Study 전용
+//					));
+//				}
 
 		// 최신순으로 정렬한다.
 		result.sort(Comparator.comparing(MyPagePost::getCreateDate).reversed());
