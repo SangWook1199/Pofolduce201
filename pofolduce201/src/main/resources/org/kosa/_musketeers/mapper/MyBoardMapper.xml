@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.kosa._musketeers.mapper.MyBoardMapper">
+<select id="findMyReviewPost" parameterType="int" resultType="org.kosa._musketeers.domain.ReviewBoard">
+	select review_post_id, title, post_html, view_count, create_date, like_count, user_id, portfolio_id
+from review_post
+where user_id=#{userId};
+</select>
+<select id="findMyStudyPost" parameterType="int" resultType="org.kosa._musketeers.domain.StudyBoard">
+	select study_id, title, post_html, view_count, post_date, like_count, address, user_id
+from study_post
+where user_id=#{userId};
+</select>
+
+<select id="findMyReviewComment" parameterType="int" resultType="org.kosa._musketeers.domain.ReviewPostComment">
+	select comments_id, comments_contents, comments_date, review_id, user_id
+from review_post_comments
+where user_id=#{userId};
+</select>
+
+<select id="findMyStudyComment" parameterType="int" resultType="org.kosa._musketeers.domain.StudyPostComment">
+	select comments_id, comments_contents, comments_date, study_id, user_id
+from study_post_comments
+where user_id=#{userId};
+</select>
+
+<select id="findMyReview" parameterType="int" resultType="org.kosa._musketeers.domain.Review">
+select review_id, REVIEW_LOCATION_X,REVIEW_LOCATION_Y,review_contents,review_date, like_count,review_post_id,  user_id
+from review
+where user_id=#{userId}
+ORDER BY review_date DESC
+</select>
+</mapper>
