@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.kosa._musketeers.mapper.StudyBoardMapper">
+	<resultMap id="studyBoardMap"
+		type="org.kosa._musketeers.domain.StudyBoard">
+		<id property="studyId" column="study_id" />
+		<result property="title" column="title" />
+		<result property="viewCount" column="view_count" />
+		<result property="postHtml" column="post_html" />
+		<result property="postDate" column="post_date" />
+		<result property="likeCount" column="like_count" />
+		<result property="address" column="address" />
+		<association property="userId"
+			javaType="org.kosa._musketeers.domain.User">
+			<id property="userId" column="user_id" />
+			<result property="nickname" column="nickname" />
+			<result property="email" column="email" />
+		</association>
+	</resultMap>
+
 	<insert id="createPost"
 		parameterType="org.kosa._musketeers.domain.StudyBoard"
 		useGeneratedKeys="true" keyProperty="studyId">
@@ -8,25 +25,32 @@
 		view_count, post_html, like_count, address, user_id)
 		VALUES (#{title},
 		#{viewCount},
-		#{postHtml},#{likeCount},#{address}, #{userId})
+		#{postHtml},#{likeCount},#{address}, #{userId.userId})
 	</insert>
 
 	<select id="getPostOrderByViewCount"
-		resultType="org.kosa._musketeers.domain.StudyBoard">
-		SELECT * FROM study_post ORDER BY view_count DESC;
+		resultMap="studyBoardMap">
+		SELECT b.*, u.user_id, u.nickname, u.email
+		FROM study_post b
+		JOIN users u ON b.user_id = u.user_id
+		ORDER BY b.view_count DESC
 	</select>
 
 	<select id="getPostOrderByDate"
-		resultType="org.kosa._musketeers.domain.StudyBoard">
-		SELECT * FROM study_post ORDER BY post_date DESC;
+		resultMap="studyBoardMap">
+		SELECT b.*, u.user_id, u.nickname, u.email
+		FROM study_post b
+		JOIN users u ON b.user_id = u.user_id
+		ORDER BY b.post_date DESC
 	</select>
 
 	<select id="getPostsByPage"
-		resultType="org.kosa._musketeers.domain.StudyBoard">
-		SELECT * FROM study_post
-		ORDER BY post_date DESC
-		LIMIT
-		#{size} OFFSET #{offset}
+		resultMap="studyBoardMap">
+		SELECT b.*, u.user_id, u.nickname, u.email
+		FROM study_post b
+		JOIN users u ON b.user_id = u.user_id
+		ORDER BY b.post_date DESC
+		LIMIT #{size} OFFSET #{offset}
 	</select>
 
 	<select id="countPosts" resultType="int">
@@ -35,7 +59,10 @@
 	</select>
 
 	<select id="getPostById" parameterType="int"
-		resultType="org.kosa._musketeers.domain.StudyBoard">
-		SELECT * FROM study_post WHERE study_id = #{studyId}
+		resultMap="studyBoardMap">
+		SELECT b.*, u.user_id, u.nickname, u.email
+		FROM study_post b
+		JOIN users u ON b.user_id = u.user_id
+		WHERE b.study_id = #{studyId}
 	</select>
 </mapper>

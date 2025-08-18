@@ -15,6 +15,9 @@
 .line{
 	border-bottom: 1px solid;
 }
+.study-table{
+	margin-bottom:40px;	
+}
 /* 페이지네이션 전체 글자 색 */
 .pagination .page-link {
     color: #6C757D;       /* 기본 글자색 */
@@ -35,4 +38,9 @@
     pointer-events: none;
     background-color: #ffffff; /* 비활성 배경색 */
     border-color: #E9ECEF;
+    margin-bottom:40px;
+}
+#map{
+	margin:auto;
+	border-radius:20px;
 }
