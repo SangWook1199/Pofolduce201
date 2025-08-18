@@ -49,7 +49,7 @@
 							<h3  class="non-data">작성한 첨삭이 없습니다.</h3>
 						</div>
 						
-						<nav aria-label="Page navigation example">
+						<nav th:if="${not #lists.isEmpty(myPageReviewList)}" aria-label="Page navigation example">
 						<ul class="pagination justify-content-center">
 
 							<!-- 이전 페이지 -->
