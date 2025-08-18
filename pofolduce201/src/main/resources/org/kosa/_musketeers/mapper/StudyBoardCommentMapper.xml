@@ -25,17 +25,21 @@
 	</insert>
 
 	<select id="getStudyComments" resultMap="commentMap">
-		SELECT c.comments_id, c.comments_contents, c.comments_date,
-		u.user_id, u.nickname, u.email, c.study_id
+		SELECT c.comments_id,
+		c.comments_contents, c.comments_date,
+		u.user_id, u.nickname, u.email,
+		c.study_id
 		FROM study_post_comments c
-		JOIN users u ON c.user_id = u.user_id
+		JOIN users u ON c.user_id =
+		u.user_id
 		WHERE c.study_id = #{studyId}
 		ORDER BY c.comments_date ASC
 		LIMIT #{pageSize} OFFSET #{offset}
 	</select>
 
 	<select id="countStudyComments" resultType="int">
-		SELECT COUNT(*) FROM study_post_comments
+		SELECT COUNT(*) FROM
+		study_post_comments
 		WHERE study_id = #{studyId}
 	</select>
 
@@ -43,7 +47,7 @@
 		parameterType="org.kosa._musketeers.domain.StudyBoardComment">
 		UPDATE study_post_comments
 		SET comments_contents =
-		#{commentsContents}, comments_date = NOW()
+		#{commentsContents}
 		WHERE comments_id =
 		#{commentsId}
 	</update>

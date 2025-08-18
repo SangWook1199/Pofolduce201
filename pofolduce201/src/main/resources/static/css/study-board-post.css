@@ -32,7 +32,9 @@
 	font-size: 14px;
 	color: #B4B4B4;
 }
-
+#study-post-title{
+	margin-bottom: 20px;
+}
 .profile-right {
 	float: right;
 	width: 30px;

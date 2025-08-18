@@ -17,15 +17,44 @@
 	<div
 		th:replace="fragments/html/board-header :: board-header('스터디 게시판 > 게시글 보기')"></div>
 	<!-- 게시글 정보 -->
-	<div class="title-area">
-		<h3 th:text="${post.title}" class="board-title">게시글 제목</h3>
+	<div class="title-area mb-3">
 
-		<img alt="김세정" th:src="@{/svg/sejung.svg}" class="profile">
-		<!-- 나중에 신고버튼 -->
-		<img alt="김세정" th:src="@{/svg/report-button.svg}"
-			class="profile-right">
-		<p th:text="${post.userId.nickname}">김세정</p>
-		<p th:text="${postDateFormatted}" class="small"></p>
+		<!-- 제목 + 버튼 영역 -->
+		<div class="d-flex justify-content-between align-items-center mb-4"
+			id="study-post-title">
+			<h3 th:text="${post.title}" class="board-title mb-0">게시글 제목</h3>
+			<div
+				th:if="${session.userId != null and session.userId == post.userId.userId}">
+				<div>
+					<a th:href="@{/study/{studyId}/update(studyId=${post.studyId})}"
+						class="btn btn-sm btn-primary">수정</a>
+					<form th:action="@{/study/{studyId}/delete(studyId=${post.studyId})}"
+						method="post" style="display: inline;">
+						<button type="submit" class="btn btn-sm btn-primary"
+							onclick="return confirmDelete();">삭제</button>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div class="d-flex align-items-center gap-3">
+
+			<!-- 나중에 프로필 누를 경우 정보 뜨게하기 추가 -->
+			<img alt="프로필" th:src="@{/svg/sejung.svg}" class="profile">
+
+			<div class="d-flex flex-column">
+				<p th:text="${post.userId.nickname}" class="mb-0 fw-bold">김세정</p>
+				<p th:text="${postDateFormatted}" class="mb-0 text-muted small">2025-08-18</p>
+			</div>
+
+			<!-- 본인 게시글 아닌 경우에만 신고 버튼 -->
+			<!-- 나중에 신고 추가 -->
+			<div
+				th:if="${session.userId != null and session.userId != post.userId.userId}">
+				<img alt="신고" th:src="@{/svg/report-button.svg}" class="ms-auto"
+					style="width: 20px; height: 20px;">
+			</div>
+		</div>
 
 	</div>
 	<!-- 게시글 내용 -->
@@ -73,6 +102,7 @@
 			<p th:text="${comment.commentsContents}">댓글 내용</p>
 			<!-- 수정, 삭제, 신고 버튼 -->
 			<div class="col text-end">
+				<!-- 본인 댓글일 때만 수정 및 삭제 버튼 -->
 				<div
 					th:if="${session.userId != null and session.userId == comment.userId.userId}">
 					<div class="d-flex justify-content-end align-items-center gap-2">
@@ -100,6 +130,7 @@
 
 
 				</div>
+				<!-- 본인 댓글 아닐때만 신고 버튼 -->
 				<div
 					th:if="${session.userId != null and session.userId != comment.userId.userId}">
 					<img alt="김세정" th:src="@{/svg/report-button.svg}" id="list-button">

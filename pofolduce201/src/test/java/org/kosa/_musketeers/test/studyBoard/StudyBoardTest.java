@@ -36,13 +36,9 @@ public class StudyBoardTest {
 		
 		// When
 		List<StudyBoard> allPostsOrderByViewCount = studyBoardMapper.getPostOrderByViewCount();
-		List<StudyBoard> allPostsOrderByDate = studyBoardMapper.getPostOrderByDate();
 		
 		// Then
 		for (StudyBoard post : allPostsOrderByViewCount) {
-		    System.out.println(post);
-		}
-		for (StudyBoard post : allPostsOrderByDate) {
 		    System.out.println(post);
 		}
 		 assertThat(allPostsOrderByViewCount.get(0).getAddress()).isEqualTo(studyboard1.getAddress());
@@ -58,4 +54,10 @@ public class StudyBoardTest {
         // Then
         assertThat(pagedPosts.size()).isLessThanOrEqualTo(pageSize);
     }
+	
+	@Test
+	void testUpdateBoard() {
+		StudyBoard board = studyBoardMapper.getPostById(1);
+		studyBoardMapper.updatePost(board);
+	}
 }

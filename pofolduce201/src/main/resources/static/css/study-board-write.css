@@ -1,0 +1,42 @@
+@charset "UTF-8";
+#main-content {
+	width: 1000px;
+	margin: auto;
+	margin-top: 40px;
+}
+
+.post-title {
+	margin-top: 40px;
+	border: 1px solid black;
+}
+
+.post-input {
+	border-radius: 10px;
+	border: 1px solid #DEE2E6;
+}
+
+.post-input::placeholder {
+	text-align: center;
+	color: #B4B4B4;
+}
+
+.post-address {
+	font-size: 20px;
+	color: #B4B4B4;
+	text-align: center;
+}
+
+.post-content {
+	margin-top: 10px;
+	border: 1px solid black;
+	height: 580px;
+}
+
+.ck-editor__editable {
+	min-height: 500px; /* 최소 높이 500px */
+}
+
+.post-button {
+	margin-top: 10px;
+	margin-bottom: 40px;
+}

@@ -12,6 +12,7 @@ import org.kosa._musketeers.service.StudyBoardService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -121,5 +122,40 @@ public class StudyBoardController {
 
 	    studyBoardCommentService.deleteStudyComment(commentId);
 	    return "redirect:/study/" + studyId;
+	}
+	
+	@GetMapping("/study/write")
+	public String getStudyBoardWrite() {
+		return "pages/study/study-board-write";
+	}
+	
+	@PostMapping("/study/write")
+    public String writeSubmit(@ModelAttribute StudyBoard board, @SessionAttribute("userId") int userId) {
+		User user = new User();
+		user.setUserId(userId);
+
+        board.setUserId(user);
+        studyBoardService.createPost(board);
+
+        return "redirect:/study";
+    }
+	
+	@GetMapping("/study/{studyId}/update")
+	public String editStudyPost(@PathVariable int studyId, Model model) {
+	    StudyBoard post = studyBoardService.getPostById(studyId);
+	    model.addAttribute("post", post);
+	    return "pages/study/study-board-update";
+	}
+	
+	@PostMapping("/study/{studyId}/update")
+	public String editPost(@PathVariable int studyId, @ModelAttribute StudyBoard board) {
+		studyBoardService.updatePost(board);
+		return "redirect:/study/" + studyId;
+	}
+	
+	@PostMapping("/study/{studyId}/delete")
+	public String deletePost(@PathVariable int studyId) {
+		studyBoardService.deletePost(studyId);
+		return "redirect:/study";
 	}
 }
