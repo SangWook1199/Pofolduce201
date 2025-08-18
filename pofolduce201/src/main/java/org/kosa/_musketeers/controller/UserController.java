@@ -169,4 +169,31 @@ public class UserController {
 			return "/pages/mypage/mypage-myreview";
 
 		}
+		
+		//내 정보 수정 (닉네임, 이메일)
+		@PostMapping("/mypage/update")
+		public String updateUserInfomation(HttpServletRequest request, String nickname, String email){
+			// 세션에서 userId 가져오기
+		    HttpSession session = request.getSession(false);
+		    if (session == null || session.getAttribute("userId") == null) {
+		        // 로그인 안 된 상태면 로그인 페이지로
+		        return "redirect:/login";
+		    }
+		    int userId = (int) session.getAttribute("userId");
+		    
+			boolean update = userService.updateUserInfomation(userId, nickname, email);
+			
+			if(update == false) {
+				
+				return "redirect:/mypage"; // URL로 리다이렉트
+			}
+			else {
+				return "redirect:/mypage"; // URL로 리다이렉트
+			}
+			
+			
+			
+		}
+		
+		
 }

@@ -24,7 +24,7 @@
 						<h1 id="mypage-title2">내 정보 ></h1>
 						<div class="box">
 							<div id="person-svg">
-								<img th:src="@{svg/person.svg}" width=130 height=130>
+								<img th:src="@{/svg/person.svg}" width=130 height=130>
 							</div>
 						</div>
 						<div class="box-left">
@@ -46,19 +46,31 @@
 							</div>
 
 
-							<div class="mypage-main-info-box">
-								<input id="input" type="text" th:placeholder="${userData.nickname}" disabled>
-								<input id="input" type="text"
-									th:placeholder="${userData.email}" disabled>
+							<form class="mypage-main-info-box" id="userinfo"
+								action="/mypage/update" method="POST">
+								<div class="input-icon nickname">
+									<input class="input" type="text"
+										th:value="${userData.nickname}" id="nickname"
+										name="nickname"
+										 disabled> <img
+										class="pen-svg" th:src="@{/svg/pen.svg}">
+								</div>
 
-								<div id="verify-box">
+								<div class="input-icon">
+									<input class="input" type="text" th:value="${userData.email}"
+										id="email" 
+										name="email" disabled>
+									<img class="pen-svg" th:src="@{/svg/pen.svg}">
+
+								</div>
+								<div class="verify-box button">
 									<button type="button"
 										class="btn btn-outline-primary btn-custom2">인증하기</button>
 								</div>
 
-								<input id="input" type="text" th:placeholder="${userData.point}" disabled>
+								<div class="verify-box" type="text" th:text="${userData.point}"></div>
+							</form>
 
-							</div>
 
 						</div>
 						<div class="box-left">
@@ -66,18 +78,23 @@
 								id="btn-box">정보 수정</button>
 
 							<button type="button" id="deleteBtn"
-								class="btn btn-outline-primary btn-custom" >회원 탈퇴</button>
-
-							
+								class="btn btn-outline-primary btn-custom"
+								data-bs-toggle="modal" data-bs-target="#globalModal"
+								data-modal-title="회원 탈퇴" data-modal-body="정말 탈퇴하시겠습니까?"
+								data-modal-confirm="탈퇴하기">회원 탈퇴</button>
+						</div>	
 					</div>
+
 
 
 				</div>
 			</div>
-
 		</div>
 	</div>
 </div>
+</div>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/modal.js}"></script>
 <script th:src="@{/js/mypage.js}"></script>
-
 </html>

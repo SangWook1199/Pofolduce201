@@ -12,4 +12,10 @@ public interface UserMapper {
 	User getUserInformation(int userId);
 
 	boolean deleteAccount(int userId);
+
+	void updateUserInformation(int userId, String nickname, String email);
+
+	int getUserNickNameById(String nickname);
+
+	int getUserEmailById(String email);
 }

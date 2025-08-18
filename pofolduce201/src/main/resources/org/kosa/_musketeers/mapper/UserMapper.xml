@@ -1,23 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.kosa._musketeers.mapper.UserMapper">
-	<select id="getUserIdByEmailPwd" parameterType="map" resultType="org.kosa._musketeers.domain.User">
+	<select id="getUserIdByEmailPwd" parameterType="map"
+		resultType="org.kosa._musketeers.domain.User">
 		SELECT user_id
 		FROM users
-		WHERE email=#{email} and password=#{password}
+		WHERE email=#{email} and
+		password=#{password}
 	</select>
-	
+
 	<select id="getUserInformation" parameterType="int">
-	SELECT email, nickname, company_name, company_certification, point, user_image_location 
+		SELECT email, nickname, company_name, company_certification, point,
+		user_image_location
 		FROM users
 		WHERE user_id=#{userId}
 	</select>
-	
-	
+
+
 	<delete id="deleteAccount" parameterType="int">
-	delete FROM users
-	where user_id=#{userId};
+		delete FROM users
+		where user_id=#{userId};
 	</delete>
-	
-	
+
+	<select id="getUserNickNameById">
+		select user_id from users
+		where nickname=#{nickname}
+	</select>
+	<select id="getUserEmailById">
+		select user_id from users
+		where email=#{email}
+	</select>
+	<update id="updateUserInformation">
+		update users set email =#{email}, nickname=#{nickname}
+		where user_id=#{userId};
+
+	</update>
+
 </mapper>
