@@ -38,3 +38,12 @@
 	margin-bottom:3%;
 }
 
+.non-data{
+	display:flex;
+	color : #CACACA;
+	margin : 10%;
+	align-items:center;
+	justify-content : center;
+}
+
+

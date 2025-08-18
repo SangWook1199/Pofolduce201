@@ -35,21 +35,26 @@ public class MyBoardService {
 
 		// 첨삭게시판에서 게시글 찾기
 		for (ReviewBoard rb : myBoardMapper.findMyReviewPost(userId)) {
+			
 			result.add(new MyPagePost(rb.getReviewPostId(), "review", // 게시판 타입
 					rb.getTitle(), rb.getViewCount(), rb.getPostHtml(), rb.getCreateDate(), rb.getLikeCount(),
 					rb.getUserId(), rb.getPortfolioId(), // Review 전용
 					null // Study 전용 없음
 			));
+			
 		}
 
 		// 스터디게시판에서 게시글 찾기
-//				for (StudyBoard sb : myBoardMapper.findMyStudyPost(userId)) {
-//					result.add(new MyPagePost(sb.getStudyId(), "study", // 게시판 타입
-//							sb.getTitle(), sb.getViewCount(), sb.getPostHtml(), sb.getPostDate(), sb.getLikeCount(),
-//							sb.getUserId(), null, // Review 전용 없음
-//							sb.getAddress() // Study 전용
-//					));
-//				}
+
+		for (StudyBoard sb : myBoardMapper.findMyStudyPost(userId)) {
+			if (sb.getUserId() != null) {   // User 객체가 있을 때만 추가
+			result.add(new MyPagePost(sb.getStudyId(), "study", // 게시판 타입
+					sb.getTitle(), sb.getViewCount(), sb.getPostHtml(), sb.getPostDate(), sb.getLikeCount(),
+					sb.getUserId().getUserId(), null, // Review 전용 없음
+					sb.getAddress() // Study 전용
+			));
+			}
+		}
 
 		// 최신순으로 정렬한다.
 		result.sort(Comparator.comparing(MyPagePost::getCreateDate).reversed());
