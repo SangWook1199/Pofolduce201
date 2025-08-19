@@ -66,7 +66,14 @@
 										class="btn btn-outline-primary btn-custom2">인증하기</button>
 								</div>
 
-								<div class="verify-box" type="text" th:text="${userData.point}"></div>
+								<div class="verify-box" type="text"
+									th:text="${userData.point >= 10000 ? '아이돌' :
+               (userData.point >= 2000 ? '데뷔조' :
+               (userData.point >= 1000 ? '연습생 A' :
+               (userData.point >= 500 ? '연습생 B' :
+               (userData.point >= 100 ? '연습생 C' : '연습생 D'))))}">
+								</div>
+
 							</form>
 
 
@@ -77,17 +84,16 @@
 
 							<!-- 탈퇴용 숨은 폼 -->
 							<form id="deleteForm" action="/mypage/delete" method="POST"
-								style="display: none;">
-								</form>
-								<input type="hidden" name="userId" value="123">
+								style="display: none;"></form>
+							<input type="hidden" name="userId" value="123">
 
-								<button type="button" id="deleteBtn"
-									class="btn btn-outline-primary btn-custom"
-									data-bs-toggle="modal" data-bs-target="#globalModal"
-									data-modal-title="회원 탈퇴" data-modal-body="정말 탈퇴하시겠습니까?"
-									data-modal-confirm="탈퇴하기">회원 탈퇴</button>
+							<button type="button" id="deleteBtn"
+								class="btn btn-outline-primary btn-custom"
+								data-bs-toggle="modal" data-bs-target="#globalModal"
+								data-modal-title="회원 탈퇴" data-modal-body="정말 탈퇴하시겠습니까?"
+								data-modal-confirm="탈퇴하기">회원 탈퇴</button>
 
-							
+
 						</div>
 					</div>
 
@@ -103,9 +109,12 @@
 
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script th:src="@{/js/modal.js}"></script>
-<script th:src="@{/js/mypage.js}"></script>
 
 
+
+<div layout:fragment="script">
+	<script th:src="@{/js/modal.js}"></script>
+	<script th:src="@{/js/mypage.js}"></script>
+</div>
 
 </html>

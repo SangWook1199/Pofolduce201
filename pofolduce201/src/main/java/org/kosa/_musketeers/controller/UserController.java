@@ -55,7 +55,7 @@ public class UserController {
 		if (user != null) {
 			HttpSession httpSession = request.getSession();
 			httpSession.setAttribute("userId", user.getUserId());
-			page = "redirect:/home";
+			page = "redirect:/";
 		} else {
 			redirectAttributes.addFlashAttribute("loginFailMessage", "아이디 or 비밀번호가 잘못입력되었습니다");
 		}
@@ -69,12 +69,7 @@ public class UserController {
 		HttpSession httpSession = request.getSession();
 		httpSession.removeAttribute("userId");
 
-		return "redirect:/home";
-	}
-
-	@GetMapping("/home")
-	public String home() {
-		return "index";
+		return "redirect:/";
 	}
 
 	// 마이페이지로 이동 및 내정보 조회

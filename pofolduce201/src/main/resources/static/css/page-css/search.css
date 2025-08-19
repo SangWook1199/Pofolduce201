@@ -1,0 +1,32 @@
+.search-home {
+	display: grid;
+	justify-content: center;
+}
+
+.search-main {
+	margin-top: 5%;
+	width: 1000px;
+	height: 100%;
+}
+
+.portfolio {
+	width: 1000px;
+	height: 500px;
+	display:flex;
+	background-color: #FFEDED;
+	border-radius: 25px;
+	margin-bottom: 5%;
+	justify-content:center;
+	align-items : center;
+	gap:30px;
+}
+
+#search-header {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 5%;
+}
+
+#search-table {
+	margin-bottom: 5%;
+}

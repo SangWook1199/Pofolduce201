@@ -1,22 +1,43 @@
 
 <head>
 <link th:href="@{/css/header1.css}" rel="stylesheet">
+
+
 </head>
 <body>
 	<div class="header1" th:fragment="header1">
 		<div class="row m-2" id="headerdiv1">
 			<div class="col-2 col-md-3 d-flex justify-content-start">
 				<img class="img-fluid" th:src="@{/svg/pofolduce201Logo.svg}"
-					alt="아이콘" width="50" height="50" onclick="location.href='/home'">
+					alt="아이콘" width="80" height="80" onclick="location.href='/'">
 			</div>
-			<div class="col-7 col-md-6 row" id='headerdiv2'>
+
+
+
+
+			<div class="col-7 col-md-5 row" id='headerdiv2'>
+
+
+
 				<div class="col-9 col-md-10 d-flex justify-content-start">
-					<input class="flex-grow-1 border-0" type="text" />
+
+
+
+					<input class="flex-grow-1 border-0" type="text" id="input" />
 				</div>
 				<div class="col-3 col-md-2 d-flex justify-content-end">
-					<img class="img-fluid" th:src="@{/svg/search.svg}">
+					<img class="img-fluid" th:src="@{/svg/search.svg}" width="30"
+						height="30" id="searchBtn">
 				</div>
 			</div>
+			<form id="hiddenForm" action="/search" method="GET"
+				style="display: none;">
+				<input type="text" name="search" id="hiddenInput" />
+			</form>
+
+
+
+
 			<div class="col-3 col-md-3 d-flex justify-content-end">
 				<div th:if="${session.userId == null}">
 					<button class="btn-sm btn-primary" onclick="location.href='/login'">Login</button>
@@ -34,4 +55,8 @@
 		<!-- 			<div id="header-line"></div>
  -->
 	</div>
+
+
 </body>
+
+
