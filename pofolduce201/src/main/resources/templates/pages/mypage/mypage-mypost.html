@@ -53,7 +53,7 @@
 						</div>
 						
 						
-						<nav aria-label="Page navigation example">
+						<nav th:if="${not #lists.isEmpty(myPagePostList)}" aria-label="Page navigation example">
 						<ul class="pagination justify-content-center">
 
 							<!-- 이전 페이지 -->

@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -172,28 +173,68 @@ public class UserController {
 		
 		//내 정보 수정 (닉네임, 이메일)
 		@PostMapping("/mypage/update")
-		public String updateUserInfomation(HttpServletRequest request, String nickname, String email){
-			// 세션에서 userId 가져오기
+		@ResponseBody // 중요! redirect 없이 메시지 바로 반환
+		public String updateUserInfomation(HttpServletRequest request, String nickname, String email) {
 		    HttpSession session = request.getSession(false);
 		    if (session == null || session.getAttribute("userId") == null) {
-		        // 로그인 안 된 상태면 로그인 페이지로
-		        return "redirect:/login";
+		        return "로그인이 필요합니다.";
 		    }
 		    int userId = (int) session.getAttribute("userId");
-		    
-			boolean update = userService.updateUserInfomation(userId, nickname, email);
-			
-			if(update == false) {
-				
-				return "redirect:/mypage"; // URL로 리다이렉트
-			}
-			else {
-				return "redirect:/mypage"; // URL로 리다이렉트
-			}
-			
-			
-			
+
+		    boolean update = userService.updateUserInfomation(userId, nickname, email);
+
+		    if(!update) {
+		       	return "닉네임 또는 이메일이 중복입니다.";
+		    } else {
+		    	return "수정이 완료되었습니다";
+
+		    }
 		}
+
+//		@PostMapping("/mypage/update")
+//		public String updateUserInfomation(RedirectAttributes redirectAttributes, HttpServletRequest request, String nickname, String email){
+//			// 세션에서 userId 가져오기
+//		    HttpSession session = request.getSession(false);
+//		    if (session == null || session.getAttribute("userId") == null) {
+//		        // 로그인 안 된 상태면 로그인 페이지로
+//		        return "redirect:/login";
+//		    }
+//		    int userId = (int) session.getAttribute("userId");
+//		    
+//			boolean update = userService.updateUserInfomation(userId, nickname, email);
+//		
+//			if(!update) {
+//		        redirectAttributes.addFlashAttribute("errorMessage", "이미 존재하는 닉네임 또는 이메일입니다.");
+//				return "redirect:/mypage"; // URL로 리다이렉트
+//			}
+//			else {
+//				redirectAttributes.addFlashAttribute("successMessage", "수정이 완료되었습니다");
+//				return "redirect:/mypage"; // URL로 리다이렉트
+//			}
+//			
+//			
+//			
+//		}
 		
+		
+		//내(가 작성한) 첨삭 조회
+				@PostMapping("/mypage/delete")
+				public String deleteAccount(HttpServletRequest request) {
+					
+					// 세션에서 userId 가져오기
+				    HttpSession session = request.getSession(false);
+				    if (session == null || session.getAttribute("userId") == null) {
+				        // 로그인 안 된 상태면 로그인 페이지로
+				        return "redirect:/login";
+				    }
+
+				    int userId = (int) session.getAttribute("userId");
+				    
+				    userService.deleteAccount(userId);
+				
+					
+					return "redirect:/login";
+
+				}
 		
 }

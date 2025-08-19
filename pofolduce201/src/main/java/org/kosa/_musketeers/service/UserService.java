@@ -30,15 +30,17 @@ public class UserService {
 	// 2. 이메일 중복 체크
 	public boolean updateUserInfomation(int userId, String nickname, String email) {
 
-		int nickNameUserId = userMapper.getUserNickNameById(nickname);
-		int emailUserId = userMapper.getUserNickNameById(email);
+		//Integer 타입으로 변경 (null이 반환될수도 있음)
+		Integer nickNameUserId = userMapper.getUserNickNameById(nickname);
+		Integer emailUserId = userMapper.getUserEmailById(email);
 
 		// 닉네임이 존재하는 경우 (즉 변경하려는 닉네임이 다른 유저의 닉네임인 경우)
-		if (nickNameUserId != userId) {
+		// nickNameUserId != userId 만 작성하면 오류가 발생한다. (null은 비교 자체가 불가능하기 때문)
+		if (nickNameUserId != null && nickNameUserId != userId) {
 			
 			return false;
 			
-		} else if (emailUserId != userId) {
+		} else if (emailUserId != null && emailUserId != userId) {
 			//이메일이 존재하는 경우
 				return false;
 		} else {
@@ -53,7 +55,7 @@ public class UserService {
 
 		boolean result = userMapper.deleteAccount(userId);
 
-		return false;
+		return result;
 	}
 
 }

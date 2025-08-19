@@ -15,7 +15,7 @@ public interface UserMapper {
 
 	void updateUserInformation(int userId, String nickname, String email);
 
-	int getUserNickNameById(String nickname);
+	Integer getUserNickNameById(String nickname);
 
-	int getUserEmailById(String email);
+	Integer getUserEmailById(String email);
 }
