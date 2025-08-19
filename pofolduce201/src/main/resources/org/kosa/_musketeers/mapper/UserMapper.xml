@@ -10,7 +10,8 @@
 	</select>
 
 	<select id="getUserInformation" parameterType="int">
-		SELECT email, nickname, company_name, company_certification, point,
+		SELECT email,
+		nickname, company_name, company_certification, point,
 		user_image_location
 		FROM users
 		WHERE user_id=#{userId}
@@ -19,7 +20,8 @@
 
 	<delete id="deleteAccount" parameterType="int">
 		delete FROM users
-		where user_id=#{userId};
+		where
+		user_id=#{userId};
 	</delete>
 
 	<select id="getUserNickNameById">
@@ -31,9 +33,22 @@
 		where email=#{email}
 	</select>
 	<update id="updateUserInformation">
-		update users set email =#{email}, nickname=#{nickname}
+		update users set email =#{email},
+		nickname=#{nickname}
 		where user_id=#{userId};
-
 	</update>
+	<select id="findUserByEmail" parameterType="string"
+		resultType="org.kosa._musketeers.domain.User">
+		SELECT user_id, email, nickname, password, company_name,
+		company_certification, point, user_image_location
+		FROM users
+		WHERE email
+		= #{email}
+	</select>
+	<insert id="insertUser"
+		parameterType="org.kosa._musketeers.domain.User">
+		INSERT INTO users (email, nickname, password)
+		VALUES (#{email}, #{nickname}, #{password})
+	</insert>
 
 </mapper>
