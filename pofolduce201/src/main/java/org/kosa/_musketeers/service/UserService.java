@@ -146,6 +146,12 @@ public class UserService {
 		return portfolioMapper.getRepPortfolio(userId);
 	}
 
+	// 아이디로 포트폴리오 아이디를 구하는 메서드입니다.
+	public int getPortfolioById(int userId) {
+		return portfolioMapper.getPortfolioById(userId);
+	}
+
+	// 포트폴리오를 삭제하는 메서드입니다.
 	public void deletePortfolio(int portfolioId) {
 		// 1) 파일 경로 생성
 		Path uploadDir = Paths.get("src/main/resources/static/uploads/portfolio/");

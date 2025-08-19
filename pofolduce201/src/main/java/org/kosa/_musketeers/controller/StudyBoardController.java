@@ -30,6 +30,7 @@ public class StudyBoardController {
 		this.studyBoardCommentService = studyBoardCommentService;
 	}
 
+	// 스터디 게시판 페이지
 	@GetMapping("/study")
 	public String studyBoard(@RequestParam(defaultValue = "1") int page, Model model) {
 
@@ -59,32 +60,34 @@ public class StudyBoardController {
 
 		return "pages/study/study-board";
 	}
+
+	// 스터디 게시글 상세 페이지
 	@GetMapping("/study/{studyId}")
-	public String studyBoardPost(@PathVariable int studyId,
-	                             @RequestParam(defaultValue = "1") int page,
-	                             Model model,
-	                             @SessionAttribute("userId") int userId) {
+	public String studyBoardPost(@PathVariable int studyId, @RequestParam(defaultValue = "1") int page, Model model,
+			@SessionAttribute("userId") int userId) {
 
-	    StudyBoard post = studyBoardService.getPostById(studyId);
-	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-	    model.addAttribute("postDateFormatted", post.getPostDate().format(formatter));
-	    model.addAttribute("post", post);
+		StudyBoard post = studyBoardService.getPostById(studyId);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		model.addAttribute("postDateFormatted", post.getPostDate().format(formatter));
+		model.addAttribute("post", post);
 
-	    int pageSize = 5; // 한 페이지 댓글 수
-	    List<StudyBoardComment> comments = studyBoardCommentService.getCommentsByStudyIdWithPage(studyId, page, pageSize);
-	    model.addAttribute("comments", comments);
+		int pageSize = 5; // 한 페이지 댓글 수
+		List<StudyBoardComment> comments = studyBoardCommentService.getCommentsByStudyIdWithPage(studyId, page,
+				pageSize);
+		model.addAttribute("comments", comments);
 
-	    int totalComments = studyBoardCommentService.countCommentsByStudyId(studyId);
-	    int totalPages = (int) Math.ceil((double) totalComments / pageSize);
+		int totalComments = studyBoardCommentService.countCommentsByStudyId(studyId);
+		int totalPages = (int) Math.ceil((double) totalComments / pageSize);
 
-	    model.addAttribute("currentPage", page);
-	    model.addAttribute("totalPages", totalPages);
+		model.addAttribute("currentPage", page);
+		model.addAttribute("totalPages", totalPages);
 
-	    model.addAttribute("userId", userId);
+		model.addAttribute("userId", userId);
 
-	    return "pages/study/study-board-post";
+		return "pages/study/study-board-post";
 	}
 
+	// 댓글 쓰기
 	@PostMapping("/study/{studyId}/comments")
 	public String addComment(@PathVariable("studyId") int studyId, @RequestParam("comment-content") String content,
 			@RequestParam("userId") int userId) {
@@ -103,56 +106,61 @@ public class StudyBoardController {
 		return "redirect:/study/" + studyId;
 	}
 
+	// 댓글 수정
 	@PostMapping("/study/{studyId}/comments/{commentId}/edit")
 	public String editComment(@PathVariable int studyId, @PathVariable int commentId,
 			@RequestParam("comment-content") String content, @SessionAttribute("userId") int userId) {
 		StudyBoardComment comment = new StudyBoardComment();
 		comment.setCommentsId(commentId);
 		comment.setCommentsContents(content);
-		
-		studyBoardCommentService.updateStudyComment(comment);
-	    return "redirect:/study/" + studyId;
-	}
-	
-	@PostMapping("/study/{studyId}/comments/{commentId}/delete")
-	public String deleteComment(
-	        @PathVariable int studyId,
-	        @PathVariable int commentId,
-	        @SessionAttribute("userId") int userId) {
 
-	    studyBoardCommentService.deleteStudyComment(commentId);
-	    return "redirect:/study/" + studyId;
+		studyBoardCommentService.updateStudyComment(comment);
+		return "redirect:/study/" + studyId;
 	}
-	
+
+	// 댓글 삭제
+	@PostMapping("/study/{studyId}/comments/{commentId}/delete")
+	public String deleteComment(@PathVariable int studyId, @PathVariable int commentId,
+			@SessionAttribute("userId") int userId) {
+
+		studyBoardCommentService.deleteStudyComment(commentId);
+		return "redirect:/study/" + studyId;
+	}
+
+	// 게시글 작성 페이지
 	@GetMapping("/study/write")
 	public String getStudyBoardWrite() {
 		return "pages/study/study-board-write";
 	}
-	
+
+	// 게시글 작성
 	@PostMapping("/study/write")
-    public String writeSubmit(@ModelAttribute StudyBoard board, @SessionAttribute("userId") int userId) {
+	public String writeSubmit(@ModelAttribute StudyBoard board, @SessionAttribute("userId") int userId) {
 		User user = new User();
 		user.setUserId(userId);
 
-        board.setUserId(user);
-        studyBoardService.createPost(board);
+		board.setUserId(user);
+		studyBoardService.createPost(board);
 
-        return "redirect:/study";
-    }
-	
+		return "redirect:/study";
+	}
+
+	// 게시글 수정 페이지
 	@GetMapping("/study/{studyId}/update")
 	public String editStudyPost(@PathVariable int studyId, Model model) {
-	    StudyBoard post = studyBoardService.getPostById(studyId);
-	    model.addAttribute("post", post);
-	    return "pages/study/study-board-update";
+		StudyBoard post = studyBoardService.getPostById(studyId);
+		model.addAttribute("post", post);
+		return "pages/study/study-board-update";
 	}
-	
+
+	// 게시글 수정
 	@PostMapping("/study/{studyId}/update")
 	public String editPost(@PathVariable int studyId, @ModelAttribute StudyBoard board) {
 		studyBoardService.updatePost(board);
 		return "redirect:/study/" + studyId;
 	}
-	
+
+	// 게시글 삭제
 	@PostMapping("/study/{studyId}/delete")
 	public String deletePost(@PathVariable int studyId) {
 		studyBoardService.deletePost(studyId);

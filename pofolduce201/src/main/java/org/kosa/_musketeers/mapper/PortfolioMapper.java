@@ -12,6 +12,8 @@ public interface PortfolioMapper {
 
 	Portfolio getPortfolio(int portfolioId);
 
+	int getPortfolioById(int userId);
+	
 	List<Portfolio> getPortfolioList(int userId);
 
 	void updateRepPortfolio(int userId, int portfolioId);
