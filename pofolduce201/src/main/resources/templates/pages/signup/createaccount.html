@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+
+<head>
+<meta charset="UTF-8">
+<title>회원 가입</title>
+<link th:href="@{/css/board-header.css}" rel="stylesheet">
+<link rel="stylesheet" th:href="@{/css/signup.css}" />
+</head>
+
+<body>
+	<div class="createaccount-container" layout:fragment="content">
+
+		<!-- 회원가입 박스 -->
+		<div class="createaccount-content">
+			<h2 class="createaccount-title">회원 가입</h2>
+
+			<img id="svg-search" th:src="@{/svg/pofolduce201Logo.svg}" alt="Logo"
+				class="logo-img">
+
+			<form th:action="@{/signup}" method="post">
+				<!-- 오류 메시지 표시 -->
+				<div th:if="${errorMessage}" class="error-message">
+					<p th:text="${errorMessage}"></p>
+				</div>
+
+				<div class="mb-3">
+					<label for="email" class="form-label">Email</label> <input
+						type="email" class="form-control" id="email" name="email" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="nickname" class="form-label">Nickname</label> <input
+						type="text" class="form-control" id="nickname" name="nickname"
+						required>
+				</div>
+
+				<div class="mb-3">
+					<label for="password" class="form-label">Password</label> <input
+						type="password" class="form-control" id="password" name="password"
+						required minlength="7" maxlength="20"
+						pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$"
+						title="영문, 숫자 포함 8~20자">
+				</div>
+
+				<div class="mb-3">
+					<label for="confirmPassword" class="form-label">Confirm
+						Password</label> <input type="password" class="form-control"
+						id="confirmPassword" name="confirmPassword" required>
+				</div>
+
+				<div class="text-center">
+					<button type="submit" class="btn primaryButton">회원 가입</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
