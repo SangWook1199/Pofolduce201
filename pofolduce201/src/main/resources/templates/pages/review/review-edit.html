@@ -16,8 +16,8 @@
 <div layout:fragment="content">
 	<div class="row justify-content-center m-5">
 		<div class="col-10">
-			<h1 class="h1 mb-5 border-bottom border-3 d-inline-block">첨삭게시판
-				> 글 수정하기</h1>
+				<div
+					th:replace="fragments/html/board-header :: board-header('첨삭 게시판 > 글 수정하기')"></div>
 
 			<form th:action="@{/review/edit/save}" method="post">
 			    <input type="hidden" name="reviewPostId" th:value="${reviewPost.reviewPostId}">

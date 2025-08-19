@@ -11,8 +11,8 @@
 	<div layout:fragment="content">
 		<div class="row justify-content-center mt-5">
 			<div class="col-9">
-				<h1 class="h2 mb-5 border-bottom border-3 d-inline-block">첨삭게시판
-					> 글쓰기</h1>
+				<div
+					th:replace="fragments/html/board-header :: board-header('첨삭 게시판')"></div>
 				<div class="row border-top border-3 p-3 align-items-center">
 					<div class="col-9">
 						<h3 class="h3" th:text=${reviewPost.title}></h3>
