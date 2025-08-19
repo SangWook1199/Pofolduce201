@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<head>
+<link th:href="@{/css/board-header.css}" rel="stylesheet">
+<link rel="stylesheet" th:href="@{/css/page-css/mypage-menu.css}" />
+<title>내 이력서</title>
+<style type="text/css">
+.mypage-mypost {
+	display: flex;
+	justify-content: center;
+}
+
+.mypage-main {
+	margin-top: 5%;
+	width: 1000px;
+	height: auto;
+}
+
+.mypage-main-side {
+	margin-top: 3%;
+	display: grid;
+	width: 100%;
+	height: auto;
+	grid-template-columns: 23% 1fr;
+	gap: 20px;
+	justify-content: center;
+}
+
+.mypage-main-container {
+	border-radius: 20px;
+	padding: 3%;
+	border: 2px solid #CACACA;
+	width: 100%;
+	height: auto;
+	margin-bottom: 4%;
+	overflow: auto;
+}
+
+#mypage-title2 {
+	margin: 0;
+	line-height: 1; /* 글자 높이에 맞춤 */
+	display: inline-block;
+	border-bottom: 3px solid #ff4473; /* 하단만 핑크 밑줄 */
+	white-space: nowrap;
+	font-size: 30px;
+	margin-bottom: 3%;
+}
+
+.long-button {
+	font-size: 20px;
+	font-weight: bolder;
+	padding: 20px;
+	background-color: #FF7C9D;
+	color: #ffffff;
+	margin-top: 30px;
+}
+
+.portfolio-title {
+	white-space: nowrap;
+}
+</style>
+</head>
+
+<div layout:fragment="content">
+
+	<div class="mypage-mypost">
+		<div class="mypage-main">
+			<div
+				th:replace="fragments/html/board-header :: board-header('마이페이지')"></div>
+			<div class="mypage-main-side">
+				<div th:replace="fragments/html/mypage-menu :: mypage-menu"></div>
+				<div>
+
+					<div class="mypage-main-container">
+						<h1 id="mypage-title2">내 이력서</h1>
+						<div class="row row-cols-3 g-4">
+							<div class="col" th:each="portfolio : ${portfolio}">
+								<div class="card h-100 text-center">
+									<!-- 썸네일 -->
+									<a
+										th:href="@{'/mypage/myportfolio/{portfolioId}(portfolioId=${portfolio.portfolioId})">
+										<img class="card-img-top"
+										th:src="@{'/uploads/portfolio/' + ${portfolio.portfolioId} + '.png'}"
+										alt="썸네일" style="max-height: 300px; object-fit: cover;"
+										th:href="@{'}">
+									</a>
+									<!-- 제목 -->
+									<div class="card-body">
+										<h6 class="card-title" th:text="${portfolio.portfolioName}">포트폴리오
+											제목</h6>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<button type="button"
+							class="btn rounded-pill w-100 py-2 long-button"
+							data-bs-toggle="modal" data-bs-target="#resumeUploadModal">+</button>
+
+						<div class="modal fade" id="resumeUploadModal" tabindex="-1"
+							aria-labelledby="resumeUploadModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+
+									<div class="modal-header">
+										<h5 class="modal-title" id="resumeUploadModalLabel">이력서
+											업로드</h5>
+										<button type="button" class="btn-close"
+											data-bs-dismiss="modal" aria-label="Close"></button>
+									</div>
+
+									<form th:action="@{/mypage/myportfolio/upload}" method="post"
+										enctype="multipart/form-data">
+										<div class="modal-body">
+											<div class="d-flex align-items-center mb-3">
+												<label class="me-2" style="min-width: 130px;">제목을
+													입력하세요.</label> <input type="text" name="portfolioName"
+													class="form-control flex-grow-1" required>
+											</div>
+											<input type="file" name="file" accept="application/pdf"
+												class="form-control" required>
+										</div>
+
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary"
+												data-bs-dismiss="modal">취소</button>
+											<button type="submit" class="btn btn-primary">확인</button>
+										</div>
+									</form>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+</html>
