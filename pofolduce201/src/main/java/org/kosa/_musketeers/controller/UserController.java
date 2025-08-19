@@ -228,13 +228,5 @@ public class UserController {
 
 	}
 
-	@GetMapping("/mypage/myportfolio/{portfolioId}")
-	public String getPortfolio(@PathVariable int portfolioId, @SessionAttribute("userId") int userId, Model model) {
-		Portfolio portfolio = userService.getPortfolio(portfolioId);
-
-		model.addAttribute("portfolio", portfolio);
-
-		return "/pages/mypage/mypage-myportfolio";
-	}
 
 }
