@@ -36,5 +36,9 @@ public class ReviewBoardService {
 		reviewBoardMapper.updateReviewPostViewCount(reviewPostId);
 		return reviewBoardMapper.getReviewPostByReviewPostId(reviewPostId);
 	}
+
+	public void deleteReviewPost(int reviewPostId) {
+		reviewBoardMapper.delteReviewPost(reviewPostId);
+	}
 	
 }

@@ -66,4 +66,10 @@
 	SET view_count=view_count+1
 	WHERE review_post_id=#{reviewPostId}
 	</update>
+	
+	<delete id="delteReviewPost" parameterType="int">
+	DELETE 
+	FROM review_post
+	WHERE review_post_id=${reviewPostId}
+	</delete>
 </mapper>
