@@ -18,4 +18,8 @@ public interface UserMapper {
 	Integer getUserNickNameById(String nickname);
 
 	Integer getUserEmailById(String email);
+
+	int insertUser(User newUser);
+
+	User findUserByEmail(String email);
 }
