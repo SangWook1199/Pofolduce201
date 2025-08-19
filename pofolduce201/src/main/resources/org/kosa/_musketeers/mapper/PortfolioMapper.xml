@@ -18,7 +18,8 @@
 	<insert id="createPortfolio"
 		parameterType="org.kosa._musketeers.domain.Portfolio"
 		useGeneratedKeys="true" keyProperty="portfolioId">
-		INSERT INTO portfolio (portfolio_name, user_id)
+		INSERT INTO portfolio
+		(portfolio_name, user_id)
 		VALUES (#{portfolioName}, #{userId.userId})
 	</insert>
 
@@ -27,7 +28,18 @@
 		SELECT p.*, u.user_id, u.nickname, u.email
 		FROM portfolio p
 		JOIN users u ON p.user_id = u.user_id
-		WHERE p.portfolio_id = #{portfolioId}
+		WHERE p.portfolio_id =
+		#{portfolioId}
+	</select>
+
+	<select id="getPortfolioList" parameterType="int"
+		resultType="org.kosa._musketeers.domain.Portfolio">
+		SELECT portfolio_id AS portfolioId,
+               portfolio_name AS portfolioName,
+               user_id AS userId
+        FROM portfolio
+        WHERE user_id = #{userId}
+        ORDER BY upload_date DESC
 	</select>
 
 </mapper>

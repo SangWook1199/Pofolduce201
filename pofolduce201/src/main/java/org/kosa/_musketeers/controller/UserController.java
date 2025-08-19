@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.kosa._musketeers.domain.MyPageComment;
 import org.kosa._musketeers.domain.MyPagePost;
+import org.kosa._musketeers.domain.Portfolio;
 import org.kosa._musketeers.domain.Review;
 import org.kosa._musketeers.domain.User;
 import org.kosa._musketeers.service.MyBoardService;
@@ -195,7 +196,11 @@ public class UserController {
 		}
 	
 		@GetMapping("/mypage/myportfolio")
-		public String getMyPortfolio() {
+		public String getMyPortfolio(Model model, @SessionAttribute("userId") int userId) {
+			List<Portfolio> portfolio = userService.getPortfolioList(userId);
+
+		    model.addAttribute("portfolio", portfolio);
+			
 			return "/pages/mypage/mypage-myportfolio";
 		}
 		
