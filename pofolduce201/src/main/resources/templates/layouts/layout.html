@@ -68,9 +68,17 @@
 			</div>
 		</div>
 	</div>
-<!-- 모달 창의 확인 및 등록과 같은 이벤트를 발생시키고 싶을 때는 해당 js를 여기에도 추가해야 정상으로 작동합니다. -->
+
+	<!-- js를 불러오려면 해당 페이지 (여기 말고) 안에서 다음과 같이 맨 밑에 작성해 줍니다.
+				<div layout:fragment="script">
+					<script th:src="@{/js/modal.js}"></script>
+ 				 	<script th:src="@{/js/mypage.js}"></script>
+				</div>
+ -->
+
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-	<script th:src="@{/js/mypage.js}"></script> 
+	<script th:src="@{/js/search.js}"></script>
+	<div layout:fragment="script"></div>
 </body>
 </html>
