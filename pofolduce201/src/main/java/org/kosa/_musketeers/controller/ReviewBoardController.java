@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -44,17 +45,39 @@ public class ReviewBoardController {
 		return "pages/review/review-post";
 	}
 	
-	
 	@GetMapping("/review/write")
 	public String reviewWritePost() {
 		return "pages/review/review-write";
 	}
 	
 	@PostMapping("/review/write/save")
-	public String reviewSavePost(@ModelAttribute ReviewPost reviewPost, HttpServletRequest request) {
+	public String saveReviewPost(@ModelAttribute ReviewPost reviewPost, HttpServletRequest request) {
 
 		reviewPost.setUser(new User((Integer)request.getSession().getAttribute("userId")));
 		reviewBoardService.createPost(reviewPost);
 		return "redirect:/review";
 	}
+	
+	@GetMapping("/review/post/{reviewPostId}/edit")
+	public String editReviewPost(@PathVariable int reviewPostId, Model model) {
+
+		ReviewPost reviewPost = reviewBoardService.getReviewPostById(reviewPostId);
+		model.addAttribute("reviewPost", reviewPost);
+		return "pages/review/review-edit";
+	}
+	
+	@PostMapping("/review/edit/save")
+	public String saveEditReviewPost(@ModelAttribute ReviewPost reviewPost) {
+		reviewBoardService.editReviewPost(reviewPost);
+		System.out.println("******");
+		System.out.println(reviewBoardService.getReviewPostById(reviewPost.getReviewPostId()));
+		return "redirect:/review";
+	}
+	
+	@PostMapping("/review/post/{reviewPostId}/delete")
+	public String deleteReviewPost(@PathVariable int reviewPostId) {
+		reviewBoardService.deleteReviewPost(reviewPostId);
+		return "redirect:/review";
+	}
+	
 }

@@ -11,19 +11,20 @@
 <script
 	src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
 
-<title>첨삭게시판 글쓰기</title>
+<title>첨삭게시판 글 수정하기</title>
 </head>
 <div layout:fragment="content">
 	<div class="row justify-content-center m-5">
 		<div class="col-10">
-			<div
-				th:replace="fragments/html/board-header :: board-header('첨삭 게시판')"></div>
+				<div
+					th:replace="fragments/html/board-header :: board-header('첨삭 게시판 > 글 수정하기')"></div>
 
-			<form th:action="@{/review/write/save}" method="post">
+			<form th:action="@{/review/edit/save}" method="post">
+			    <input type="hidden" name="reviewPostId" th:value="${reviewPost.reviewPostId}">
 				<div class="m-1 row p-3 border rounded">
 					<div class="col-10">
 						<input type="text" class="form-control col-6 text-center"
-							id="title" name="title" placeholder="제목을 입력하세요" required>
+							id="title" name="title" placeholder="제목을 입력하세요" th:value="${reviewPost.title}" required>
 					</div>
 					<div class="col-2 d-flex justify-content-center ">
 						<button class="btn btn-primary">이력서 불러오기</button>
@@ -31,11 +32,11 @@
 				</div>
 				<div class="my-2">
 					<textarea class="form-control" id="editor" name="postHtml"
-						rows="10"></textarea>
+						rows="10" th:text="${reviewPost.postHtml}"></textarea>
 				</div>
 				<div class="d-flex justify-content-between">
-					<a th:href="@{/review}" class="btn btn-secondary">목록보기</a>
-					<button type="submit" class="btn btn-primary">게시하기</button>
+					<a th:href="@{/review}" class="btn btn-secondary">원글보기</a>
+					<button type="submit" class="btn btn-primary">수정하기</button>
 				</div>
 			</form>
 		</div>

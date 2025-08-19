@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="row justify-content-center mt-5">
+			<div class="col-9">
+				<div
+					th:replace="fragments/html/board-header :: board-header('첨삭 게시판')"></div>
+				<div class="row border-top border-3 p-3 align-items-center">
+					<div class="col-9">
+						<h3 class="h3" th:text=${reviewPost.title}></h3>
+					</div>
+					<div th:if="${session.userId == reviewPost.user.userId}"
+						class="col-3 d-flex justify-content-center">
+						<a class="btn btn-primary m-2"
+							th:href="@{/review/post/{reviewPostId}/edit(reviewPostId=${reviewPost.reviewPostId})}">수정하기</a>
+						<form
+							th:action="@{/review/post/{reviewPostId}/delete(reviewPostId=${reviewPost.reviewPostId})}"
+							method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+							<button class="btn btn-primary m-2" type="submit">삭제하기</button>
+						</form>
+					</div>
+					<div class="row justify-content-start">
+						<img class="col-3 col-md-2 col-xl-1 rounded-circle"
+							src="https://marketplace.canva.com/FUJzw/MAEVntFUJzw/1/tl/canva-human-face.-MAEVntFUJzw.png">
+						<div class="col-9 col-md-10 col-xl-11 row align-items-center">
+							<a class="fs-4 text-decoration-none text-dark" th:href="@{/}"
+								th:text="${reviewPost.user.nickname}"></a>
+							<p th:text="${reviewPost.createDate}">
+						</div>
+					</div>
+
+				</div>
+				<div class="pt-3 border-top border-1 mt">
+					<p th:utext="${reviewPost.postHtml}">
+				</div>
+				<div
+					class="d-flex justify-content-center mt-3 border-bottom border-1">
+					<button class="btn btn-primary text-align-center m-5">LIKE
+						👍</button>
+				</div>
+				<div class="d-flex justify-content-end m-3">
+					<button class="btn btn-primary" type="button"
+						onclick="location.href='/review'">목록보기</button>
+				</div>
+				<div class="p-3">
+					<h4 class="h4">댓글 목록</h4>
+					<form action="" method="post">
+						<div class="row">
+							<div class="col-10">
+								<textarea class="form-control" placeholder="댓글을 입력하세요"></textarea>
+							</div>
+							<button class="col-2 btn btn-primary" type="submit">등록</button>
+						</div>
+						<div th:each="comments : ${commentsList}">
+							<span th:text="${comments.user.nickname}"></span> <span
+								th:text="${comments.commentsContents}"></span>
+							<div th:if="${session.userId == comments.user.userId}">
+								<button>수정</button>
+								<button>삭제</button>
+							</div>
+							<div>
+								<button>신고</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
