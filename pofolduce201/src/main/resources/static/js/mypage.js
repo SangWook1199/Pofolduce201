@@ -1,5 +1,6 @@
 // mypage.js
 //회원 탈퇴 버튼
+
 document.addEventListener("click", (e) => {
     // modalConfirmBtn 클릭 감지
     const confirmBtn = e.target.closest("#modalConfirmBtn");
@@ -12,58 +13,66 @@ document.addEventListener("click", (e) => {
     const modalTitle = modalEl.querySelector(".modal-title").textContent.trim();
 
     if (modalTitle === "회원 탈퇴") {
+
         // alert 띄우기
         alert("탈퇴되었습니다.");
-
+	
         // 모달 닫기
         const modal = bootstrap.Modal.getInstance(modalEl);
         if (modal) modal.hide();
 
-        // 실제 탈퇴 AJAX 호출 가능
-        // 예: axios.post('/user/delete', { id: userId })
+		document.getElementById("deleteForm").submit();
+		
     }
 });
 
 
-//수정하기 버튼
 document.addEventListener("DOMContentLoaded", () => {
     const editBtn = document.getElementById("btn-box");
     const inputs = document.querySelectorAll(".mypage-main-info-box .input");
-	const penIcons = document.querySelectorAll(".pen-svg");
+    const penIcons = document.querySelectorAll(".pen-svg");
+    const deleteBtn = document.getElementById("deleteBtn");
+    const userinfo = document.getElementById("userinfo");
 
-    editBtn.addEventListener("click", () => {
-        // input 중 하나라도 disabled인지 확인
+    editBtn.addEventListener("click", (e) => {
         const isDisabled = Array.from(inputs).some(input => input.disabled);
 
         if (isDisabled) {
             // 수정 모드로 전환
             inputs.forEach(input => input.disabled = false);
-            editBtn.textContent = "수정하기"; // 버튼 텍스트 변경(optional)
-			deleteBtn.style.display = "none";   // 회원 탈퇴 버튼 숨기기
-			// 펜 보이게 하기 
-			penIcons.forEach(icon => icon.style.visibility = "visible");
+            editBtn.textContent = "수정완료"; 
+            deleteBtn.style.display = "none";
+            penIcons.forEach(icon => icon.style.visibility = "visible");
         } else {
-            // 수정 완료 처리
-			// 여기서 서버로 수정 데이터 보내기
-			
-			
-			userinfo.submit();  // <-- 여기서 서버로 전송
-			
+            // 수정 완료: AJAX로 전송
+            e.preventDefault(); // 기존 submit 막기
+
+            const formData = new FormData(userinfo);
+            const params = new URLSearchParams();
+            formData.forEach((value, key) => params.append(key, value));
+
+            fetch("/mypage/update", {
+                method: "POST",
+                body: params,
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            })
+            .then(response => response.text()) // 서버에서 redirect 없이 메시지만 반환
+            .then(msg => {
+                alert(msg); // 서버에서 반환한 메시지 alert
+                window.location.href = "/mypage"; // mypage로 이동
+            })
+            .catch(err => console.error(err));
+
             inputs.forEach(input => input.disabled = true);
-            alert("수정이 완료되었습니다!");
-            editBtn.textContent = "정보 수정"; // 버튼 텍스트 원복(optional)
-            
-			// 펜 숨기기
-			penIcons.forEach(icon => icon.style.visibility = "hidden");
-			// 회원 탈퇴 버튼 나타내기
-			deleteBtn.style.display = "inline-block";   
-			
+            editBtn.textContent = "정보 수정";
+            penIcons.forEach(icon => icon.style.visibility = "hidden");
+            deleteBtn.style.display = "inline-block";   
         }
     });
 });
 
-
-//수정 데이터 전달하기 (ajax)
 
 
 
