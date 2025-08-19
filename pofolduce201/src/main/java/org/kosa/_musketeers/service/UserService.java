@@ -133,5 +133,8 @@ public class UserService {
 	public List<Portfolio> getPortfolioList(int userId) {
 		return portfolioMapper.getPortfolioList(userId);
 	}
+	public Portfolio getPortfolio(int portfolioId) {
+		return portfolioMapper.getPortfolio(portfolioId);
+	}
 
 }

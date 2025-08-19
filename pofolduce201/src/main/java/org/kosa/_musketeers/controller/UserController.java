@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
@@ -64,175 +65,176 @@ public class UserController {
 
 	@GetMapping("/logout")
 	public String logout(HttpServletRequest request) {
-		
+
 		HttpSession httpSession = request.getSession();
 		httpSession.removeAttribute("userId");
-		
+
 		return "redirect:/home";
 	}
-	
+
 	@GetMapping("/home")
 	public String home() {
 		return "index";
 	}
-	
-	// 마이페이지로 이동 및 내정보 조회
-		@GetMapping("/mypage")
-		public String Mypage(HttpServletRequest request, Model model ) {
-			
-			// 세션에서 userId 가져오기
-		    HttpSession session = request.getSession(false);
-		    if (session == null || session.getAttribute("userId") == null) {
-		        // 로그인 안 된 상태면 로그인 페이지로
-		        return "redirect:/login";
-		    }
-		    
-		    int userId = (int) session.getAttribute("userId");
-		    User userData = userService.getUserInformation(userId);
-		    model.addAttribute("userData", userData);
-			
-			return "/pages/mypage/mypage-main";
 
+	// 마이페이지로 이동 및 내정보 조회
+	@GetMapping("/mypage")
+	public String Mypage(HttpServletRequest request, Model model) {
+
+		// 세션에서 userId 가져오기
+		HttpSession session = request.getSession(false);
+		if (session == null || session.getAttribute("userId") == null) {
+			// 로그인 안 된 상태면 로그인 페이지로
+			return "redirect:/login";
 		}
+
+		int userId = (int) session.getAttribute("userId");
+		User userData = userService.getUserInformation(userId);
+		model.addAttribute("userData", userData);
+
+		return "/pages/mypage/mypage-main";
+
+	}
 
 	// 내 게시글 조회
 	@GetMapping("/mypage/mypost")
-	public String getMypagePost(
-	        HttpServletRequest request,
-	        Model model,
-	        @RequestParam(defaultValue = "1") int page,
-	        @RequestParam(defaultValue = "10") int size
-	) {
-	    HttpSession session = request.getSession(false);
-	    if (session == null || session.getAttribute("userId") == null) {
-	        return "redirect:/login";
-	    }
+	public String getMypagePost(HttpServletRequest request, Model model, @RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "10") int size) {
+		HttpSession session = request.getSession(false);
+		if (session == null || session.getAttribute("userId") == null) {
+			return "redirect:/login";
+		}
 
-	    int userId = (int) session.getAttribute("userId");
+		int userId = (int) session.getAttribute("userId");
 
-	    List<MyPagePost> myPagePostList = myBoardService.findMyPost(userId, page, size);
-	    int totalCount = myBoardService.countMyPost(userId);
-	    int totalPages = (int) Math.ceil((double) totalCount / size);
+		List<MyPagePost> myPagePostList = myBoardService.findMyPost(userId, page, size);
+		int totalCount = myBoardService.countMyPost(userId);
+		int totalPages = (int) Math.ceil((double) totalCount / size);
 
-	    model.addAttribute("myPagePostList", myPagePostList);
-	    model.addAttribute("currentPage", page);
-	    model.addAttribute("totalPages", totalPages);
-	    model.addAttribute("size", size);
-	    return "/pages/mypage/mypage-mypost";
+		model.addAttribute("myPagePostList", myPagePostList);
+		model.addAttribute("currentPage", page);
+		model.addAttribute("totalPages", totalPages);
+		model.addAttribute("size", size);
+		return "/pages/mypage/mypage-mypost";
 	}
-	
-	//내 댓글 조회
-		@GetMapping("/mypage/mycomment")
-		public String getMypageComment(HttpServletRequest request,@RequestParam(defaultValue = "1") int page,
-		        @RequestParam(defaultValue = "10") int size, Model model) {
-			// 세션에서 userId 가져오기
-		    HttpSession session = request.getSession(false);
-		    if (session == null || session.getAttribute("userId") == null) {
-		        // 로그인 안 된 상태면 로그인 페이지로
-		        return "redirect:/login";
-		    }
 
-		    int userId = (int) session.getAttribute("userId");
-			List<MyPageComment> myPageCommentList = myBoardService.findMyComment(userId, page, size);
-			   int totalCount = myBoardService.countMyComment(userId);
-			    int totalPages = (int) Math.ceil((double) totalCount / size);
-
-			    model.addAttribute("myPageCommentList", myPageCommentList);
-			    model.addAttribute("currentPage", page);
-			    model.addAttribute("totalPages", totalPages);
-			    model.addAttribute("size", size);
-
-			
-			return "/pages/mypage/mypage-mycomment";
-
+	// 내 댓글 조회
+	@GetMapping("/mypage/mycomment")
+	public String getMypageComment(HttpServletRequest request, @RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "10") int size, Model model) {
+		// 세션에서 userId 가져오기
+		HttpSession session = request.getSession(false);
+		if (session == null || session.getAttribute("userId") == null) {
+			// 로그인 안 된 상태면 로그인 페이지로
+			return "redirect:/login";
 		}
 
-		//내(가 작성한) 첨삭 조회
-		@GetMapping("/mypage/myreview")
-		public String getMypageReview(@RequestParam(defaultValue = "1") int page,
-		        @RequestParam(defaultValue = "10") int size, HttpServletRequest request, Model model) {
-			
-			// 세션에서 userId 가져오기
-		    HttpSession session = request.getSession(false);
-		    if (session == null || session.getAttribute("userId") == null) {
-		        // 로그인 안 된 상태면 로그인 페이지로
-		        return "redirect:/login";
-		    }
+		int userId = (int) session.getAttribute("userId");
+		List<MyPageComment> myPageCommentList = myBoardService.findMyComment(userId, page, size);
+		int totalCount = myBoardService.countMyComment(userId);
+		int totalPages = (int) Math.ceil((double) totalCount / size);
 
-		    int userId = (int) session.getAttribute("userId");
-			List<Review> myPageReviewList = myBoardService.findMyReview(userId, page, size);
-			 int totalCount = myBoardService.countMyReview(userId);
-			    int totalPages = (int) Math.ceil((double) totalCount / size);
+		model.addAttribute("myPageCommentList", myPageCommentList);
+		model.addAttribute("currentPage", page);
+		model.addAttribute("totalPages", totalPages);
+		model.addAttribute("size", size);
 
-				model.addAttribute("myPageReviewList", myPageReviewList);
-			    model.addAttribute("currentPage", page);
-			    model.addAttribute("totalPages", totalPages);
-			    model.addAttribute("size", size);
-	
-			
-			
-			return "/pages/mypage/mypage-myreview";
+		return "/pages/mypage/mypage-mycomment";
+
+	}
+
+	// 내(가 작성한) 첨삭 조회
+	@GetMapping("/mypage/myreview")
+	public String getMypageReview(@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "10") int size, HttpServletRequest request, Model model) {
+
+		// 세션에서 userId 가져오기
+		HttpSession session = request.getSession(false);
+		if (session == null || session.getAttribute("userId") == null) {
+			// 로그인 안 된 상태면 로그인 페이지로
+			return "redirect:/login";
+		}
+
+		int userId = (int) session.getAttribute("userId");
+		List<Review> myPageReviewList = myBoardService.findMyReview(userId, page, size);
+		int totalCount = myBoardService.countMyReview(userId);
+		int totalPages = (int) Math.ceil((double) totalCount / size);
+
+		model.addAttribute("myPageReviewList", myPageReviewList);
+		model.addAttribute("currentPage", page);
+		model.addAttribute("totalPages", totalPages);
+		model.addAttribute("size", size);
+
+		return "/pages/mypage/mypage-myreview";
+
+	}
+
+	// 내 정보 수정 (닉네임, 이메일)
+	@PostMapping("/mypage/update")
+	@ResponseBody // 중요! redirect 없이 메시지 바로 반환
+	public String updateUserInfomation(HttpServletRequest request, String nickname, String email) {
+		HttpSession session = request.getSession(false);
+		if (session == null || session.getAttribute("userId") == null) {
+			return "로그인이 필요합니다.";
+		}
+		int userId = (int) session.getAttribute("userId");
+
+		boolean update = userService.updateUserInfomation(userId, nickname, email);
+
+		if (!update) {
+			return "닉네임 또는 이메일이 중복입니다.";
+		} else {
+			return "수정이 완료되었습니다";
 
 		}
-		
-		//내 정보 수정 (닉네임, 이메일)
-		@PostMapping("/mypage/update")
-		@ResponseBody // 중요! redirect 없이 메시지 바로 반환
-		public String updateUserInfomation(HttpServletRequest request, String nickname, String email) {
-		    HttpSession session = request.getSession(false);
-		    if (session == null || session.getAttribute("userId") == null) {
-		        return "로그인이 필요합니다.";
-		    }
-		    int userId = (int) session.getAttribute("userId");
+	}
 
-		    boolean update = userService.updateUserInfomation(userId, nickname, email);
+	@GetMapping("/mypage/myportfolio")
+	public String getMyPortfolio(Model model, @SessionAttribute("userId") int userId) {
+		List<Portfolio> portfolio = userService.getPortfolioList(userId);
 
-		    if(!update) {
-		       	return "닉네임 또는 이메일이 중복입니다.";
-		    } else {
-		    	return "수정이 완료되었습니다";
+		model.addAttribute("portfolio", portfolio);
 
-		    }
+		return "/pages/mypage/mypage-myportfolio";
+	}
+
+	@PostMapping("/mypage/myportfolio/upload")
+	public String uploadPortfolio(@RequestParam("file") MultipartFile file,
+			@RequestParam("portfolioName") String portfolioName, @SessionAttribute("userId") int userId)
+			throws IOException {
+		User user = new User();
+		user.setUserId(userId);
+
+		userService.createPortfolio(file, portfolioName, user);
+		return "redirect:/mypage/myportfolio";
+	}
+
+	// 내(가 작성한) 첨삭 조회
+	@PostMapping("/mypage/delete")
+	public String deleteAccount(HttpServletRequest request) {
+
+		// 세션에서 userId 가져오기
+		HttpSession session = request.getSession(false);
+		if (session == null || session.getAttribute("userId") == null) {
+			// 로그인 안 된 상태면 로그인 페이지로
+			return "redirect:/login";
 		}
-	
-		@GetMapping("/mypage/myportfolio")
-		public String getMyPortfolio(Model model, @SessionAttribute("userId") int userId) {
-			List<Portfolio> portfolio = userService.getPortfolioList(userId);
 
-		    model.addAttribute("portfolio", portfolio);
-			
-			return "/pages/mypage/mypage-myportfolio";
-		}
-		
-		@PostMapping("/mypage/myportfolio/upload")
-		public String uploadPortfolio(@RequestParam("file") MultipartFile file,
-                @RequestParam("portfolioName") String portfolioName,
-                @SessionAttribute("userId") int userId) throws IOException {
-			User user = new User();
-			user.setUserId(userId);
-			
-			userService.createPortfolio(file,portfolioName,user);
-			return "redirect:/mypage/myportfolio";
-		}
-		
-		//내(가 작성한) 첨삭 조회
-				@PostMapping("/mypage/delete")
-				public String deleteAccount(HttpServletRequest request) {
-					
-					// 세션에서 userId 가져오기
-				    HttpSession session = request.getSession(false);
-				    if (session == null || session.getAttribute("userId") == null) {
-				        // 로그인 안 된 상태면 로그인 페이지로
-				        return "redirect:/login";
-				    }
+		int userId = (int) session.getAttribute("userId");
 
-				    int userId = (int) session.getAttribute("userId");
-				    
-				    userService.deleteAccount(userId);
-				
-					
-					return "redirect:/login";
+		userService.deleteAccount(userId);
 
-				}
-		
+		return "redirect:/login";
+
+	}
+
+	@GetMapping("/mypage/myportfolio/{portfolioId}")
+	public String getPortfolio(@PathVariable int portfolioId, @SessionAttribute("userId") int userId, Model model) {
+		Portfolio portfolio = userService.getPortfolio(portfolioId);
+
+		model.addAttribute("portfolio", portfolio);
+
+		return "/pages/mypage/mypage-myportfolio";
+	}
+
 }

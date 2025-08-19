@@ -54,7 +54,7 @@
 	padding: 20px;
 	background-color: #FF7C9D;
 	color: #ffffff;
-	margin-top:30px;
+	margin-top: 30px;
 }
 
 .portfolio-title {
@@ -79,10 +79,13 @@
 							<div class="col" th:each="portfolio : ${portfolio}">
 								<div class="card h-100 text-center">
 									<!-- 썸네일 -->
-									<img class="card-img-top"
+									<a
+										th:href="@{'/mypage/myportfolio/{portfolioId}(portfolioId=${portfolio.portfolioId})">
+										<img class="card-img-top"
 										th:src="@{'/uploads/portfolio/' + ${portfolio.portfolioId} + '.png'}"
-										alt="썸네일" style="max-height: 300px; object-fit: cover;">
-
+										alt="썸네일" style="max-height: 300px; object-fit: cover;"
+										th:href="@{'}">
+									</a>
 									<!-- 제목 -->
 									<div class="card-body">
 										<h6 class="card-title" th:text="${portfolio.portfolioName}">포트폴리오
