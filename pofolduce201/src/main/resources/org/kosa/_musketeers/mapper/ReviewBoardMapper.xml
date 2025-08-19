@@ -72,4 +72,10 @@
 	FROM review_post
 	WHERE review_post_id=${reviewPostId}
 	</delete>
+	
+	<update id="updateReviewPostByReviewId" parameterType="org.kosa._musketeers.domain.ReviewPost">
+	UPDATE review_post
+	SET title=#{title}, post_html=#{postHtml}
+	WHERE review_post_id=#{reviewPostId}
+	</update>
 </mapper>

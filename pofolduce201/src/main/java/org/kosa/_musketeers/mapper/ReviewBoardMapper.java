@@ -21,4 +21,6 @@ public interface ReviewBoardMapper {
 	void updateReviewPostViewCount(int reviewPostId);
 
 	void delteReviewPost(int reviewPostId);
+
+	void updateReviewPostByReviewId(ReviewPost reviewPost);
 }
