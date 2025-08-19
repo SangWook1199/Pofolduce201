@@ -1,0 +1,11 @@
+@charset "UTF-8";
+
+.container {
+	width: 1000px;
+	margin: auto;
+}
+
+.myportfolio-title {
+	margin-top: 40px;
+	margin-bottom: 50px;
+}

@@ -189,6 +189,7 @@ public class UserController {
 		}
 	}
 
+	// 내 이력서 페이지
 	@GetMapping("/mypage/myportfolio")
 	public String getMyPortfolio(Model model, @SessionAttribute("userId") int userId) {
 		List<Portfolio> portfolio = userService.getPortfolioList(userId);
@@ -198,6 +199,7 @@ public class UserController {
 		return "/pages/mypage/mypage-myportfolio";
 	}
 
+	// 이력서 업로드
 	@PostMapping("/mypage/myportfolio/upload")
 	public String uploadPortfolio(@RequestParam("file") MultipartFile file,
 			@RequestParam("portfolioName") String portfolioName, @SessionAttribute("userId") int userId)
@@ -206,8 +208,9 @@ public class UserController {
 		user.setUserId(userId);
 		Integer repId = userService.getRepPortfolio(userId);
 		userService.createPortfolio(file, portfolioName, user);
+		int portId = userService.getPortfolioById(userId);
 		if (repId == null) {
-			userService.setFirstRepPortfolio(userId, userId);
+			userService.setFirstRepPortfolio(userId, portId);
 		}
 		return "redirect:/mypage/myportfolio";
 	}
@@ -239,7 +242,8 @@ public class UserController {
 
 		return "/pages/mypage/mypage-myportfolio-detail";
 	}
-	
+
+	// 대표 이력서 설정
 	@PostMapping("/mypage/myportfolio/{portfolioId}/rep")
 	public String setRepPortfolio(@PathVariable int portfolioId, @SessionAttribute("userId") int userId, Model model) {
 		Integer pofId = userService.getRepPortfolio(userId);
@@ -254,22 +258,22 @@ public class UserController {
 		userService.setRepPortfolio(userId, portfolioId);
 		return "redirect:/mypage/myportfolio";
 	}
-	
-	@PostMapping("/mypage/myportfolio/{portfolioId}/delete")
-	public String deletePortfolio(@PathVariable int portfolioId,
-	                              @SessionAttribute("userId") int userId,
-	                              RedirectAttributes redirectAttributes) {
-	    Integer pofId = userService.getRepPortfolio(userId);
-	    // 나중에 ajax 처리
-	    if (pofId != null && pofId == portfolioId) {
-	        redirectAttributes.addFlashAttribute("errorMessage", "대표 이력서는 삭제할 수 없습니다.");
-	        return "redirect:/mypage/myportfolio/"+portfolioId;
-	    }
 
-	    // 대표 이력서가 아니라면 삭제
-	    userService.deletePortfolio(portfolioId);
-	    redirectAttributes.addFlashAttribute("successMessage", "이력서가 삭제되었습니다.");
-	    return "redirect:/mypage/myportfolio";
+	// 이력서 삭제
+	@PostMapping("/mypage/myportfolio/{portfolioId}/delete")
+	public String deletePortfolio(@PathVariable int portfolioId, @SessionAttribute("userId") int userId,
+			RedirectAttributes redirectAttributes) {
+		Integer pofId = userService.getRepPortfolio(userId);
+		// 나중에 ajax 처리
+		if (pofId != null && pofId == portfolioId) {
+			redirectAttributes.addFlashAttribute("errorMessage", "대표 이력서는 삭제할 수 없습니다.");
+			return "redirect:/mypage/myportfolio/" + portfolioId;
+		}
+
+		// 대표 이력서가 아니라면 삭제
+		userService.deletePortfolio(portfolioId);
+		redirectAttributes.addFlashAttribute("successMessage", "이력서가 삭제되었습니다.");
+		return "redirect:/mypage/myportfolio";
 	}
 
 }

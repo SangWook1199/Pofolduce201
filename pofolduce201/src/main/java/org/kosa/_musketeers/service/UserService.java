@@ -136,16 +136,18 @@ public class UserService {
 	public List<Portfolio> getPortfolioList(int userId) {
 		return portfolioMapper.getPortfolioList(userId);
 	}
+
 	// 특정 포트폴리오를 불러오는 메서드입니다.
 	public Portfolio getPortfolio(int portfolioId) {
 		return portfolioMapper.getPortfolio(portfolioId);
 	}
-	
+
 	// 대표 포트폴리오를 설정하는 메서드입니다.
 	public void setRepPortfolio(int userId, int portfolioId) {
-        // 새 대표 포트폴리오 추가
-        portfolioMapper.updateRepPortfolio(userId, portfolioId);
+		// 새 대표 포트폴리오 추가
+		portfolioMapper.updateRepPortfolio(userId, portfolioId);
 	}
+
 	// 처음 포트폴리오를 대표 포트폴리오를 설정하는 메서드입니다.
 	public void setFirstRepPortfolio(int userId, int portfolioId) {
 		portfolioMapper.setRepPortfolio(userId, portfolioId);
@@ -156,25 +158,31 @@ public class UserService {
 		return portfolioMapper.getRepPortfolio(userId);
 	}
 
+	// 아이디로 포트폴리오 아이디를 구하는 메서드입니다.
+	public int getPortfolioById(int userId) {
+		return portfolioMapper.getPortfolioById(userId);
+	}
+
+	// 포트폴리오를 삭제하는 메서드입니다.
 	public void deletePortfolio(int portfolioId) {
 		// 1) 파일 경로 생성
-        Path uploadDir = Paths.get("src/main/resources/static/uploads/portfolio/");
-        Path pdfPath = uploadDir.resolve(portfolioId + ".pdf");
-        Path pngPath = uploadDir.resolve(portfolioId + ".png");
+		Path uploadDir = Paths.get("src/main/resources/static/uploads/portfolio/");
+		Path pdfPath = uploadDir.resolve(portfolioId + ".pdf");
+		Path pngPath = uploadDir.resolve(portfolioId + ".png");
 
-        // 2) 파일 삭제 (존재하면)
-        try {
-            if (Files.exists(pdfPath)) {
-                Files.delete(pdfPath);
-            }
-            if (Files.exists(pngPath)) {
-                Files.delete(pngPath);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            // 로그 남기거나 예외 처리 가능
-        }
-        // 3) DB에서 삭제
-        portfolioMapper.deletePortfolio(portfolioId);
+		// 2) 파일 삭제 (존재하면)
+		try {
+			if (Files.exists(pdfPath)) {
+				Files.delete(pdfPath);
+			}
+			if (Files.exists(pngPath)) {
+				Files.delete(pngPath);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			// 로그 남기거나 예외 처리 가능
+		}
+		// 3) DB에서 삭제
+		portfolioMapper.deletePortfolio(portfolioId);
 	}
 }
