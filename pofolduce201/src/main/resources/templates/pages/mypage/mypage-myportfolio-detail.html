@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<head>
+<link th:href="@{/css/board-header.css}" rel="stylesheet">
+<title>내 이력서</title>
+<style type="text/css">
+.container {
+	width: 1000px;
+	margin: auto;
+}
+
+.myportfolio-title {
+	margin-top: 40px;
+	margin-bottom: 50px;
+}
+</style>
+</head>
+
+<div layout:fragment="content">
+	<div class="container">
+
+		<div class="myportfolio-title">
+			<div
+				th:replace="fragments/html/board-header :: board-header('내 이력서 > ' + ${portfolio.portfolioName})"></div>
+		</div>
+		<div class="embed-responsive embed-responsive-4by3 mb-3">
+			<embed class="pdf-viewer embed-responsive-item"
+				th:src="@{'/uploads/portfolio/' + ${portfolio.portfolioId} + '.pdf'}"
+				type="application/pdf" width="100%" height="1030px" />
+		</div>
+
+		<!-- 버튼 4개 오른쪽 정렬 -->
+		<div class="d-flex justify-content-end gap-2">
+			<a href="/mypage/myportfolio" class="btn btn-primary">목록</a>
+			<form
+				th:action="@{/mypage/myportfolio/{portfolioId}/rep(portfolioId=${portfolio.portfolioId})}"
+				method="post" onsubmit="return confirm('대표 이력서로 설정하시겠습니까?');">
+				<button type="submit" class="btn btn-primary">대표이력서 설정</button>
+			</form>
+			<form
+				th:action="@{/mypage/myportfolio/{portfolioId}/delete(portfolioId=${portfolio.portfolioId})}"
+				method="post" onsubmit="return confirm('이력서를 삭제하시겠습니까?');">
+				<button type="submit" class="btn btn-primary">삭제</button>
+			</form>
+		</div>
+	</div>
+	<div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+		<span th:text="${errorMessage}"></span>
+	</div>
+	<div th:if="${successMessage}" class="alert alert-success" role="alert">
+		<span th:text="${successMessage}"></span>
+	</div>
+</div>
+</html>

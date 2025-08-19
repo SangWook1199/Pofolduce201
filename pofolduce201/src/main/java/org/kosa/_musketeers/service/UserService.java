@@ -19,9 +19,11 @@ import org.kosa._musketeers.domain.User;
 import org.kosa._musketeers.mapper.PortfolioMapper;
 import org.kosa._musketeers.mapper.UserMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
+@Transactional
 public class UserService {
 
 	private UserMapper userMapper;
@@ -130,11 +132,49 @@ public class UserService {
 		return portfolio;
 	}
 
+	// 포트폴리오 리스트를 불러오는 메서드입니다.
 	public List<Portfolio> getPortfolioList(int userId) {
 		return portfolioMapper.getPortfolioList(userId);
 	}
+	// 특정 포트폴리오를 불러오는 메서드입니다.
 	public Portfolio getPortfolio(int portfolioId) {
 		return portfolioMapper.getPortfolio(portfolioId);
 	}
+	
+	// 대표 포트폴리오를 설정하는 메서드입니다.
+	public void setRepPortfolio(int userId, int portfolioId) {
+        // 새 대표 포트폴리오 추가
+        portfolioMapper.updateRepPortfolio(userId, portfolioId);
+	}
+	// 처음 포트폴리오를 대표 포트폴리오를 설정하는 메서드입니다.
+	public void setFirstRepPortfolio(int userId, int portfolioId) {
+		portfolioMapper.setRepPortfolio(userId, portfolioId);
+	}
 
+	// 대표 포트폴리오가 있는지 확인하는 메서드입니다.
+	public Integer getRepPortfolio(int userId) {
+		return portfolioMapper.getRepPortfolio(userId);
+	}
+
+	public void deletePortfolio(int portfolioId) {
+		// 1) 파일 경로 생성
+        Path uploadDir = Paths.get("src/main/resources/static/uploads/portfolio/");
+        Path pdfPath = uploadDir.resolve(portfolioId + ".pdf");
+        Path pngPath = uploadDir.resolve(portfolioId + ".png");
+
+        // 2) 파일 삭제 (존재하면)
+        try {
+            if (Files.exists(pdfPath)) {
+                Files.delete(pdfPath);
+            }
+            if (Files.exists(pngPath)) {
+                Files.delete(pngPath);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            // 로그 남기거나 예외 처리 가능
+        }
+        // 3) DB에서 삭제
+        portfolioMapper.deletePortfolio(portfolioId);
+	}
 }
