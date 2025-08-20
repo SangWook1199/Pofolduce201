@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.kosa._musketeers.domain.ReviewPost;
+import org.kosa._musketeers.domain.ReviewPostComment;
 
 @Mapper
 public interface ReviewBoardMapper {
@@ -23,4 +24,10 @@ public interface ReviewBoardMapper {
 	void delteReviewPost(int reviewPostId);
 
 	void updateReviewPostByReviewId(ReviewPost reviewPost);
+
+	void createReviewPostComment(ReviewPostComment reviewPostComment);
+
+	List<ReviewPostComment> getReviewCommentListByReviewPostId(int reviewPostId);
+
+	void deleteReviewComment(int reviewCommentId);
 }
