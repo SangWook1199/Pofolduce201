@@ -86,12 +86,12 @@ public class MyBoardService {
 		List<MyPageComment> result = new ArrayList<>();
 
 		// 첨삭게시판에서 게시글 찾기
-		for (ReviewPostComment rc : myBoardMapper.findMyReviewComment(userId)) {
-			result.add(new MyPageComment(rc.getCommentsId(), "review", // 게시판 타입
-					rc.getCommentsContents(), rc.getCommentsDate(), rc.getUserId(), rc.getReviewId(), // Review 전용
-					null // Study 전용 없음
-			));
-		}
+//		for (ReviewPostComment rc : myBoardMapper.findMyReviewComment(userId)) {
+//			result.add(new MyPageComment(rc.getCommentsId(), "review", // 게시판 타입
+//					rc.getCommentsContents(), rc.getCommentsDate(), rc.getUserId(), rc.getReviewPostId(), // Review 전용
+//					null // Study 전용 없음
+//			));
+//		}
 
 		// 스터디게시판에서 게시글 찾기
 		for (StudyPostComment sc : myBoardMapper.findMyStudyComment(userId)) {

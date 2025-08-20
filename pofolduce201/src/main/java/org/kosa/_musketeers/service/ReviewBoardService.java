@@ -65,4 +65,8 @@ public class ReviewBoardService {
 		reviewBoardMapper.deleteReviewComment(reviewCommentId);
 	}
 	
+	public int getTotalReviewPostCountById(int userId) {
+		return reviewBoardMapper.getTotalReviewPostCountById(userId);
+	}
+	
 }

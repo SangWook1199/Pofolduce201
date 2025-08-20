@@ -203,8 +203,8 @@ public class UserController {
 		user.setUserId(userId);
 		Integer repId = userService.getRepPortfolio(userId);
 		userService.createPortfolio(file, portfolioName, user);
-		int portId = userService.getPortfolioById(userId);
 		if (repId == null) {
+			int portId = userService.getPortfolioById(userId);
 			userService.setFirstRepPortfolio(userId, portId);
 		}
 		return "redirect:/mypage/myportfolio";
@@ -229,6 +229,7 @@ public class UserController {
 
 	}
 
+	// 이력서 상세 페이지
 	@GetMapping("/mypage/myportfolio/{portfolioId}")
 	public String getPortfolio(@PathVariable int portfolioId, @SessionAttribute("userId") int userId, Model model) {
 		Portfolio portfolio = userService.getPortfolio(portfolioId);
@@ -270,5 +271,19 @@ public class UserController {
 		redirectAttributes.addFlashAttribute("successMessage", "이력서가 삭제되었습니다.");
 		return "redirect:/mypage/myportfolio";
 	}
-
+	
+	// 다른 유저 페이지
+	@GetMapping("/userpage/{userId}")
+	public String userPage(@PathVariable int userId, Model model) {
+		User userData = userService.getUserInformation(userId);
+		Integer repPortId = userService.getRepPortfolio(userId);
+		Portfolio portfolio = null; 
+	    if (repPortId != null) {
+	        portfolio = userService.getPortfolio(repPortId);
+	    }
+	    
+		model.addAttribute("portfolio", portfolio);
+		model.addAttribute("userData", userData);
+		return "pages/mypage/userpage";
+	}
 }

@@ -9,6 +9,50 @@
 	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=70c0de37da587509ef9f5d9da9f64303"></script>
 
 <title>게시글</title>
+<style type="text/css">
+.popover .popover-header {
+	display: none;
+}
+
+.popover {
+	max-width: 300px;
+	background-color: #ffffff;
+	border: 1px solid #FF4473;
+	border-radius: 20px;
+	text-align: center;
+}
+
+.popover-nickname {
+	font-weight: bolder;
+	font-size: 25px;
+}
+
+.popover hr {
+	color: #FF4473;
+}
+
+.popover-content {
+	color: #C5C5C5;
+}
+
+.popover-image {
+	width: 30px;
+	height: 30px;
+	margin: auto;
+}
+
+.popover-button {
+	width: 30px;
+	height: 30px;
+	font-size: 30px;
+	background-color: #FF4473;
+	cursor: pointer;
+	border-radius: 50%;
+	text-align: center;
+	line-height: 27px;
+	margin: auto;
+}
+</style>
 </head>
 <!--/* 
 		body tag 는 명시하지 않는다  layout.html 의 content fragment 영역에 삽입될 부분이기 때문 
@@ -40,11 +84,12 @@
 
 		<div class="d-flex align-items-center gap-3">
 
-			<!-- 나중에 프로필 누를 경우 정보 뜨게하기 추가 -->
 			<img alt="프로필" th:src="@{/svg/sejung.svg}" class="profile">
 
 			<div class="d-flex flex-column">
-				<p th:text="${post.userId.nickname}" class="mb-0 fw-bold">김세정</p>
+				<p th:text="${post.userId.nickname}" class="mb-0 fw-bold nickname"
+					th:attr="data-userid=${post.userId.userId}"
+					data-bs-toggle="popover" title="사용자 정보">김세정</p>
 				<p th:text="${postDateFormatted}" class="mb-0 text-muted small">2025-08-18</p>
 			</div>
 
@@ -68,8 +113,7 @@
 		</div>
 		<!-- 나중에 좋아요 기능 추가 -->
 		<div class="text-center like-button">
-			<button id="likeBtn" class="btn btn-primary not-liked" type="button"
-				th:attr="data-postid=${post.postId}">
+			<button id="likeBtn" class="btn btn-primary not-liked" type="button">
 				종아요<span id="likeCount" th:text="${post.likeCount}"></span>
 			</button>
 		</div>
@@ -99,10 +143,13 @@
 		<div class="row comment-list" th:each="comment : ${comments}">
 			<!-- 댓글 작성자 정보 -->
 			<p>
-				<strong th:text="${comment.userId.nickname}"
+				<strong th:text="${comment.userId.nickname}" tabindex="0"
+					th:attr="data-userid=${comment.userId.userId}"
+					data-bs-toggle="popover" data-bs-trigger="focus"
 					class="comment-userName">작성자</strong> <span class="small"
 					th:text="${#temporals.format(comment.commentsDate, 'yyyy-MM-dd HH:mm')}">작성일</span>
 			</p>
+
 			<p th:text="${comment.commentsContents}">댓글 내용</p>
 			<!-- 수정, 삭제, 신고 버튼 -->
 			<div class="col text-end">
@@ -165,9 +212,6 @@
 		</div>
 	</div>
 	<script>
-		const likeBtn = document.getElementById('likeBtn');
-		const likeCount = document.getElementById('likeCount');
-		
 		var container = document.getElementById('map');
 		var options = {
 			center : new kakao.maps.LatLng(37.583743027324, 126.999963317958),
@@ -188,33 +232,75 @@
 		function confirmDelete() {
 			return confirm('정말 삭제하시겠습니까?');
 		}
-		
-		likeBtn.addEventListener('click', async () => {
-		    const studyId = likeBtn.dataset.studyid;
-		    const liked = likeBtn.classList.contains('liked');
+		document.addEventListener("DOMContentLoaded", function () {
+		    const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
 
-		    try {
-		        const response = await fetch('/api/study/like', {
-		            method: 'POST',
-		            headers: { 'Content-Type': 'application/json' },
-		            body: JSON.stringify({ studyId, liked })
+		    popoverTriggerList.forEach(el => {
+		        // Popover 초기화 (manual trigger)
+		        const popover = new bootstrap.Popover(el, {
+		            html: true,
+		            title: '',
+		            content: '불러오는 중...',
+		            placement: 'top',
+		            trigger: 'manual',
+		            fallbackPlacements: []
 		        });
 
-		        if (!response.ok) throw new Error('서버 에러');
+		        // 닉네임 클릭 시 실행
+		        el.addEventListener("click", async (e) => {
+		            e.stopPropagation(); // 클릭 이벤트 버블링 방지
+		            const userId = el.dataset.userid;
 
-		        const data = await response.json();
-		        likeCount.textContent = data.likes;
+		            try {
+		                const response = await fetch(`/api/user/${userId}`);
+		                if (!response.ok) throw new Error("서버 응답 오류");
 
-		        if (data.liked) {
-		            likeBtn.classList.add('liked');
-		            likeBtn.classList.remove('not-liked');
-		        } else {
-		            likeBtn.classList.add('not-liked');
-		            likeBtn.classList.remove('liked');
-		        }
-		    } catch (err) {
-		        console.error(err);
-		    }
+		                const data = await response.json();
+
+		                const contentHtml = `
+		                  <div>
+		                    <div class="popover-image">
+		                        <img src="/svg/crown.svg" alt="프로필" style="width:30px; height:30px;">
+		                    </div>
+		                    <p class="popover-nickname">${data.nickname}</p>
+		                    <hr>
+		                    <p class="popover-content">획득한 포인트: ${data.point}</p>
+		                    <p class="popover-content">작성한 이력서: ${data.countPortfolio}</p>
+		                    <p class="popover-content">작성한 첨삭: ${data.countReview}</p>
+		                    <div class="popover-button">></div>
+		                  </div>
+		                `;
+
+		                popover.setContent({ '.popover-body': contentHtml });
+		                popover.show();
+
+		                // 팝오버 내부 버튼 클릭 시 상세페이지 이동
+		                const btn = document.querySelector('.popover-button');
+		                if (btn) {
+		                    btn.addEventListener("click", () => {
+		                        window.location.href = `/userpage/${data.userId}`;
+		                    });
+		                }
+
+		            } catch (err) {
+		                console.error(err);
+		                popover.setContent({ '.popover-body': '정보를 불러오지 못했습니다.' });
+		                popover.show();
+		            }
+		        });
+		    });
+
+		    // 문서 클릭 시 팝오버 닫기
+		    document.addEventListener('click', function (e) {
+		        popoverTriggerList.forEach(el => {
+		            const popoverInstance = bootstrap.Popover.getInstance(el);
+		            if (popoverInstance &&
+		                !el.contains(e.target) &&
+		                !document.querySelector('.popover')?.contains(e.target)) {
+		                popoverInstance.hide();
+		            }
+		        });
+		    });
 		});
 	</script>
 </div>

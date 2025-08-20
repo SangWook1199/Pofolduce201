@@ -51,7 +51,13 @@
 		VALUES
 		(#{email}, #{nickname}, #{password})
 	</insert>
-
+	
+	<select id="getTotalPortfolioCountById" resultType="int">
+		SELECT COUNT(*)
+		FROM portfolio
+		WHERE user_id=#{userId};
+	</select>
+	
 	<select id="getUserById" parameterType="int"
 		resultType="org.kosa._musketeers.domain.User">
 		SELECT user_id, email, nickname, password, user_type,
@@ -59,6 +65,4 @@
 		FROM users
 		WHERE user_id = #{userId}
 	</select>
-
-
 </mapper>
