@@ -137,4 +137,13 @@ public class UserService {
 		return portfolioMapper.getPortfolio(portfolioId);
 	}
 
+	public User getUserById(int userId) {
+	    return userMapper.getUserById(userId);
+	}
+	
+	public boolean isAdmin(int userId) {
+	    User user = getUserById(userId);
+	    return user != null && "관리자".equals(user.getUserType());
+	}
+
 }

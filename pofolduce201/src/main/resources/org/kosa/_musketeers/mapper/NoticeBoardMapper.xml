@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.kosa._musketeers.mapper.NoticeBoardMapper">
+    <resultMap id="NoticeBoardResultMap" type="org.kosa._musketeers.domain.NoticeBoard">
+        <id property="noticeId" column="notice_id" />
+        <result property="title" column="title" />
+        <result property="contentHtml" column="content_html" />
+        <result property="noticeCount" column="notice_count" />
+        <result property="date" column="date" />
+        <association property="userId" javaType="org.kosa._musketeers.domain.User">
+            <id property="userId" column="user_id" />
+            <result property="email" column="email" />
+            <result property="nickname" column="nickname" />
+        </association>
+    </resultMap>
+
+    <!-- 전체 게시글 개수 -->
+    <select id="countPosts" resultType="int">
+        SELECT COUNT(*) FROM notice
+    </select>
+
+    <!-- 게시글 목록 조회 ( 최신순) -->
+    <select id="getPostsByPage" resultMap="NoticeBoardResultMap" parameterType="map">
+        SELECT n.notice_id, n.title, n.content_html, n.notice_count, n.date,
+               u.user_id, u.email, u.nickname
+        FROM notice n
+        JOIN users u ON n.user_id = u.user_id
+        ORDER BY n.date DESC
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+	<!-- 게시물 작성 -->
+	<insert id="createPost" parameterType="org.kosa._musketeers.domain.NoticeBoard" useGeneratedKeys="true" keyProperty="noticeId">
+		INSERT INTO notice (title, content_html, user_id)
+		VALUES (#{title}, #{contentHtml},#{userId.userId})	
+	</insert>
+	
+    <!-- 게시글 상세 조회 -->
+    <select id="getPostById" parameterType="int" resultMap="NoticeBoardResultMap">
+        SELECT n.notice_id, n.title, n.content_html, n.notice_count, n.date,
+               u.user_id, u.email, u.nickname
+        FROM notice n
+        JOIN users u ON n.user_id = u.user_id
+        WHERE n.notice_id = #{noticeId}
+    </select>
+
+    <!-- 게시글 삭제 -->
+    <delete id="deletePost" parameterType="int">
+        DELETE FROM notice WHERE notice_id = #{noticeId}
+    </delete>
+
+    <!-- 게시글 수정 -->
+    <update id="updatePost" parameterType="org.kosa._musketeers.domain.NoticeBoard">
+        UPDATE notice
+        SET title = #{title},
+            content_html = #{contentHtml},
+            notice_count = #{noticeCount},
+            date = #{date},
+            user_id = #{userId.userId}
+        WHERE notice_id = #{noticeId}
+    </update>
+</mapper>

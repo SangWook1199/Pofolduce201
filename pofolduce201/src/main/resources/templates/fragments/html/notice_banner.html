@@ -1,0 +1,10 @@
+<nav th:fragment="banner(bannerText1, bannerText2)" class="navbar" id="banner-container">
+	<div class="container-fluid">
+        <p class="banner-text" id="banner-left">
+            <img alt="왕관" th:src="@{/svg/crown.svg}" class="banner-image">
+            <span th:text="${bannerText1}">포폴듀스201의 공지사항 입니다.</span>
+        	<br>
+            <span th:text="${bannerText2}">문의 사항은 하단의 고객센터 번호를 확인해 주세요.</span> 
+        </p>
+    </div>
+</nav>

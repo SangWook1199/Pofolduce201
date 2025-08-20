@@ -48,7 +48,17 @@
 	<insert id="insertUser"
 		parameterType="org.kosa._musketeers.domain.User">
 		INSERT INTO users (email, nickname, password)
-		VALUES (#{email}, #{nickname}, #{password})
+		VALUES
+		(#{email}, #{nickname}, #{password})
 	</insert>
+
+	<select id="getUserById" parameterType="int"
+		resultType="org.kosa._musketeers.domain.User">
+		SELECT user_id, email, nickname, password, user_type,
+		company_name, company_certification, point, user_image_location
+		FROM users
+		WHERE user_id = #{userId}
+	</select>
+
 
 </mapper>
