@@ -7,20 +7,25 @@ public class ReviewPostComment {
 	private int commentsId;
 	private String commentsContents;
 	private LocalDateTime commentsDate;
-	private int reviewId;
-	private int userId;
+	private int reviewPostId;
+	private User userId;
 	public ReviewPostComment() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public ReviewPostComment(int commentsId, String commentsContents, LocalDateTime commentsDate, int reviewId,
-			int userId) {
+	public ReviewPostComment(int commentsId, String commentsContents, LocalDateTime commentsDate, int reviewPostId,
+			User userId) {
 		super();
 		this.commentsId = commentsId;
 		this.commentsContents = commentsContents;
 		this.commentsDate = commentsDate;
-		this.reviewId = reviewId;
+		this.reviewPostId = reviewPostId;
 		this.userId = userId;
+	}
+	public ReviewPostComment(String commentsContents, User userId, int reviewPostId) {
+		this.commentsContents = commentsContents;
+		this.userId = userId;
+		this.reviewPostId = reviewPostId;
 	}
 	public int getCommentsId() {
 		return commentsId;
@@ -40,22 +45,22 @@ public class ReviewPostComment {
 	public void setCommentsDate(LocalDateTime commentsDate) {
 		this.commentsDate = commentsDate;
 	}
-	public int getReviewId() {
-		return reviewId;
+	public int getReviewPostId() {
+		return reviewPostId;
 	}
-	public void setReviewId(int reviewId) {
-		this.reviewId = reviewId;
+	public void setReviewPostId(int reviewPostId) {
+		this.reviewPostId = reviewPostId;
 	}
-	public int getUserId() {
+	public User getUserId() {
 		return userId;
 	}
-	public void setUserId(int userId) {
+	public void setUserId(User userId) {
 		this.userId = userId;
 	}
 	@Override
 	public String toString() {
 		return "ReviewPostComment [commentsId=" + commentsId + ", commentsContents=" + commentsContents
-				+ ", commentsDate=" + commentsDate + ", reviewId=" + reviewId + ", userId=" + userId + "]";
+				+ ", commentsDate=" + commentsDate + ", reviewPostId=" + reviewPostId + ", userId=" + userId + "]";
 	}
 	
 	
