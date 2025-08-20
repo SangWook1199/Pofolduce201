@@ -3,6 +3,8 @@ package org.kosa._musketeers.service;
 import java.util.List;
 
 import org.kosa._musketeers.domain.ReviewPost;
+import org.kosa._musketeers.domain.ReviewPostComment;
+import org.kosa._musketeers.domain.User;
 import org.kosa._musketeers.mapper.ReviewBoardMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,6 +51,20 @@ public class ReviewBoardService {
 		reviewBoardMapper.updateReviewPostByReviewId(reviewPost);
 	}
 
+	public void writeComment(int userId, int reviewPostId, String comment) {
+		User user = new User(userId);
+		ReviewPostComment reviewPostComment = new ReviewPostComment(comment, user, reviewPostId);
+		reviewBoardMapper.createReviewPostComment(reviewPostComment);
+	}
+
+	public List<ReviewPostComment> loadReviewPostCommentList(int reviewPostId) {
+		return reviewBoardMapper.getReviewCommentListByReviewPostId(reviewPostId);
+	}
+
+	public void deleteComment(int reviewCommentId) {
+		reviewBoardMapper.deleteReviewComment(reviewCommentId);
+	}
+	
 	public int getTotalReviewPostCountById(int userId) {
 		return reviewBoardMapper.getTotalReviewPostCountById(userId);
 	}
