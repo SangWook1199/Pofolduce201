@@ -22,4 +22,6 @@ public interface UserMapper {
 	int insertUser(User newUser);
 
 	User findUserByEmail(String email);
+
+	int getTotalPortfolioCountById(int userId);
 }

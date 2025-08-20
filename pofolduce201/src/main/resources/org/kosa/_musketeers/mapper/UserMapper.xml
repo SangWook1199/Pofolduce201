@@ -48,7 +48,12 @@
 	<insert id="insertUser"
 		parameterType="org.kosa._musketeers.domain.User">
 		INSERT INTO users (email, nickname, password)
-		VALUES (#{email}, #{nickname}, #{password})
+		VALUES
+		(#{email}, #{nickname}, #{password})
 	</insert>
-
+	<select id="getTotalPortfolioCountById" resultType="int">
+		SELECT COUNT(*)
+		FROM portfolio
+		WHERE user_id=#{userId};
+	</select>
 </mapper>

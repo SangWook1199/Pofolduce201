@@ -78,4 +78,10 @@
 	SET title=#{title}, post_html=#{postHtml}
 	WHERE review_post_id=#{reviewPostId}
 	</update>
+	
+	<select id="getTotalReviewPostCountById" resultType="int">
+		SELECT COUNT(*)
+		FROM review_post
+		WHERE user_id=#{userId};
+	</select>
 </mapper>

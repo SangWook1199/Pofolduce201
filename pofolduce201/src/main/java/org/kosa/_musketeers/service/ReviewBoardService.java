@@ -48,5 +48,9 @@ public class ReviewBoardService {
 	public void editReviewPost(ReviewPost reviewPost) {
 		reviewBoardMapper.updateReviewPostByReviewId(reviewPost);
 	}
+
+	public int getTotalReviewPostCountById(int userId) {
+		return reviewBoardMapper.getTotalReviewPostCountById(userId);
+	}
 	
 }

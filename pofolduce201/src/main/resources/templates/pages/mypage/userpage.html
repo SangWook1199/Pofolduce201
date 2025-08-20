@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<head>
+
+<link th:href="@{/css/board-header.css}" rel="stylesheet">
+
+<title>마이페이지</title>
+<style type="text/css">
+.mypage {
+	display: flex;
+	justify-content: center;
+}
+
+.mypage-main {
+	margin-top: 5%;
+}
+.mypage-main-container{
+	margin-top: 5%;
+	width:800px;
+}
+
+</style>
+</head>
+
+<div layout:fragment="content">
+	<div class="mypage">
+		<div class="mypage-main">
+			<div
+				th:replace="fragments/html/board-header :: board-header('마이페이지')"></div>
+			<div class="mypage-main-side">
+				<div>
+
+					<div class="mypage-main-container">
+						<div class="box">
+							<div id="person-svg">
+								<img th:src="@{/svg/person.svg}" width=130 height=130>
+							</div>
+						</div>
+					</div>
+
+					<div class="mypage-main-container">
+
+						<div class="mypage-main-info">
+							<div class="mypage-main-info-box">
+								<h2 id="id-box">닉네임</h2>
+								<h2 id="id-box">이메일</h2>
+								<h2 id="id-box">회사 인증</h2>
+								<h2 id="id-box">등급</h2>
+
+							</div>
+
+
+							<form class="mypage-main-info-box" id="userinfo"
+								action="/mypage/update" method="POST">
+								<div class="input-icon nickname">
+									<input class="input" type="text"
+										th:value="${userData.nickname}" id="nickname" name="nickname"
+										disabled> <img class="pen-svg"
+										th:src="@{/svg/pen.svg}">
+								</div>
+
+								<div class="input-icon">
+									<input class="input" type="text" th:value="${userData.email}"
+										id="email" name="email" disabled> <img class="pen-svg"
+										th:src="@{/svg/pen.svg}">
+
+								</div>
+								<div class="verify-box button">
+									<button type="button"
+										class="btn btn-outline-primary btn-custom2">인증하기</button>
+								</div>
+
+								<div class="verify-box" type="text"
+									th:text="${userData.point >= 10000 ? '아이돌' :
+               (userData.point >= 2000 ? '데뷔조' :
+               (userData.point >= 1000 ? '연습생 A' :
+               (userData.point >= 500 ? '연습생 B' :
+               (userData.point >= 100 ? '연습생 C' : '연습생 D'))))}">
+								</div>
+
+							</form>
+
+
+						</div>
+						<div class="box-left">
+							<button type="submit" class="btn btn-outline-primary btn-custom"
+								id="btn-box">정보 수정</button>
+
+							<!-- 탈퇴용 숨은 폼 -->
+							<form id="deleteForm" action="/mypage/delete" method="POST"
+								style="display: none;"></form>
+							<input type="hidden" name="userId" value="123">
+
+							<button type="button" id="deleteBtn"
+								class="btn btn-outline-primary btn-custom"
+								data-bs-toggle="modal" data-bs-target="#globalModal"
+								data-modal-title="회원 탈퇴" data-modal-body="정말 탈퇴하시겠습니까?"
+								data-modal-confirm="탈퇴하기">회원 탈퇴</button>
+
+
+						</div>
+					</div>
+
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+</html>

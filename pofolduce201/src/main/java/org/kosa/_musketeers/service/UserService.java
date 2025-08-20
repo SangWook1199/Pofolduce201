@@ -173,4 +173,8 @@ public class UserService {
 		// 3) DB에서 삭제
 		portfolioMapper.deletePortfolio(portfolioId);
 	}
+
+	public int getTotalPortfolioCountById(int userId) {
+		return userMapper.getTotalPortfolioCountById(userId);
+	}
 }

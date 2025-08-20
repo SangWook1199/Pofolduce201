@@ -270,5 +270,11 @@ public class UserController {
 		redirectAttributes.addFlashAttribute("successMessage", "이력서가 삭제되었습니다.");
 		return "redirect:/mypage/myportfolio";
 	}
-
+	
+	@GetMapping("/userpage/{userId}")
+	public String userPage(@PathVariable int userId,Model model) {
+		User userData = userService.getUserInformation(userId);
+		model.addAttribute("userData", userData);
+		return "pages/mypage/userpage";
+	}
 }
