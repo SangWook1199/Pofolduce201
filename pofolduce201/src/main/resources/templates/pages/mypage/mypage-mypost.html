@@ -24,7 +24,8 @@
 						<h1 id="mypage-title2">내 정보 > 내 게시글 목록</h1>
 
 
-						<table class="table table-hover" th:if="${not #lists.isEmpty(myPagePostList)}">
+						<table class="table table-hover"
+							th:if="${not #lists.isEmpty(myPagePostList)}">
 							<thead>
 								<tr>
 									<th scope="col">#</th>
@@ -39,49 +40,55 @@
 									<th scope="row"
 										th:text="${(currentPage - 1) * size + iterStat.index + 1}">
 									</th>
+
+
 									<td
 										th:text="${post.boardType == 'study' ? '스터디 게시판' : '첨삭 게시판'}"></td>
-									<td th:text="${post.title}"></td>
+									<td><a
+										th:href="${post.boardType == 'study' ? '/study/' + post.postId : '/review/' + post.postId}"
+										th:text="${post.title}" style="all: unset; cursor: pointer;"></a>
+									</td>
 								</tr>
 							</tbody>
 
 						</table>
-						
+
 						<!-- 데이터가 없을 때 -->
 						<div th:if="${#lists.isEmpty(myPagePostList)}">
-							<h3  class="non-data">작성한 게시글이 없습니다.</h3>
+							<h3 class="non-data">작성한 게시글이 없습니다.</h3>
 						</div>
-						
-						
-						<nav th:if="${not #lists.isEmpty(myPagePostList)}" aria-label="Page navigation example">
-						<ul class="pagination justify-content-center">
 
-							<!-- 이전 페이지 -->
-							<li class="page-item"
-								th:classappend="${currentPage == 1} ? 'disabled'"><a
-								class="page-link"
-								th:href="@{/mypage/mypost(page=${currentPage - 1}, size=${size})}"
-								tabindex="-1" aria-disabled="true">Previous</a></li>
 
-							<!-- 페이지 번호 반복 -->
-							<li class="page-item"
-								th:each="i : ${#numbers.sequence(1, totalPages)}"
-								th:classappend="${i == currentPage} ? 'active'"><a
-								class="page-link"
-								th:href="@{/mypage/mypost(page=${i}, size=${size})}"
-								th:text="${i}">1</a></li>
+						<nav th:if="${not #lists.isEmpty(myPagePostList)}"
+							aria-label="Page navigation example">
+							<ul class="pagination justify-content-center">
 
-							<!-- 다음 페이지 -->
-							<li class="page-item"
-								th:classappend="${currentPage == totalPages} ? 'disabled'">
-								<a class="page-link"
-								th:href="@{/mypage/mypost(page=${currentPage + 1}, size=${size})}">Next</a>
-							</li>
-						</ul>
-					</nav>
-						
+								<!-- 이전 페이지 -->
+								<li class="page-item"
+									th:classappend="${currentPage == 1} ? 'disabled'"><a
+									class="page-link"
+									th:href="@{/mypage/mypost(page=${currentPage - 1}, size=${size})}"
+									tabindex="-1" aria-disabled="true">Previous</a></li>
+
+								<!-- 페이지 번호 반복 -->
+								<li class="page-item"
+									th:each="i : ${#numbers.sequence(1, totalPages)}"
+									th:classappend="${i == currentPage} ? 'active'"><a
+									class="page-link"
+									th:href="@{/mypage/mypost(page=${i}, size=${size})}"
+									th:text="${i}">1</a></li>
+
+								<!-- 다음 페이지 -->
+								<li class="page-item"
+									th:classappend="${currentPage == totalPages} ? 'disabled'">
+									<a class="page-link"
+									th:href="@{/mypage/mypost(page=${currentPage + 1}, size=${size})}">Next</a>
+								</li>
+							</ul>
+						</nav>
+
 					</div>
-					
+
 
 
 
