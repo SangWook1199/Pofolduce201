@@ -58,6 +58,16 @@ public class User {
 		this.date = date;
 		this.userImageLocation = userImageLocation;
 	}
+	
+	public User(int userId, String nickname) {
+		super();
+		this.userId = userId;
+		this.nickname = nickname;
+	}
+
+	public User(int userId) {
+		this.userId = userId;
+	}
 
 	public int getUserId() {
 		return userId;

@@ -4,63 +4,9 @@
 	layout:decorate="~{layouts/layout}">
 <head>
 <link th:href="@{/css/board-header.css}" rel="stylesheet">
+<link th:href="@{/css/page-css/mypage-myportfolio.css}" rel="stylesheet">
 <link rel="stylesheet" th:href="@{/css/page-css/mypage-menu.css}" />
 <title>내 이력서</title>
-<style type="text/css">
-.mypage-mypost {
-	display: flex;
-	justify-content: center;
-}
-
-.mypage-main {
-	margin-top: 5%;
-	width: 1000px;
-	height: auto;
-}
-
-.mypage-main-side {
-	margin-top: 3%;
-	display: grid;
-	width: 100%;
-	height: auto;
-	grid-template-columns: 23% 1fr;
-	gap: 20px;
-	justify-content: center;
-}
-
-.mypage-main-container {
-	border-radius: 20px;
-	padding: 3%;
-	border: 2px solid #CACACA;
-	width: 100%;
-	height: auto;
-	margin-bottom: 4%;
-	overflow: auto;
-}
-
-#mypage-title2 {
-	margin: 0;
-	line-height: 1; /* 글자 높이에 맞춤 */
-	display: inline-block;
-	border-bottom: 3px solid #ff4473; /* 하단만 핑크 밑줄 */
-	white-space: nowrap;
-	font-size: 30px;
-	margin-bottom: 3%;
-}
-
-.long-button {
-	font-size: 20px;
-	font-weight: bolder;
-	padding: 20px;
-	background-color: #FF7C9D;
-	color: #ffffff;
-	margin-top: 30px;
-}
-
-.portfolio-title {
-	white-space: nowrap;
-}
-</style>
 </head>
 
 <div layout:fragment="content">
@@ -76,20 +22,25 @@
 					<div class="mypage-main-container">
 						<h1 id="mypage-title2">내 이력서</h1>
 						<div class="row row-cols-3 g-4">
-							<div class="col" th:each="portfolio : ${portfolio}">
+							<div class="col" th:each="portfolio : ${portfolios}">
 								<div class="card h-100 text-center">
 									<!-- 썸네일 -->
 									<a
-										th:href="@{'/mypage/myportfolio/{portfolioId}(portfolioId=${portfolio.portfolioId})">
+										th:href="@{/mypage/myportfolio/{portfolioId}(portfolioId=${portfolio.portfolioId})}">
 										<img class="card-img-top"
 										th:src="@{'/uploads/portfolio/' + ${portfolio.portfolioId} + '.png'}"
-										alt="썸네일" style="max-height: 300px; object-fit: cover;"
-										th:href="@{'}">
+										alt="썸네일" style="max-height: 300px; object-fit: cover;">
 									</a>
 									<!-- 제목 -->
-									<div class="card-body">
-										<h6 class="card-title" th:text="${portfolio.portfolioName}">포트폴리오
-											제목</h6>
+									<div
+										class="card-body d-flex justify-content-center align-items-center">
+										<div class="d-flex align-items-center">
+											<!-- 대표 포트폴리오면 아이콘 표시 -->
+											<img th:if="${repId == portfolio.portfolioId}"
+												th:src="@{/svg/crown.svg}" alt="왕관" class="crown me-1">
+											<h6 class="card-title mb-0 portfolio-title"
+												th:text="${portfolio.portfolioName}">포트폴리오 제목</h6>
+										</div>
 									</div>
 								</div>
 							</div>

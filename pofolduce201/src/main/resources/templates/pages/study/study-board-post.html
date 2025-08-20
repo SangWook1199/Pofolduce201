@@ -28,7 +28,8 @@
 				<div>
 					<a th:href="@{/study/{studyId}/update(studyId=${post.studyId})}"
 						class="btn btn-sm btn-primary">수정</a>
-					<form th:action="@{/study/{studyId}/delete(studyId=${post.studyId})}"
+					<form
+						th:action="@{/study/{studyId}/delete(studyId=${post.studyId})}"
 						method="post" style="display: inline;">
 						<button type="submit" class="btn btn-sm btn-primary"
 							onclick="return confirmDelete();">삭제</button>
@@ -67,7 +68,10 @@
 		</div>
 		<!-- 나중에 좋아요 기능 추가 -->
 		<div class="text-center like-button">
-			<button class="btn btn-primary" type="button">종아요</button>
+			<button id="likeBtn" class="btn btn-primary not-liked" type="button"
+				th:attr="data-postid=${post.postId}">
+				종아요<span id="likeCount" th:text="${post.likeCount}"></span>
+			</button>
 		</div>
 	</div>
 	<div class="comment-area">
@@ -161,6 +165,9 @@
 		</div>
 	</div>
 	<script>
+		const likeBtn = document.getElementById('likeBtn');
+		const likeCount = document.getElementById('likeCount');
+		
 		var container = document.getElementById('map');
 		var options = {
 			center : new kakao.maps.LatLng(37.583743027324, 126.999963317958),
@@ -181,6 +188,34 @@
 		function confirmDelete() {
 			return confirm('정말 삭제하시겠습니까?');
 		}
+		
+		likeBtn.addEventListener('click', async () => {
+		    const studyId = likeBtn.dataset.studyid;
+		    const liked = likeBtn.classList.contains('liked');
+
+		    try {
+		        const response = await fetch('/api/study/like', {
+		            method: 'POST',
+		            headers: { 'Content-Type': 'application/json' },
+		            body: JSON.stringify({ studyId, liked })
+		        });
+
+		        if (!response.ok) throw new Error('서버 에러');
+
+		        const data = await response.json();
+		        likeCount.textContent = data.likes;
+
+		        if (data.liked) {
+		            likeBtn.classList.add('liked');
+		            likeBtn.classList.remove('not-liked');
+		        } else {
+		            likeBtn.classList.add('not-liked');
+		            likeBtn.classList.remove('liked');
+		        }
+		    } catch (err) {
+		        console.error(err);
+		    }
+		});
 	</script>
 </div>
 

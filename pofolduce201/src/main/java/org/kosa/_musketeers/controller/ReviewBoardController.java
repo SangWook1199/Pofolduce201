@@ -1,0 +1,108 @@
+package org.kosa._musketeers.controller;
+
+import java.util.List;
+
+import org.kosa._musketeers.domain.ReviewPost;
+import org.kosa._musketeers.domain.ReviewPostComment;
+import org.kosa._musketeers.domain.User;
+import org.kosa._musketeers.service.ReviewBoardService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import jakarta.servlet.http.HttpServletRequest;
+
+@Controller
+public class ReviewBoardController {
+	
+	private ReviewBoardService reviewBoardService;
+	private ReviewBoardController(ReviewBoardService reviewBoardService, UserController userController) {
+		this.reviewBoardService = reviewBoardService;
+	}
+
+	@GetMapping("/review")
+	public String review(@RequestParam(defaultValue = "1") int page, Model model) {
+		
+		int pagePostCount = 15;
+		int totalPage = reviewBoardService.getTotalReviewPostCount() / pagePostCount + 1;
+		List<ReviewPost> bestReviewPostList = reviewBoardService.getBestReviewPostList();
+		List<ReviewPost> reviewPostList = reviewBoardService.getReviewPostList(page);
+		
+		model.addAttribute("totalPages", totalPage);
+		model.addAttribute("currentPage", page);
+		model.addAttribute("reviewPostList",reviewPostList);
+		model.addAttribute("bestReviewPostList", bestReviewPostList);
+		return "pages/review/review-board";
+	}
+	
+	@GetMapping("/review/post{reviewPostId}")
+	public String reviewViewPost(@RequestParam int reviewPostId, Model model) {
+		ReviewPost reviewPost = reviewBoardService.viewPost(reviewPostId);
+		List<ReviewPostComment> commentList = reviewBoardService.loadReviewPostCommentList(reviewPostId);
+		System.out.println(commentList.get(0).getUserId().getUserId());
+		model.addAttribute("reviewPost", reviewPost);
+		model.addAttribute("commentsList", commentList);
+		return "pages/review/review-post";
+	}
+	
+	@GetMapping("/review/write")
+	public String reviewWritePost() {
+		return "pages/review/review-write";
+	}
+	
+	@PostMapping("/review/write/save")
+	public String saveReviewPost(@ModelAttribute ReviewPost reviewPost, HttpServletRequest request) {
+
+		reviewPost.setUser(new User((Integer)request.getSession().getAttribute("userId")));
+		reviewBoardService.createPost(reviewPost);
+		return "redirect:/review";
+	}
+	
+	@GetMapping("/review/post/{reviewPostId}/edit")
+	public String editReviewPost(@PathVariable int reviewPostId, Model model) {
+
+		ReviewPost reviewPost = reviewBoardService.getReviewPostById(reviewPostId);
+		model.addAttribute("reviewPost", reviewPost);
+		return "pages/review/review-edit";
+	}
+	
+	@PostMapping("/review/edit/save")
+	public String saveEditReviewPost(@ModelAttribute ReviewPost reviewPost) {
+		reviewBoardService.editReviewPost(reviewPost);
+		System.out.println("******");
+		System.out.println(reviewBoardService.getReviewPostById(reviewPost.getReviewPostId()));
+		return "redirect:/review";
+	}
+	
+	@PostMapping("/review/post/{reviewPostId}/delete")
+	public String deleteReviewPost(@PathVariable int reviewPostId) {
+		reviewBoardService.deleteReviewPost(reviewPostId);
+		return "redirect:/review";
+	}
+	
+	@PostMapping("/review/comment")
+	public String createComment(int userId, int reviewPostId, String comment) {
+		System.out.println(userId);
+		System.out.println(reviewPostId);
+		System.out.println(comment);
+
+		reviewBoardService.writeComment(userId, reviewPostId, comment);
+		return "redirect:/review/post?reviewPostId=" + reviewPostId;
+	}
+	
+	@PostMapping("/review/comment/{reviewCommentId}/delete")
+	public String deleteComment(@PathVariable int reviewCommentId, @RequestParam int reviewPostId) {
+		reviewBoardService.deleteComment(reviewCommentId);
+		return "redirect:/review/post?reviewPostId=" + Integer.toString(reviewPostId);
+	}
+	
+	@PostMapping("/review/comment/{reviewCommentId}/edit")
+	public String editComment(@PathVariable int reviewCommentId, @RequestParam int reviewPostId) {
+		reviewBoardService.deleteComment(reviewCommentId);
+		return "redirect:/review/post?reviewPostId=" + Integer.toString(reviewPostId);
+	}
+}

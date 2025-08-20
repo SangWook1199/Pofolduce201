@@ -20,6 +20,7 @@ public class StudyBoardService {
 		this.studyBoardMapper = studyBoardMapper;
 	}
 
+	// 조회수 3위까지 조회하는 메서드입니다.
 	public Map<String, StudyBoard> getTop3ByViewCount() {
 		List<StudyBoard> list = studyBoardMapper.getPostOrderByViewCount();
 		Map<String, StudyBoard> top3 = new HashMap<>();
@@ -31,34 +32,39 @@ public class StudyBoardService {
 		return top3;
 	}
 
-	// 상위 3개 제외, 날짜순으로 페이지 단위 조회
+	// 상위 3개 제외, 날짜순으로 페이지 단위로 조회하는 메서드입니다.
 	public List<StudyBoard> getPostsByPage(int page, int pageSize) {
 		int offset = (page - 1) * pageSize;
 		return studyBoardMapper.getPostsByPage(offset, pageSize);
 	}
-	// 상위 3개 제외 후 게시글 총 개수
+
+	// 상위 3개 제외 후 게시글 총 개수를 구하는 메서드입니다.
 	public int countPosts() {
 		return studyBoardMapper.countPosts() - 3;
 	}
-	
+
+	// 게시글 조회하는 메서드입니다.
 	public StudyBoard getPostById(int studyId) {
-	    return studyBoardMapper.getPostById(studyId);
+		return studyBoardMapper.getPostById(studyId);
 	}
-	
-    public void createPost(StudyBoard board) {
-        board.setViewCount(0);
-        board.setLikeCount(0);
-        board.setPostDate(LocalDateTime.now());
 
-        studyBoardMapper.createPost(board);
-    }
-    
-    public void updatePost(StudyBoard board) {
-    	studyBoardMapper.updatePost(board);
-    }
+	// 게시글 작성 메서드입니다.
+	public void createPost(StudyBoard board) {
+		board.setViewCount(0);
+		board.setLikeCount(0);
+		board.setPostDate(LocalDateTime.now());
 
+		studyBoardMapper.createPost(board);
+	}
+
+	// 게시글 수정 메서드입니다.
+	public void updatePost(StudyBoard board) {
+		studyBoardMapper.updatePost(board);
+	}
+
+	// 게시글 삭제 메서드입니다.
 	public void deletePost(int studyId) {
 		studyBoardMapper.deletePost(studyId);
 	}
-	
+
 }

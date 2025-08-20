@@ -55,7 +55,7 @@ public class UserController {
 		if (user != null) {
 			HttpSession httpSession = request.getSession();
 			httpSession.setAttribute("userId", user.getUserId());
-			page = "redirect:/home";
+			page = "redirect:/";
 		} else {
 			redirectAttributes.addFlashAttribute("loginFailMessage", "아이디 or 비밀번호가 잘못입력되었습니다");
 		}
@@ -69,12 +69,7 @@ public class UserController {
 		HttpSession httpSession = request.getSession();
 		httpSession.removeAttribute("userId");
 
-		return "redirect:/home";
-	}
-
-	@GetMapping("/home")
-	public String home() {
-		return "index";
+		return "redirect:/";
 	}
 
 	// 마이페이지로 이동 및 내정보 조회
@@ -189,23 +184,29 @@ public class UserController {
 		}
 	}
 
+	// 내 이력서 페이지
 	@GetMapping("/mypage/myportfolio")
 	public String getMyPortfolio(Model model, @SessionAttribute("userId") int userId) {
 		List<Portfolio> portfolio = userService.getPortfolioList(userId);
-
-		model.addAttribute("portfolio", portfolio);
-
+		Integer pofId = userService.getRepPortfolio(userId);
+		model.addAttribute("portfolios", portfolio);
+		model.addAttribute("repId", pofId);
 		return "/pages/mypage/mypage-myportfolio";
 	}
 
+	// 이력서 업로드
 	@PostMapping("/mypage/myportfolio/upload")
 	public String uploadPortfolio(@RequestParam("file") MultipartFile file,
 			@RequestParam("portfolioName") String portfolioName, @SessionAttribute("userId") int userId)
 			throws IOException {
 		User user = new User();
 		user.setUserId(userId);
-
+		Integer repId = userService.getRepPortfolio(userId);
 		userService.createPortfolio(file, portfolioName, user);
+		int portId = userService.getPortfolioById(userId);
+		if (repId == null) {
+			userService.setFirstRepPortfolio(userId, portId);
+		}
 		return "redirect:/mypage/myportfolio";
 	}
 
@@ -234,7 +235,40 @@ public class UserController {
 
 		model.addAttribute("portfolio", portfolio);
 
-		return "/pages/mypage/mypage-myportfolio";
+		return "/pages/mypage/mypage-myportfolio-detail";
+	}
+
+	// 대표 이력서 설정
+	@PostMapping("/mypage/myportfolio/{portfolioId}/rep")
+	public String setRepPortfolio(@PathVariable int portfolioId, @SessionAttribute("userId") int userId, Model model) {
+		Integer pofId = userService.getRepPortfolio(userId);
+		Portfolio portfolio = userService.getPortfolio(portfolioId);
+		model.addAttribute("portfolio", portfolio);
+		// 대표 이력서라면
+		// 나중에 알람 설정
+		if (pofId != null && pofId == portfolioId) {
+			return "/pages/mypage/mypage-myportfolio-detail";
+		}
+		// 대표 이력서로 설정
+		userService.setRepPortfolio(userId, portfolioId);
+		return "redirect:/mypage/myportfolio";
+	}
+
+	// 이력서 삭제
+	@PostMapping("/mypage/myportfolio/{portfolioId}/delete")
+	public String deletePortfolio(@PathVariable int portfolioId, @SessionAttribute("userId") int userId,
+			RedirectAttributes redirectAttributes) {
+		Integer pofId = userService.getRepPortfolio(userId);
+		// 나중에 ajax 처리
+		if (pofId != null && pofId == portfolioId) {
+			redirectAttributes.addFlashAttribute("errorMessage", "대표 이력서는 삭제할 수 없습니다.");
+			return "redirect:/mypage/myportfolio/" + portfolioId;
+		}
+
+		// 대표 이력서가 아니라면 삭제
+		userService.deletePortfolio(portfolioId);
+		redirectAttributes.addFlashAttribute("successMessage", "이력서가 삭제되었습니다.");
+		return "redirect:/mypage/myportfolio";
 	}
 
 }

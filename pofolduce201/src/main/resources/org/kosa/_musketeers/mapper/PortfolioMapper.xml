@@ -31,15 +31,51 @@
 		WHERE p.portfolio_id =
 		#{portfolioId}
 	</select>
+	<select id="getPortfolioById" parameterType="int"
+		resultType="int">
+		SELECT portfolio_id
+		FROM portfolio
+		WHERE user_id =
+		#{userId}
+	</select>
 
 	<select id="getPortfolioList" parameterType="int"
 		resultType="org.kosa._musketeers.domain.Portfolio">
-		SELECT portfolio_id AS portfolioId,
-               portfolio_name AS portfolioName,
-               user_id AS userId
-        FROM portfolio
-        WHERE user_id = #{userId}
-        ORDER BY upload_date DESC
+		SELECT p.portfolio_id AS portfolioId,
+		p.portfolio_name AS
+		portfolioName,
+		p.user_id AS userId,
+		r.portfolio_id AS repPortfolioId
+		FROM portfolio p
+		LEFT JOIN rep_portfolio r
+		ON p.portfolio_id =
+		r.portfolio_id AND r.user_id = #{userId}
+		WHERE p.user_id = #{userId}
+		ORDER BY
+		CASE WHEN r.portfolio_id IS NOT NULL THEN 0 ELSE 1 END,
+		p.upload_date DESC
 	</select>
-
+	<select id="getRepPortfolio" parameterType="int"
+		resultType="int">
+		SELECT portfolio_id
+		FROM rep_portfolio
+		WHERE user_id =
+		#{userId}
+	</select>
+	<update id="updateRepPortfolio" parameterType="map">
+		UPDATE
+		rep_portfolio
+		SET portfolio_id = #{portfolioId}
+		WHERE user_id =
+		#{userId}
+	</update>
+	<insert id="setRepPortfolio" parameterType="map">
+		INSERT INTO
+		rep_portfolio(user_id, portfolio_id)
+		VALUES (#{userId}, #{portfolioId})
+	</insert>
+	<delete id="deletePortfolio" parameterType="int">
+		DELETE FROM portfolio
+		WHERE portfolio_id = #{portfolioId}
+	</delete>
 </mapper>

@@ -13,6 +13,7 @@ body {
 	border-width: 0 0 3px;
 } */
 
+
 .nav-links {
 	list-style: none;
 	display: flex;
@@ -20,6 +21,7 @@ body {
 	margin: 0;
 	padding: 0;
 	left: 50%;
+
 }
 
 .nav-links a {
@@ -32,4 +34,9 @@ body {
 .nav-links a:hover {
 	color: #ff4473;
 	border-radius: 4px;
+}
+
+.custom-border{
+	border-top : 1px solid #FF4473;
+	border-bottom : 1px solid #FF4473;
 }

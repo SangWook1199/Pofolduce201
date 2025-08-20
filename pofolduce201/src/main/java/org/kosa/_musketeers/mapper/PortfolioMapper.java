@@ -12,6 +12,16 @@ public interface PortfolioMapper {
 
 	Portfolio getPortfolio(int portfolioId);
 
+	int getPortfolioById(int userId);
+	
 	List<Portfolio> getPortfolioList(int userId);
+
+	void updateRepPortfolio(int userId, int portfolioId);
+
+	void setRepPortfolio(int userId, int portfolioId);
+	
+	Integer getRepPortfolio(int userId);
+
+	void deletePortfolio(int portfolioId);
 
 }
