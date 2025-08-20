@@ -27,11 +27,57 @@
 
 
 				</div>
-				<div class="portfolio">
-					<img th:src="@{/img/portfolio.png}" width="300"> <img
-						th:src="@{/img/portfolio.png}" width="300"> <img
-						th:src="@{/img/portfolio.png}" width="300">
+
+
+
+
+
+				<!-- 메인 캐러셀 -->
+				<div id="main-container">
+					<div id="carouselExampleControls" class="carousel slide"
+						data-bs-ride="carousel">
+						<div class="portfolio">
+							<div class="carousel-inner">
+								<div class="carousel-item active">
+									<div id="portfolio-items">
+										<img th:src="@{/img/portfolio.png}" width="300" id="item">
+										<img th:src="@{/img/portfolio.png}" width="300" id="item">
+										<img th:src="@{/img/portfolio.png}" width="300" id="item">
+									</div>
+								</div>
+
+								<div class="carousel-item">
+									<div id="portfolio-items">
+										<img th:src="@{/img/portfolio.png}" width="300" id="item">
+										<img th:src="@{/img/portfolio.png}" width="300" id="item">
+										<img th:src="@{/img/portfolio.png}" width="300" id="item">
+
+									</div>
+								</div>
+
+								<div class="carousel-item">
+									<div id="portfolio-items">
+										<img th:src="@{/img/portfolio.png}" width="300" id="item">
+										<img th:src="@{/img/portfolio.png}" width="300" id="item">
+										<img th:src="@{/img/portfolio.png}" width="300" id="item">
+									</div>
+								</div>
+							</div>
+						</div>
+						<button class="carousel-control-prev" type="button"
+							data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+							<img th:src="@{/svg/left.svg}" id="left-button"> <span
+								class="visually-hidden">Previous</span>
+						</button>
+						<button class="carousel-control-next" type="button"
+							data-bs-target="#carouselExampleControls" data-bs-slide="next">
+							<img th:src="@{/svg/right.svg}" id="right-button"> <span
+								class="visually-hidden">Next</span>
+						</button>
+					</div>
 				</div>
+
+
 
 				<div class="row">
 					<div class="col-6">
@@ -41,7 +87,12 @@
 							<img th:src="@{/svg/arrow.svg}" width="35" height="35"
 								onclick="location.href='/recruit'">
 						</div>
-						<div>여기에 채용공고 정렬하기</div>
+						
+						<div class="recruit">
+						<p>
+						현재 채용 공고가 없습니다.
+						</p>
+						</div>
 					</div>
 
 
@@ -53,36 +104,20 @@
 								onclick="location.href='/study'">
 						</div>
 						<div class="main-study">
-							<div id="main-study-component">
-								<h3>스터디 글의 제목 입니다. 길이 테스트 길이 테스트</h3>
+							<div th:each="board:${Board}">
+								<a th:href="@{'/study/' + ${board.study_id}}"
+									style="all: unset;">
+									<div id="main-study-component">
 
-								<div id="main-study-line"></div>
-								<h3>아이디</h3>
-							</div>
-							<div id="main-study-component">
-								<h3>스터디 글의 제목 입니다. 길이 테스트 길이 테스트</h3>
+										<h3 id="h3-text" th:text="${board.title}">스터디 글의 제목 입니다. 길이 테스트 길이 테스트</h3>
 
-								<div id="main-study-line"></div>
-								<h3>아이디</h3>
-							</div>
-							<div id="main-study-component">
-								<h3>스터디 글의 제목 입니다. 길이 테스트 길이 테스트</h3>
+										<div id="main-study-line"></div>
+										<h3 id="h3-text" th:text="${board.nickname}">아이디</h3>
 
-								<div id="main-study-line"></div>
-								<h3>아이디</h3>
+									</div>
+								</a>
 							</div>
-							<div id="main-study-component">
-								<h3>스터디 글의 제목 입니다. 길이 테스트 길이 테스트</h3>
 
-								<div id="main-study-line"></div>
-								<h3>아이디</h3>
-							</div>
-							<div id="main-study-component">
-								<h3>스터디 글의 제목 입니다. 길이 테스트 길이 테스트</h3>
-
-								<div id="main-study-line"></div>
-								<h3>아이디</h3>
-							</div>
 						</div>
 					</div>
 
