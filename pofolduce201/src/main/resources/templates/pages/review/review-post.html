@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/layout}">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <title>Insert title here</title>
 </head>
 <body>
@@ -15,7 +14,7 @@
 					th:replace="fragments/html/board-header :: board-header('첨삭 게시판')"></div>
 				<div class="row border-top border-3 p-3 align-items-center">
 					<div class="col-9">
-						<h3 class="h3" th:text=${reviewPost.title}></h3>
+						<h3 class="h3" th:text="${reviewPost.title}"></h3>
 					</div>
 					<div th:if="${session.userId == reviewPost.user.userId}"
 						class="col-3 d-flex justify-content-center">
@@ -29,18 +28,18 @@
 					</div>
 					<div class="row justify-content-start">
 						<img class="col-3 col-md-2 col-xl-1 rounded-circle"
-							src="https://marketplace.canva.com/FUJzw/MAEVntFUJzw/1/tl/canva-human-face.-MAEVntFUJzw.png">
+							src="https://marketplace.canva.com/FUJzw/MAEVntFUJzw/1/tl/canva-human-face.-MAEVntFUJzw.png" />
 						<div class="col-9 col-md-10 col-xl-11 row align-items-center">
 							<a class="fs-4 text-decoration-none text-dark" th:href="@{/}"
 								th:text="${reviewPost.user.nickname}"></a>
-							<p th:text="${reviewPost.createDate}">
+							<p th:text="${reviewPost.createDate}"></p>
 						</div>
 					</div>
-
 				</div>
 				<div class="pt-3 border-top border-1 mt">
-					<p th:utext="${reviewPost.postHtml}">
+					<p th:utext="${reviewPost.postHtml}"></p>
 				</div>
+
 				<div
 					class="d-flex justify-content-center mt-3 border-bottom border-1">
 					<button class="btn btn-primary text-align-center m-5">LIKE
@@ -52,28 +51,77 @@
 				</div>
 				<div class="p-3">
 					<h4 class="h4">댓글 목록</h4>
-					<form action="" method="post">
+					<form action="/review/comment" method="post">
 						<div class="row">
 							<div class="col-10">
-								<textarea class="form-control" placeholder="댓글을 입력하세요"></textarea>
+								<input type="hidden" th:value="${session.userId}" name="userId" />
+								<input type="hidden" th:value="${reviewPost.reviewPostId}"
+									name="reviewPostId" />
+								<textarea class="form-control" placeholder="댓글을 입력하세요"
+									name="comment"></textarea>
 							</div>
 							<button class="col-2 btn btn-primary" type="submit">등록</button>
 						</div>
-						<div th:each="comments : ${commentsList}">
-							<span th:text="${comments.user.nickname}"></span> <span
-								th:text="${comments.commentsContents}"></span>
-							<div th:if="${session.userId == comments.user.userId}">
-								<button>수정</button>
-								<button>삭제</button>
-							</div>
-							<div>
-								<button>신고</button>
+					</form>
+					<div class="row mt-3 border-top pt-3"
+						th:each="comments : ${commentsList}">
+						<img class="col-3 col-md-2 col-xl-1 rounded-circle"
+							src="https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg">
+						<div class="col-10">
+							<div class="fw-bold" th:text="${comments.userId.nickname}"></div>
+							<div class="col-10 mt-2" th:text="${comments.commentsContents}"
+								th:id="'comments-contents-' + ${comments.commentsId}"></div>
+						</div>
+
+						<div class="d-flex justify-content-end">
+							<button class="btn btn-primary ms-1"
+								th:if="${session.userId == comments.userId.userId}"
+								th:onclick="|toggleEdit(${comments.commentsId})|">수정</button>
+							<form
+								th:action="@{/review/comment/{reviewCommentId}/delete(reviewCommentId=${comments.commentsId})}"
+								method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+								<input type="hidden" th:value="${reviewPost.reviewPostId}"
+									name="reviewPostId">
+								<button th:if="${session.userId == comments.userId.userId}"
+									class="btn btn-primary ms-2" type="submit">삭제</button>
+							</form>
+							<button class="btn btn-primary ms-1">신고</button>
+							<!-- 숨겨진 수정창 -->
+							<div th:id="|edit-box-${comments.commentsId}|"
+								style="display: none;">
+								<form
+									th:action="@{/review/comment/{reviewCommentId}/edit(reviewCommentId=${comments.commentsId})}"
+									method="post">	
+									<textarea class="form-control" name="comment-content"
+										id="comment-content" th:text="${comments.commentsContents}"></textarea>
+									<button class="btn btn-primary btn-sm mt-2" type="submit">수정
+										완료</button>
+								</form>
 							</div>
 						</div>
-					</form>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	<script>
+		document
+				.addEventListener(
+						'DOMContentLoaded',
+						function() {
+							function toggleEdit(commentId) {
+								const editBox = document
+										.getElementById("edit-box-" + commentId);
+								if (editBox) {
+									editBox.style.display = (editBox.style.display === "none" || editBox.style.display === "") ? "block"
+											: "none";
+								}
+							}
+
+							function confirmDelete() {
+								return confirm('정말 삭제하시겠습니까?');
+							}
+						});
+	</script>
 </body>
 </html>

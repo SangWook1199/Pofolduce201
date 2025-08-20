@@ -45,37 +45,72 @@
 		ORDER BY like_count DESC
 		LIMIT 3;
 	</select>
-	
+
 	<insert id="createPost" parameterType="map">
-		INSERT INTO review_post(title, post_html, user_id, portfolio_id) VALUE(#{title}, #{postHtml}, #{user.userId}, 1);
+		INSERT INTO
+		review_post(title, post_html, user_id, portfolio_id) VALUE(#{title},
+		#{postHtml}, #{user.userId}, 1);
 	</insert>
-	
-	<select id="getReviewPostByReviewPostId" parameterType="int" resultMap="viewReviewPostResultMap">
-		SELECT review_post_id, title, post_html, view_count, create_date, like_count, users.user_id, portfolio_id, nickname
-		FROM review_post JOIN users on review_post.user_id=users.user_id
-		WHERE review_post_id=#{reviewPostId};
+
+	<select id="getReviewPostByReviewPostId" parameterType="int"
+		resultMap="viewReviewPostResultMap">
+		SELECT review_post_id, title, post_html, view_count,
+		create_date, like_count, users.user_id, portfolio_id, nickname
+		FROM
+		review_post JOIN users on review_post.user_id=users.user_id
+		WHERE
+		review_post_id=#{reviewPostId};
 	</select>
-	
-	<resultMap type="org.kosa._musketeers.domain.ReviewPost" id="viewReviewPostResultMap">
-		<result column="user_id" property="user.userId"/>
-		<result column="nickname" property="user.nickname"/>
+
+	<resultMap type="org.kosa._musketeers.domain.ReviewPost"
+		id="viewReviewPostResultMap">
+		<result column="user_id" property="user.userId" />
+		<result column="nickname" property="user.nickname" />
+	</resultMap>
+
+	<update id="updateReviewPostViewCount" parameterType="int">
+		UPDATE review_post
+		SET view_count=view_count+1
+		WHERE review_post_id=#{reviewPostId}
+	</update>
+
+	<delete id="delteReviewPost" parameterType="int">
+		DELETE
+		FROM review_post
+		WHERE review_post_id=${reviewPostId}
+	</delete>
+
+	<update id="updateReviewPostByReviewId"
+		parameterType="org.kosa._musketeers.domain.ReviewPost">
+		UPDATE review_post
+		SET title=#{title}, post_html=#{postHtml}
+		WHERE review_post_id=#{reviewPostId}
+	</update>
+
+	<insert id="createReviewPostComment"
+		parameterType="org.kosa._musketeers.domain.ReviewPostComment">
+		INSERT review_post_comments(comments_contents, user_id, review_post_id)
+		VALUES(#{commentsContents}, #{userId.userId}, #{reviewPostId})
+	</insert>
+
+	<select id="getReviewCommentListByReviewPostId"
+		parameterType="int"
+		resultType="org.kosa._musketeers.domain.ReviewPostComment" resultMap="getReviewCommentListByReviewPostIdResultMap">
+		SELECT comments_id, comments_contents, comments_date, review_post_id,
+		users.user_id, users.nickname
+		FROM review_post_comments JOIN users ON
+		review_post_comments.user_id=users.user_id
+		WHERE review_post_id=#{review_post_id}
+	</select>
+
+	<resultMap type="org.kosa._musketeers.domain.ReviewPostComment"
+		id="getReviewCommentListByReviewPostIdResultMap">
+		<result column="user_id" property="userId.userId" />
+		<result column="nickname" property="userId.nickname" />
 	</resultMap>
 	
-	<update id="updateReviewPostViewCount" parameterType="int">
-	UPDATE review_post
-	SET view_count=view_count+1
-	WHERE review_post_id=#{reviewPostId}
-	</update>
-	
-	<delete id="delteReviewPost" parameterType="int">
-	DELETE 
-	FROM review_post
-	WHERE review_post_id=${reviewPostId}
+	<delete id="deleteReviewComment" parameterType="int">
+		DELETE FROM review_post_comments
+		WHERE comments_id=${reviewCommentId}
 	</delete>
-	
-	<update id="updateReviewPostByReviewId" parameterType="org.kosa._musketeers.domain.ReviewPost">
-	UPDATE review_post
-	SET title=#{title}, post_html=#{postHtml}
-	WHERE review_post_id=#{reviewPostId}
-	</update>
 </mapper>

@@ -3,6 +3,7 @@ package org.kosa._musketeers.controller;
 import java.util.List;
 
 import org.kosa._musketeers.domain.ReviewPost;
+import org.kosa._musketeers.domain.ReviewPostComment;
 import org.kosa._musketeers.domain.User;
 import org.kosa._musketeers.service.ReviewBoardService;
 import org.springframework.stereotype.Controller;
@@ -19,7 +20,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public class ReviewBoardController {
 	
 	private ReviewBoardService reviewBoardService;
-	private ReviewBoardController(ReviewBoardService reviewBoardService) {
+	private ReviewBoardController(ReviewBoardService reviewBoardService, UserController userController) {
 		this.reviewBoardService = reviewBoardService;
 	}
 
@@ -41,7 +42,10 @@ public class ReviewBoardController {
 	@GetMapping("/review/post{reviewPostId}")
 	public String reviewViewPost(@RequestParam int reviewPostId, Model model) {
 		ReviewPost reviewPost = reviewBoardService.viewPost(reviewPostId);
+		List<ReviewPostComment> commentList = reviewBoardService.loadReviewPostCommentList(reviewPostId);
+		System.out.println(commentList.get(0).getUserId().getUserId());
 		model.addAttribute("reviewPost", reviewPost);
+		model.addAttribute("commentsList", commentList);
 		return "pages/review/review-post";
 	}
 	
@@ -80,4 +84,25 @@ public class ReviewBoardController {
 		return "redirect:/review";
 	}
 	
+	@PostMapping("/review/comment")
+	public String createComment(int userId, int reviewPostId, String comment) {
+		System.out.println(userId);
+		System.out.println(reviewPostId);
+		System.out.println(comment);
+
+		reviewBoardService.writeComment(userId, reviewPostId, comment);
+		return "redirect:/review/post?reviewPostId=" + reviewPostId;
+	}
+	
+	@PostMapping("/review/comment/{reviewCommentId}/delete")
+	public String deleteComment(@PathVariable int reviewCommentId, @RequestParam int reviewPostId) {
+		reviewBoardService.deleteComment(reviewCommentId);
+		return "redirect:/review/post?reviewPostId=" + Integer.toString(reviewPostId);
+	}
+	
+	@PostMapping("/review/comment/{reviewCommentId}/edit")
+	public String editComment(@PathVariable int reviewCommentId, @RequestParam int reviewPostId) {
+		reviewBoardService.deleteComment(reviewCommentId);
+		return "redirect:/review/post?reviewPostId=" + Integer.toString(reviewPostId);
+	}
 }
