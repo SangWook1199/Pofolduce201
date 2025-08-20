@@ -25,6 +25,11 @@ public interface UserMapper {
 
 	User findUserByEmail(String email);
 
+
 	void updateProfile(int userId, String imagePath);
+
+	
+	// user 정보 (관리자 확인용)
+	User getUserById(int userId);
 
 }

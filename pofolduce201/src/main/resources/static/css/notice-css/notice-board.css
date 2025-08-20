@@ -1,0 +1,38 @@
+@charset "UTF-8";
+
+.main-content {
+	width: 1000px;
+	margin: auto;
+	margin-top: 40px;
+}
+.banner{
+	margin-top: 200px;
+}
+.table {
+  text-align: center;
+  margin-top:15px;
+}
+.line{
+	border-bottom: 1px solid;
+}
+/* 페이지네이션 전체 글자 색 */
+.pagination .page-link {
+    color: #6C757D;       /* 기본 글자색 */
+    background-color: #ffffff;  /* 기본 배경색 */
+    border-color: #E9ECEF;      /* 테두리 색 */
+}
+
+/* 활성 페이지 */
+.pagination .page-item.active .page-link {
+    color: #ffffff;       /* 활성 글자색 */
+    background-color: #FF4473; /* 활성 배경색 */
+    border-color: #ff5733;     /* 테두리 색 */
+}
+
+/* 비활성화된 이전/다음 버튼 */
+.pagination .page-item.disabled .page-link {
+    color: #ADB5BD;       /* 비활성 글자색 */
+    pointer-events: none;
+    background-color: #ffffff; /* 비활성 배경색 */
+    border-color: #E9ECEF;
+}

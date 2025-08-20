@@ -220,14 +220,14 @@ public class UserController {
 		user.setUserId(userId);
 		Integer repId = userService.getRepPortfolio(userId);
 		userService.createPortfolio(file, portfolioName, user);
-		int portId = userService.getPortfolioById(userId);
 		if (repId == null) {
+			int portId = userService.getPortfolioById(userId);
 			userService.setFirstRepPortfolio(userId, portId);
 		}
 		return "redirect:/mypage/myportfolio";
 	}
 
-	// 내(가 작성한) 첨삭 조회
+	// 회원 탈퇴
 	@PostMapping("/mypage/delete")
 	public String deleteAccount(HttpServletRequest request) {
 

@@ -2,6 +2,9 @@ package org.kosa._musketeers.domain;
 
 import java.time.LocalDateTime;
 
+//마이페이지 전용 스터디 게시판 코멘트 조회 vo입니다.
+//절대 바꾸지 마세요.
+
 public class StudyBoardComment {
 	private int commentsId;
 	private String commentsContents;

@@ -68,8 +68,7 @@
 		</div>
 		<!-- 나중에 좋아요 기능 추가 -->
 		<div class="text-center like-button">
-			<button id="likeBtn" class="btn btn-primary not-liked" type="button"
-				th:attr="data-postid=${post.postId}">
+			<button id="likeBtn" class="btn btn-primary not-liked" type="button">
 				종아요<span id="likeCount" th:text="${post.likeCount}"></span>
 			</button>
 		</div>

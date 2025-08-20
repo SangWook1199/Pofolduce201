@@ -12,13 +12,13 @@ from study_post
 where user_id=#{userId};
 </select>
 
-<select id="findMyReviewComment" parameterType="int" resultType="org.kosa._musketeers.domain.ReviewPostComment">
+<select id="findMyReviewComment" parameterType="int" resultType="org.kosa._musketeers.domain.MyPageReviewComment">
 	select comments_id, comments_contents, comments_date, review_id, user_id
 from review_post_comments
 where user_id=#{userId};
 </select>
 
-<select id="findMyStudyComment" parameterType="int" resultType="org.kosa._musketeers.domain.StudyPostComment">
+<select id="findMyStudyComment" parameterType="int" resultType="org.kosa._musketeers.domain.MyPageStudyComment">
 	select comments_id, comments_contents, comments_date, study_id, user_id
 from study_post_comments
 where user_id=#{userId};

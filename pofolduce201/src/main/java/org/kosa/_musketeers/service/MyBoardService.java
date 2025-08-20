@@ -6,11 +6,11 @@ import java.util.List;
 
 import org.kosa._musketeers.domain.MyPageComment;
 import org.kosa._musketeers.domain.MyPagePost;
+import org.kosa._musketeers.domain.MyPageReviewComment;
+import org.kosa._musketeers.domain.MyPageStudyComment;
 import org.kosa._musketeers.domain.Review;
 import org.kosa._musketeers.domain.ReviewBoard;
-import org.kosa._musketeers.domain.ReviewPostComment;
 import org.kosa._musketeers.domain.StudyBoard;
-import org.kosa._musketeers.domain.StudyPostComment;
 import org.kosa._musketeers.mapper.MyBoardMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -86,7 +86,7 @@ public class MyBoardService {
 		List<MyPageComment> result = new ArrayList<>();
 
 		// 첨삭게시판에서 게시글 찾기
-		for (ReviewPostComment rc : myBoardMapper.findMyReviewComment(userId)) {
+		for (MyPageReviewComment rc : myBoardMapper.findMyReviewComment(userId)) {
 			result.add(new MyPageComment(rc.getCommentsId(), "review", // 게시판 타입
 					rc.getCommentsContents(), rc.getCommentsDate(), rc.getUserId(), rc.getReviewId(), // Review 전용
 					null // Study 전용 없음
@@ -94,7 +94,7 @@ public class MyBoardService {
 		}
 
 		// 스터디게시판에서 게시글 찾기
-		for (StudyPostComment sc : myBoardMapper.findMyStudyComment(userId)) {
+		for (MyPageStudyComment sc : myBoardMapper.findMyStudyComment(userId)) {
 			result.add(new MyPageComment(sc.getCommentsId(), "study", // 게시판 타입
 					sc.getCommentsContents(), sc.getCommentsDate(), sc.getUserId(), null, // Review 전용
 					sc.getStudyId() // Study 전용 없음
