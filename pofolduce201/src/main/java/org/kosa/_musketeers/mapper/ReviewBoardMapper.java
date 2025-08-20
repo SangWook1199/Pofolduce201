@@ -25,13 +25,11 @@ public interface ReviewBoardMapper {
 
 	void updateReviewPostByReviewId(ReviewPost reviewPost);
 
-<<<<<<< HEAD
 	int getTotalReviewPostCountById(int userId);
-=======
+	
 	void createReviewPostComment(ReviewPostComment reviewPostComment);
 
 	List<ReviewPostComment> getReviewCommentListByReviewPostId(int reviewPostId);
 
 	void deleteReviewComment(int reviewCommentId);
->>>>>>> main
 }

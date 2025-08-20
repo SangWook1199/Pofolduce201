@@ -24,4 +24,7 @@ public interface UserMapper {
 	User findUserByEmail(String email);
 
 	int getTotalPortfolioCountById(int userId);
+	
+	// user 정보 (관리자 확인용)
+	User getUserById(int userId);
 }
