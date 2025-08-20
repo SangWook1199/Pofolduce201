@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>공지사항 > 게시글 보기</title>
+<link th:href="@{/css/board-header.css}" rel="stylesheet">
+<link th:href="@{/css/notice-css/notice-board-post.css}"
+	rel="stylesheet">
+</head>
+
+<!-- layout.html의 content fragment 영역에 삽입될 부분 -->
+<div layout:fragment="content" class="main-content">
+
+	<!-- 상단 헤더 -->
+	<div
+		th:replace="fragments/html/board-header :: board-header('공지사항 > 게시글 보기')"></div>
+
+	<!-- 게시글 정보 -->
+	<div class="title-area mb-3">
+
+		<!-- 제목 + 버튼 영역 -->
+		<div class="d-flex justify-content-between align-items-center mb-4"
+			id="notice-post-title">
+			<h3 th:text="${post.title}" class="board-title mb-0">공지사항 제목</h3>
+
+			<!-- 관리자일 때만 수정/삭제 버튼 표시 -->
+			<div th:if="${isAdmin}">
+				<a th:href="@{/notice/{noticeId}/update(noticeId=${post.noticeId})}"
+					class="btn btn-sm btn-primary">수정</a>
+				<form
+					th:action="@{/notice/{noticeId}/delete(noticeId=${post.noticeId})}"
+					method="post" style="display: inline;">
+					<button type="submit" class="btn btn-sm btn-danger"
+						onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+				</form>
+			</div>
+		</div>
+
+		<!-- 작성자 정보 -->
+		<div class="d-flex align-items-center gap-3">
+			<img alt="프로필" th:src="@{/svg/admin.svg}" class="profile">
+
+			<div class="d-flex flex-column">
+				<p th:text="${post.userId.nickname}" class="mb-0 fw-bold">관리자</p>
+				<p th:text="${#temporals.format(post.date, 'yyyy-MM-dd')}"
+					class="mb-0 text-muted small">2025-08-24</p>
+			</div>
+
+			<span class="ms-auto small text-muted">조회수: <span
+				th:text="${post.noticeCount}">12</span>
+			</span>
+		</div>
+	</div>
+
+	<!-- 게시글 내용 -->
+	<div class="content-area">
+		<div th:utext="${post.contentHtml}" class="board-content">공지사항
+			본문이 들어갑니다.</div>
+	</div>
+
+	<!-- 목록 버튼 -->
+	<div class="col text-end mt-4">
+		<a class="btn btn-primary" th:href="@{/notice-board}" id="list-button">목록보기</a>
+	</div>
+
+</div>
+</html>

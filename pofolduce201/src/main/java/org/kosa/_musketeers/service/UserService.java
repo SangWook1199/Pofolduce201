@@ -130,6 +130,15 @@ public class UserService {
 		return portfolioMapper.getPortfolio(portfolioId);
 	}
 
+	public User getUserById(int userId) {
+	    return userMapper.getUserById(userId);
+	}
+	
+	public boolean isAdmin(int userId) {
+	    User user = getUserById(userId);
+	    return user != null && "관리자".equals(user.getUserType());
+	}
+
 	// 대표 포트폴리오를 설정하는 메서드입니다.
 	public void setRepPortfolio(int userId, int portfolioId) {
 		// 새 대표 포트폴리오 추가

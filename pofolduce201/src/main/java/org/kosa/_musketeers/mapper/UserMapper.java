@@ -22,4 +22,7 @@ public interface UserMapper {
 	int insertUser(User newUser);
 
 	User findUserByEmail(String email);
+	
+	// user 정보 (관리자 확인용)
+	User getUserById(int userId);
 }

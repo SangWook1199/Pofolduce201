@@ -1,0 +1,81 @@
+@charset "UTF-8";
+
+/* 전체 컨테이너 정렬 */
+.main-content {
+    width: 1000px;
+    margin: auto;
+    margin-top: 40px;
+}
+
+/* 제목 영역 */
+.title-area {
+    border-top: 1px solid black;
+    border-bottom: 1px solid #DEE2E6;
+    margin-top: 80px;
+    padding: 20px 0 15px 30px;
+    margin-bottom: 30px;
+}
+
+/* 제목 텍스트 + 수정/삭제 버튼 하단 핑크 밑줄 */
+#notice-post-title {
+    border-bottom: 3px solid #ff4473;
+    margin-bottom: 20px;
+}
+
+/* 제목 글자 */
+.board-title {
+    margin-bottom: 30px;
+    font-size: 28px;
+}
+
+/* 프로필 이미지 */
+.profile {
+    width: 45px;
+    height: 45px;
+    float: left;
+    margin-right: 10px;
+}
+
+/* 게시글 상단 사용자 정보 */
+.title-area p {
+    margin: 0px;
+    font-size: 20px;
+}
+
+.title-area .small {
+    font-size: 14px;
+    color: #B4B4B4;
+}
+
+/* 게시글 본문 영역 */
+.content-area {
+    padding-left: 30px;
+    border-bottom: 1px solid #DEE2E6;
+}
+
+/* 본문 텍스트 스타일 */
+.board-content {
+    font-size: 25px;
+    line-height: 1.6;
+    margin-bottom: 80px;
+    white-space: pre-wrap; /* 줄바꿈 유지 */
+}
+
+/* 목록 버튼 영역 */
+#list-button {
+    margin: 10px 0px;
+}
+
+/* 목록 버튼 커스터마이징 */
+.notice-post-btn a {
+    border-color: #ff4473;
+    color: #ff4473;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.notice-post-btn a:hover {
+    background-color: #ff4473;
+    color: white;
+}
+
+/* 기타 (지도, 좋아요, 댓글 등은 미사용이므로 제거됨) */

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>공지사항 작성</title>
+
+    <link th:href="@{/css/board-header.css}" rel="stylesheet">
+    <link th:href="@{/css/notice-css/notice-board-post.css}" rel="stylesheet">
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+</head>
+
+<div layout:fragment="content" class="page-wrap" id="main-content">
+    <div th:replace="fragments/html/board-header :: board-header('공지사항')"></div>
+
+    <form th:action="@{/notice/notice-post-create}" method="post" onsubmit="return submitForm(this)">
+        <!-- 제목 -->
+        <div class="card card-body p-4 p-md-4 post-title mb-3">
+            <input type="text" class="form-control form-control-lg post-input"
+                   id="title" name="title" placeholder="제목을 입력하세요." required />
+        </div>
+
+        <!-- 내용 (에디터) -->
+        <div class="card card-body post-content mb-3">
+            <textarea class="post-editor" id="editor" name="contentHtml"></textarea>
+        </div>
+
+        <!-- 버튼 -->
+        <div class="d-flex justify-content-between mb-3 post-button">
+            <a class="btn btn-primary" href="/notice-board" id="list-button">목록보기</a>
+            <button type="submit" class="btn btn-primary">게시하기</button>
+        </div>
+
+        <!-- CKEditor 및 폼 제출 스크립트 -->
+        <script>
+            let editorInstance;
+
+            ClassicEditor
+                .create(document.querySelector('#editor'))
+                .then(editor => {
+                    editor.ui.view.editable.element.style.height = "500px";
+                    editorInstance = editor;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+
+            function submitForm(form) {
+                if (editorInstance) {
+                    form.querySelector('#editor').value = editorInstance.getData();
+                }
+                alert("공지사항 작성이 완료되었습니다!");
+                return true;
+            }
+        </script>
+    </form>
+</div>
+</html>
