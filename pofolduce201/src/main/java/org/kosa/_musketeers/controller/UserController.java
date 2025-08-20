@@ -1,5 +1,6 @@
 package org.kosa._musketeers.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -12,15 +13,16 @@ import org.kosa._musketeers.service.MyBoardService;
 import org.kosa._musketeers.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -74,7 +76,7 @@ public class UserController {
 
 	// 마이페이지로 이동 및 내정보 조회
 	@GetMapping("/mypage")
-	public String Mypage(HttpServletRequest request, Model model) {
+	public String Mypage(HttpServletRequest request, Model model) throws IOException {
 
 		// 세션에서 userId 가져오기
 		HttpSession session = request.getSession(false);
@@ -84,8 +86,23 @@ public class UserController {
 		}
 
 		int userId = (int) session.getAttribute("userId");
+		
 		User userData = userService.getUserInformation(userId);
+		
+		//프로필 사진이 서버에 있는 지 확인합니다. 없으면 기본 프로필을 띄웁니다.
+		String fileLocation = userData.getUserImageLocation();
+	
+		String uploadDir = new ClassPathResource("static/uploads/profile/").getFile().getAbsolutePath();
+
+		// 사용자 프로필 이미지 파일
+		File profileFile = new File(uploadDir + "/" + userData.getUserId() + ".png");
+		boolean hasProfileImage = profileFile.exists();
+
+		//전달
+		model.addAttribute("hasProfileImage", hasProfileImage);
 		model.addAttribute("userData", userData);
+		
+	
 
 		return "/pages/mypage/mypage-main";
 
@@ -270,5 +287,28 @@ public class UserController {
 		redirectAttributes.addFlashAttribute("successMessage", "이력서가 삭제되었습니다.");
 		return "redirect:/mypage/myportfolio";
 	}
+
+	// 유저의 프로필을 업로드하는 메소드입니다.
+	@PostMapping("/mypage/profile")
+	public String updateProfile(HttpServletRequest request, @RequestParam("file") MultipartFile file)
+			throws IOException {
+		// 세션에서 userId 가져오기
+		HttpSession session = request.getSession(false);
+		if (session == null || session.getAttribute("userId") == null) {
+			// 로그인 안 된 상태면 로그인 페이지로
+			return "redirect:/login";
+		}
+		
+		int userId = (int) session.getAttribute("userId");
+
+		userService.updateProfile(file, userId);
+
+		return "redirect:/mypage";
+
+	}
+	
+	
+	
+	
 
 }

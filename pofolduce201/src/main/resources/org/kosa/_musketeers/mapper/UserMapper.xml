@@ -10,7 +10,7 @@
 	</select>
 
 	<select id="getUserInformation" parameterType="int">
-		SELECT email,
+		SELECT user_id, email,
 		nickname, company_name, company_certification, point,
 		user_image_location
 		FROM users
@@ -50,5 +50,11 @@
 		INSERT INTO users (email, nickname, password)
 		VALUES (#{email}, #{nickname}, #{password})
 	</insert>
+	
+	<update id="updateProfile" >
+		UPDATE users set user_image_location=#{imagePath}
+		where user_id=#{userId}
+	</update>
+	
 
 </mapper>

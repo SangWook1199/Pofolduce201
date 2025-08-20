@@ -1,6 +1,5 @@
 // mypage.js
-//회원 탈퇴 버튼
-
+//모달 창 
 document.addEventListener("click", (e) => {
     // modalConfirmBtn 클릭 감지
     const confirmBtn = e.target.closest("#modalConfirmBtn");
@@ -11,7 +10,7 @@ document.addEventListener("click", (e) => {
 
     // trim으로 공백 제거
     const modalTitle = modalEl.querySelector(".modal-title").textContent.trim();
-
+	//회원 탈퇴 업로드
     if (modalTitle === "회원 탈퇴") {
 
         // alert 띄우기
@@ -24,6 +23,19 @@ document.addEventListener("click", (e) => {
 		document.getElementById("deleteForm").submit();
 		
     }
+	//모달 업로드
+	else if (modalTitle === "프로필 사진 변경") {
+
+	        // alert 띄우기
+	        alert("프로필 사진이 변경되었습니다.");
+		
+	        // 모달 닫기
+	        const modal = bootstrap.Modal.getInstance(modalEl);
+	        if (modal) modal.hide();
+
+			document.getElementById("updateProfileForm").submit();
+			
+	    }
 });
 
 
@@ -72,7 +84,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
-
 
 
 

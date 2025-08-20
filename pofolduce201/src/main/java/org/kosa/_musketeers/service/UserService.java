@@ -173,4 +173,21 @@ public class UserService {
 		// 3) DB에서 삭제
 		portfolioMapper.deletePortfolio(portfolioId);
 	}
+
+	// 유저의 프로필을 등록하는 메소드 입니다.
+	public void updateProfile(MultipartFile file, int userId) throws IOException {
+
+		// 1. 업로드 디렉터리 경로 설정
+		Path uploadDir = Paths.get("src/main/resources/static/uploads/profile/");
+		Files.createDirectories(uploadDir);
+
+		// 2. 업로드하기
+		Path imagePath = uploadDir.resolve(userId + ".png");
+		Files.copy(file.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+		String imagePathStr = imagePath.toString();
+		// 3. db에 경로 저장하기
+		userMapper.updateProfile(userId, imagePathStr);
+
+	}
+
 }

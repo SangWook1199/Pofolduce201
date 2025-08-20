@@ -1,5 +1,7 @@
 package org.kosa._musketeers.mapper;
 
+import java.nio.file.Path;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.kosa._musketeers.domain.User;
@@ -22,4 +24,7 @@ public interface UserMapper {
 	int insertUser(User newUser);
 
 	User findUserByEmail(String email);
+
+	void updateProfile(int userId, String imagePath);
+
 }
