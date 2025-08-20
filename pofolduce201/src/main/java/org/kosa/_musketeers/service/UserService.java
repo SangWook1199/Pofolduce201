@@ -183,6 +183,7 @@ public class UserService {
 		portfolioMapper.deletePortfolio(portfolioId);
 	}
 
+
 	// 유저의 프로필을 등록하는 메소드 입니다.
 	public void updateProfile(MultipartFile file, int userId) throws IOException {
 
@@ -197,6 +198,11 @@ public class UserService {
 		// 3. db에 경로 저장하기
 		userMapper.updateProfile(userId, imagePathStr);
 
+	}
+
+
+	public int getTotalPortfolioCountById(int userId) {
+		return userMapper.getTotalPortfolioCountById(userId);
 	}
 
 }

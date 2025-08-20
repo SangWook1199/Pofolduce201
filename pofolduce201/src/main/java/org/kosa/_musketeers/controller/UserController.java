@@ -246,6 +246,7 @@ public class UserController {
 
 	}
 
+	// 이력서 상세 페이지
 	@GetMapping("/mypage/myportfolio/{portfolioId}")
 	public String getPortfolio(@PathVariable int portfolioId, @SessionAttribute("userId") int userId, Model model) {
 		Portfolio portfolio = userService.getPortfolio(portfolioId);
@@ -288,6 +289,7 @@ public class UserController {
 		return "redirect:/mypage/myportfolio";
 	}
 
+
 	// 유저의 프로필을 업로드하는 메소드입니다.
 	@PostMapping("/mypage/profile")
 	public String updateProfile(HttpServletRequest request, @RequestParam("file") MultipartFile file)
@@ -309,6 +311,19 @@ public class UserController {
 	
 	
 	
-	
+	// 다른 유저 페이지
+	@GetMapping("/userpage/{userId}")
+	public String userPage(@PathVariable int userId, Model model) {
+		User userData = userService.getUserInformation(userId);
+		Integer repPortId = userService.getRepPortfolio(userId);
+		Portfolio portfolio = null; 
+	    if (repPortId != null) {
+	        portfolio = userService.getPortfolio(repPortId);
+	    }
+	    
+		model.addAttribute("portfolio", portfolio);
+		model.addAttribute("userData", userData);
+		return "pages/mypage/userpage";
+	}
 
 }

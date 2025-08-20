@@ -52,10 +52,19 @@
 		(#{email}, #{nickname}, #{password})
 	</insert>
 	
+
 	<update id="updateProfile" >
 		UPDATE users set user_image_location=#{imagePath}
 		where user_id=#{userId}
 	</update>
+	
+
+
+	<select id="getTotalPortfolioCountById" resultType="int">
+		SELECT COUNT(*)
+		FROM portfolio
+		WHERE user_id=#{userId};
+	</select>
 	
 
 	<select id="getUserById" parameterType="int"
@@ -65,6 +74,4 @@
 		FROM users
 		WHERE user_id = #{userId}
 	</select>
-
-
 </mapper>

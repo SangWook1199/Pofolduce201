@@ -26,7 +26,11 @@ public interface UserMapper {
 	User findUserByEmail(String email);
 
 
+
 	void updateProfile(int userId, String imagePath);
+
+
+	int getTotalPortfolioCountById(int userId);
 
 	
 	// user 정보 (관리자 확인용)
