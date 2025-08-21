@@ -72,14 +72,22 @@ public class StudyBoardService {
 		return list;
 	}
 
-	public int decreaseLike(int studyId) {
-		studyBoardMapper.updateLikeCount(studyId, studyBoardMapper.getLikeCount(studyId) + 1);
-        return studyBoardMapper.getLikeCount(studyId);
-	}
+	public int addLike(int studyId) {
+        // 1. 좋아요 수 증가
+        int likeCount = studyBoardMapper.updateLikeCount(studyId);
 
-	public int increaseLike(int studyId) {
-		studyBoardMapper.updateLikeCount(studyId, studyBoardMapper.getLikeCount(studyId) - 1);
-        return studyBoardMapper.getLikeCount(studyId);
-	}
+        if (likeCount == 0) {
+            throw new IllegalArgumentException("Invalid study ID: " + studyId);
+        }
+
+        // 2. 증가된 좋아요 수 조회
+        Integer newLikeCount = studyBoardMapper.getLikeCount(studyId);
+
+        if (newLikeCount == null) {
+            throw new IllegalArgumentException("Failed to get updated like count for study ID: " + studyId);
+        }
+        
+        return newLikeCount;
+    }
 
 }
