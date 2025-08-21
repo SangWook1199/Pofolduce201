@@ -72,4 +72,14 @@ public class StudyBoardService {
 		return list;
 	}
 
+	public int decreaseLike(int studyId) {
+		studyBoardMapper.updateLikeCount(studyId, studyBoardMapper.getLikeCount(studyId) + 1);
+        return studyBoardMapper.getLikeCount(studyId);
+	}
+
+	public int increaseLike(int studyId) {
+		studyBoardMapper.updateLikeCount(studyId, studyBoardMapper.getLikeCount(studyId) - 1);
+        return studyBoardMapper.getLikeCount(studyId);
+	}
+
 }

@@ -96,4 +96,17 @@
 		WHERE ranked.rnk <![CDATA[ < ]]> 6;
 
 	</select>
+	
+    <select id="getLikeCount" resultType="int">
+        SELECT like_count
+        FROM study_post
+        WHERE study_id = #{studyId}
+    </select>
+
+    <update id="updateLikeCount"
+    parameterType="org.kosa._musketeers.domain.StudyBoard">
+        UPDATE study_post
+        SET like_count = #{i}
+        WHERE study_id = #{studyId}
+    </update>
 </mapper>

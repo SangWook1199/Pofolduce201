@@ -4,53 +4,15 @@
 	layout:decorate="~{layouts/layout}">
 <head>
 <link th:href="@{/css/board-header.css}" rel="stylesheet">
-<link th:href="@{/css/study/study-board-post.css}" rel="stylesheet">
+<link th:href="@{/css/study-css/study-board-post.css}" rel="stylesheet">
+<link th:href="@{/css/popover.css}" rel="stylesheet">
 <script type="text/javascript"
 	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=70c0de37da587509ef9f5d9da9f64303"></script>
 
 <title>게시글</title>
 <style type="text/css">
-.popover .popover-header {
-	display: none;
-}
-
-.popover {
-	max-width: 300px;
-	background-color: #ffffff;
-	border: 1px solid #FF4473;
-	border-radius: 20px;
-	text-align: center;
-}
-
-.popover-nickname {
-	font-weight: bolder;
-	font-size: 25px;
-}
-
-.popover hr {
-	color: #FF4473;
-}
-
-.popover-content {
-	color: #C5C5C5;
-}
-
-.popover-image {
-	width: 30px;
-	height: 30px;
-	margin: auto;
-}
-
-.popover-button {
-	width: 30px;
-	height: 30px;
-	font-size: 30px;
-	background-color: #FF4473;
-	cursor: pointer;
-	border-radius: 50%;
-	text-align: center;
-	line-height: 27px;
-	margin: auto;
+.report-content {
+	resize: none;
 }
 </style>
 </head>
@@ -87,18 +49,23 @@
 			<img alt="프로필" th:src="@{/svg/sejung.svg}" class="profile">
 
 			<div class="d-flex flex-column">
-				<p th:text="${post.userId.nickname}" class="mb-0 fw-bold nickname"
+				<p th:text="${post.userId.nickname}"
+					class="mb-0 fw-bold nickname all-userName"
 					th:attr="data-userid=${post.userId.userId}"
 					data-bs-toggle="popover" title="사용자 정보">김세정</p>
 				<p th:text="${postDateFormatted}" class="mb-0 text-muted small">2025-08-18</p>
 			</div>
 
 			<!-- 본인 게시글 아닌 경우에만 신고 버튼 -->
-			<!-- 나중에 신고 추가 -->
 			<div
 				th:if="${session.userId != null and session.userId != post.userId.userId}">
-				<img alt="신고" th:src="@{/svg/report-button.svg}" class="ms-auto"
-					style="width: 20px; height: 20px;">
+				<button type="button" class="btn p-0 border-0 bg-transparent"
+					data-bs-toggle="modal" data-bs-target="#reportPostModal">
+					<img alt="김세정" class="ms-auto report-img"
+						th:src="@{/svg/report-button.svg}">
+				</button>
+				<div
+					th:replace="fragments/html/report-modal :: reportModalFragment('reportPostModal', ${post.studyId}, ${post.userId.userId})"></div>
 			</div>
 		</div>
 
@@ -111,10 +78,12 @@
 			<p class="map-title">위치 정보</p>
 			<div id="map" style="width: 800px; height: 300px;"></div>
 		</div>
-		<!-- 나중에 좋아요 기능 추가 -->
+		<!-- 좋아요 버튼 -->
 		<div class="text-center like-button">
-			<button id="likeBtn" class="btn btn-primary not-liked" type="button">
-				종아요<span id="likeCount" th:text="${post.likeCount}"></span>
+			<button id="likeBtn" type="button" class="btn btn-light">
+				좋아요 <img id="likeImg" th:src="@{/svg/like-off.svg}" alt="좋아요"
+					style="width: 24px; height: 24px;"> <span id="likeCount"
+					th:text="${post.likeCount}">0</span>
 			</button>
 		</div>
 	</div>
@@ -146,7 +115,8 @@
 				<strong th:text="${comment.userId.nickname}" tabindex="0"
 					th:attr="data-userid=${comment.userId.userId}"
 					data-bs-toggle="popover" data-bs-trigger="focus"
-					class="comment-userName">작성자</strong> <span class="small"
+					class="comment-userName all-userName">작성자</strong> <span
+					class="small"
 					th:text="${#temporals.format(comment.commentsDate, 'yyyy-MM-dd HH:mm')}">작성일</span>
 			</p>
 
@@ -184,13 +154,20 @@
 				<!-- 본인 댓글 아닐때만 신고 버튼 -->
 				<div
 					th:if="${session.userId != null and session.userId != comment.userId.userId}">
-					<img alt="김세정" th:src="@{/svg/report-button.svg}" id="list-button">
+					<button type="button" class="btn p-0 border-0 bg-transparent"
+						data-bs-toggle="modal"
+						th:data-bs-target="'#reportCommentModal-' + ${comment.userId.userId}">
+						<img alt="김세정" th:src="@{/svg/report-button.svg}"
+							class="ms-auto report-img">
+					</button>
 				</div>
+				<div
+					th:replace="fragments/html/report-modal :: reportModalFragment('reportCommentModal-' + ${comment.userId.userId},, ${post.studyId}, ${comment.userId.userId})"></div>
 			</div>
 		</div>
-		<div class="comment-line"></div>
 		<!-- 페이지네이션 -->
 		<div class="comment-pagination mt-3">
+			<div class="comment-line"></div>
 			<ul class="pagination justify-content-center">
 				<li class="page-item"
 					th:classappend="${currentPage == 1}? 'disabled'"><a
@@ -210,8 +187,8 @@
 				</li>
 			</ul>
 		</div>
-	</div>
-	<script>
+
+		<script>
 		var container = document.getElementById('map');
 		var options = {
 			center : new kakao.maps.LatLng(37.583743027324, 126.999963317958),
@@ -232,77 +209,78 @@
 		function confirmDelete() {
 			return confirm('정말 삭제하시겠습니까?');
 		}
-		document.addEventListener("DOMContentLoaded", function () {
-		    const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
+		document.addEventListener("DOMContentLoaded", function() {
+			const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
 
-		    popoverTriggerList.forEach(el => {
-		        // Popover 초기화 (manual trigger)
-		        const popover = new bootstrap.Popover(el, {
-		            html: true,
-		            title: '',
-		            content: '불러오는 중...',
-		            placement: 'top',
-		            trigger: 'manual',
-		            fallbackPlacements: []
-		        });
+			popoverTriggerList.forEach(el => {
+				// Popover 초기화 (manual trigger)
+				const popover = new bootstrap.Popover(el, {
+					html: true,
+					content: '불러오는 중...',
+					placement: 'top',
+					trigger: 'manual',
+					fallbackPlacements: []
+				});
 
-		        // 닉네임 클릭 시 실행
-		        el.addEventListener("click", async (e) => {
-		            e.stopPropagation(); // 클릭 이벤트 버블링 방지
-		            const userId = el.dataset.userid;
+				// 닉네임 클릭 시 실행
+				el.addEventListener("click", async (e) => {
+					e.stopPropagation(); // 클릭 이벤트 버블링 방지
+					const userId = el.dataset.userid;
 
-		            try {
-		                const response = await fetch(`/api/user/${userId}`);
-		                if (!response.ok) throw new Error("서버 응답 오류");
+					try {
+						const response = await fetch(`/api/user/${userId}`);
+						if (!response.ok) throw new Error("서버 응답 오류");
 
-		                const data = await response.json();
+						const data = await response.json();
 
-		                const contentHtml = `
-		                  <div>
-		                    <div class="popover-image">
-		                        <img src="/svg/crown.svg" alt="프로필" style="width:30px; height:30px;">
-		                    </div>
-		                    <p class="popover-nickname">${data.nickname}</p>
-		                    <hr>
-		                    <p class="popover-content">획득한 포인트: ${data.point}</p>
-		                    <p class="popover-content">작성한 이력서: ${data.countPortfolio}</p>
-		                    <p class="popover-content">작성한 첨삭: ${data.countReview}</p>
-		                    <div class="popover-button">></div>
-		                  </div>
-		                `;
+						const contentHtml = `
+				                  <div>
+				                    <div class="popover-image">
+				                        <img src="/svg/crown.svg" alt="프로필" style="width:30px; height:30px;">
+				                    </div>
+				                    <p class="popover-nickname">${data.nickname}</p>
+				                    <hr>
+				                    <p class="popover-content">획득한 포인트: ${data.point}</p>
+				                    <p class="popover-content">작성한 이력서: ${data.countPortfolio}</p>
+				                    <p class="popover-content">작성한 첨삭: ${data.countReview}</p>
+				                    <div class="popover-button">></div>
+				                  </div>
+				                `;
 
-		                popover.setContent({ '.popover-body': contentHtml });
-		                popover.show();
+						popover.setContent({ '.popover-body': contentHtml });
+						popover.show();
 
-		                // 팝오버 내부 버튼 클릭 시 상세페이지 이동
-		                const btn = document.querySelector('.popover-button');
-		                if (btn) {
-		                    btn.addEventListener("click", () => {
-		                        window.location.href = `/userpage/${data.userId}`;
-		                    });
-		                }
+						// 팝오버 내부 버튼 클릭 시 상세페이지 이동
+						const btn = document.querySelector('.popover-button');
+						if (btn) {
+							btn.addEventListener("click", () => {
+								window.location.href = `/userpage/${data.userId}`;
+							});
+						}
 
-		            } catch (err) {
-		                console.error(err);
-		                popover.setContent({ '.popover-body': '정보를 불러오지 못했습니다.' });
-		                popover.show();
-		            }
-		        });
-		    });
+					} catch (err) {
+						console.error(err);
+						popover.setContent({ '.popover-body': '정보를 불러오지 못했습니다.' });
+						popover.show();
+					}
+				});
+			});
 
-		    // 문서 클릭 시 팝오버 닫기
-		    document.addEventListener('click', function (e) {
-		        popoverTriggerList.forEach(el => {
-		            const popoverInstance = bootstrap.Popover.getInstance(el);
-		            if (popoverInstance &&
-		                !el.contains(e.target) &&
-		                !document.querySelector('.popover')?.contains(e.target)) {
-		                popoverInstance.hide();
-		            }
-		        });
-		    });
+			// 문서 클릭 시 팝오버 닫기
+			document.addEventListener('click', function(e) {
+				popoverTriggerList.forEach(el => {
+					const popoverInstance = bootstrap.Popover.getInstance(el);
+					if (popoverInstance &&
+						!el.contains(e.target) &&
+						!document.querySelector('.popover')?.contains(e.target)) {
+						popoverInstance.hide();
+					}
+				});
+			});
 		});
-	</script>
-</div>
 
+
+	</script>
+	</div>
+</div>
 </html>

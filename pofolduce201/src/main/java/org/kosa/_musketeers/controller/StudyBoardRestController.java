@@ -3,41 +3,40 @@ package org.kosa._musketeers.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.kosa._musketeers.domain.User;
-import org.kosa._musketeers.service.ReviewBoardService;
-import org.kosa._musketeers.service.UserService;
+import org.kosa._musketeers.service.StudyBoardService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class StudyBoardRestController {
-	private final UserService userService;
-	private final ReviewBoardService reviewBoardService;
-	
-	
-	
-	public StudyBoardRestController(UserService userService, ReviewBoardService reviewBoardService) {
+	private final StudyBoardService studyBoardService;
+
+	public StudyBoardRestController(StudyBoardService studyBoardService) {
 		super();
-		this.userService = userService;
-		this.reviewBoardService = reviewBoardService;
+		this.studyBoardService = studyBoardService;
 	}
 
-
-
-	@GetMapping("/api/user/{userId}")
-    public ResponseEntity<Map<String, Object>> getUserInfo(@PathVariable int userId) {
-        User user = userService.getUserInformation(userId);
-        int countReview = reviewBoardService.getTotalReviewPostCountById(userId);
-        int countPortfolio = userService.getTotalPortfolioCountById(userId);
+	@PostMapping("/study/{studyId}/like")
+	public ResponseEntity<Map<String, Object>> likePost(@PathVariable int studyId,
+			@RequestBody Map<String, Boolean> body) {
+		
+		boolean liked = body.getOrDefault("liked", false);
+		
+		int updatedLikeCount;
+        if(liked) {
+            // 현재 페이지에서 이미 눌러서 -> 취소
+            updatedLikeCount = studyBoardService.decreaseLike(studyId);
+        } else {
+            // 좋아요
+            updatedLikeCount = studyBoardService.increaseLike(studyId);
+        }
+        
         Map<String, Object> result = new HashMap<>();
-        result.put("userId", userId);
-        result.put("nickname", user.getNickname());
-        result.put("point", user.getPoint());
-        result.put("countReview", countReview);
-        result.put("countPortfolio", countPortfolio);
-        return ResponseEntity.ok(result);
-    }
+        result.put("likeCount", updatedLikeCount);
 
+		return ResponseEntity.ok(result);
+	}
 }
