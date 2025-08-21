@@ -67,10 +67,33 @@
 		#{postHtml}, address=#{address}
 		WHERE study_id = #{studyId}
 	</update>
-	
+
 	<delete id="deletePost" parameterType="int">
 		DELETE FROM
 		study_post
 		WHERE study_id = #{studyId}
 	</delete>
+
+	<select id="getStudyBoardByViewCount" resultType="map">
+		SELECT ranked.title,
+		ranked.view_count,
+		ranked.study_id,
+		ranked.post_html,
+		ranked.address,
+		ranked.user_id,
+		u.nickname
+		FROM (
+		SELECT title,
+		view_count,
+		study_id,
+		post_html,
+		address,
+		user_id,
+		RANK() OVER (ORDER BY view_count DESC) AS rnk
+		FROM study_post
+		) ranked
+		JOIN users u ON ranked.user_id = u.user_id
+		WHERE ranked.rnk <![CDATA[ < ]]> 6;
+
+	</select>
 </mapper>

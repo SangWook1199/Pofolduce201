@@ -67,4 +67,9 @@ public class StudyBoardService {
 		studyBoardMapper.deletePost(studyId);
 	}
 
+	public List<Map<String, Object>> getStudyBoardByViewCount() {
+		List<Map<String, Object>> list = studyBoardMapper.getStudyBoardByViewCount();
+		return list;
+	}
+
 }

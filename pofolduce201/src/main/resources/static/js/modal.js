@@ -11,7 +11,7 @@ document.addEventListener("click", (e) => {
     }
 
     modalEl.querySelector(".modal-title").textContent = btn.getAttribute("data-modal-title") || "";
-    modalEl.querySelector(".modal-body p").textContent = btn.getAttribute("data-modal-body") || "";
+    modalEl.querySelector(".modal-body").innerHTML = btn.getAttribute("data-modal-body") || "";
     modalEl.querySelector("#modalConfirmBtn").textContent = btn.getAttribute("data-modal-confirm") || "확인";
 
     modal.show();

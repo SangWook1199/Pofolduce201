@@ -1,5 +1,7 @@
 package org.kosa._musketeers.mapper;
 
+import java.nio.file.Path;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.kosa._musketeers.domain.User;
@@ -23,8 +25,15 @@ public interface UserMapper {
 
 	User findUserByEmail(String email);
 
+
+
+	void updateProfile(int userId, String imagePath);
+
+
 	int getTotalPortfolioCountById(int userId);
+
 	
 	// user 정보 (관리자 확인용)
 	User getUserById(int userId);
+
 }

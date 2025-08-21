@@ -1,6 +1,7 @@
 package org.kosa._musketeers.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.kosa._musketeers.domain.StudyBoard;
@@ -21,5 +22,7 @@ public interface StudyBoardMapper {
 	void updatePost(StudyBoard board);
 
 	void deletePost(int studyId);
+
+	List<Map<String, Object>> getStudyBoardByViewCount();
 
 }

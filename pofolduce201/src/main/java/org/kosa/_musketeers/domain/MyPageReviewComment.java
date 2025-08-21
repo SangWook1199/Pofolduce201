@@ -1,32 +1,32 @@
 package org.kosa._musketeers.domain;
 
 import java.time.LocalDateTime;
+//마이페이지 전용 vo 입니다.
 
-//스터디 게시글의 댓글 VO 입니다.
-public class StudyPostComment {
-
+public class MyPageReviewComment {
+	
 	private int commentsId;
 	private String commentsContents;
 	private LocalDateTime commentsDate;
-	private int studyId;
+	private int reviewId;
 	private int userId;
-	public StudyPostComment() {
+	public MyPageReviewComment() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public StudyPostComment(int commentsId, String commentsContents, LocalDateTime commentsDate, int studyId,
+	public MyPageReviewComment(int commentsId, String commentsContents, LocalDateTime commentsDate, int reviewId,
 			int userId) {
 		super();
 		this.commentsId = commentsId;
 		this.commentsContents = commentsContents;
 		this.commentsDate = commentsDate;
-		this.studyId = studyId;
+		this.reviewId = reviewId;
 		this.userId = userId;
 	}
 	public int getCommentsId() {
 		return commentsId;
 	}
-	public void setCommentId(int commentsId) {
+	public void setCommentsId(int commentsId) {
 		this.commentsId = commentsId;
 	}
 	public String getCommentsContents() {
@@ -41,11 +41,11 @@ public class StudyPostComment {
 	public void setCommentsDate(LocalDateTime commentsDate) {
 		this.commentsDate = commentsDate;
 	}
-	public int getStudyId() {
-		return studyId;
+	public int getReviewId() {
+		return reviewId;
 	}
-	public void setStudyId(int studyId) {
-		this.studyId = studyId;
+	public void setReviewId(int reviewId) {
+		this.reviewId = reviewId;
 	}
 	public int getUserId() {
 		return userId;
@@ -55,10 +55,8 @@ public class StudyPostComment {
 	}
 	@Override
 	public String toString() {
-		return "StudyPostComment [commentsId=" + commentsId + ", commentsContents=" + commentsContents + ", commentsDate="
-				+ commentsDate + ", studyId=" + studyId + ", userId=" + userId + "]";
+		return "MyPageReviewComment [commentsId=" + commentsId + ", commentsContents=" + commentsContents
+				+ ", commentsDate=" + commentsDate + ", reviewId=" + reviewId + ", userId=" + userId + "]";
 	}
-	
-	
-	
+
 }

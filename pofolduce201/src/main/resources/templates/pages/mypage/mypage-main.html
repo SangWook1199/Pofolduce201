@@ -24,13 +24,34 @@
 						<h1 id="mypage-title2">내 정보 ></h1>
 						<div class="box">
 							<div id="person-svg">
-								<img th:src="@{/svg/person.svg}" width=130 height=130>
+								<div th:if="${hasProfileImage}">
+									<img th:src="@{|/uploads/profile/${userData.userId}.png|}"
+										style="object-fit: cover" />
+								</div>
+								<div th:if="${!hasProfileImage}">
+									<img th:src="@{/svg/person.svg}" width="130" height="130">
+								</div>
+
 							</div>
+
 						</div>
 						<div class="box-left">
+							<!-- 사진 업로드 폼 및 버튼 -->
 
-							<button type="button" class="btn btn-outline-primary btn-custom">사진
-								수정</button>
+							<input type="hidden" name="userId">
+
+							<button type="button" class="btn btn-outline-primary btn-custom"
+								data-bs-toggle="modal" data-bs-target="#globalModal"
+								data-modal-title="프로필 사진 변경"
+								data-modal-body='
+							<form id="updateProfileForm" action="/mypage/profile"
+								method="POST" enctype="multipart/form-data" >
+								<div class="input-group mb-3">
+  								<input type="file" class="form-control" id="updateProfile" name="file" accept=".jpg,.jpeg,.png" >
+								</div>
+								</form>
+								'
+								data-modal-confirm="사진 변경">사진 변경</button>
 						</div>
 					</div>
 
@@ -96,9 +117,6 @@
 
 						</div>
 					</div>
-
-
-
 				</div>
 			</div>
 		</div>
