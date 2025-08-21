@@ -8,7 +8,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
@@ -131,12 +133,12 @@ public class UserService {
 	}
 
 	public User getUserById(int userId) {
-	    return userMapper.getUserById(userId);
+		return userMapper.getUserById(userId);
 	}
-	
+
 	public boolean isAdmin(int userId) {
-	    User user = getUserById(userId);
-	    return user != null && "관리자".equals(user.getUserType());
+		User user = getUserById(userId);
+		return user != null && "관리자".equals(user.getUserType());
 	}
 
 	// 대표 포트폴리오를 설정하는 메서드입니다.
@@ -183,7 +185,6 @@ public class UserService {
 		portfolioMapper.deletePortfolio(portfolioId);
 	}
 
-
 	// 유저의 프로필을 등록하는 메소드 입니다.
 	public void updateProfile(MultipartFile file, int userId) throws IOException {
 
@@ -200,9 +201,55 @@ public class UserService {
 
 	}
 
-
 	public int getTotalPortfolioCountById(int userId) {
 		return userMapper.getTotalPortfolioCountById(userId);
 	}
 
+	// 검색어를 입력하면 검색을 할 수 있는 메소드 입니다.
+	// 첨삭 게시판 검색 결과 -> list로 반환
+	public List<Map<String, Object>> getReviewSearchResult(String search, int page, int size) {
+
+		List<Map<String, Object>> list = userMapper.getReviewSearchResult(search);
+		int totalCount = list.size();
+		
+		// 페이징 (subList 사용)
+	    int fromIndex = Math.max(0, (page - 1) * size);
+	    int toIndex = Math.min(fromIndex + size, totalCount);
+
+	    if (fromIndex > toIndex) {
+	        return new ArrayList<>(); // 빈 리스트
+	    }
+
+		return list.subList(fromIndex, toIndex);
+
+	}
+
+	// 검색어를 입력하면 검색을 할 수 있는 메소드 입니다.
+	// 스터디 게시판 검색 결과 -> list 로 반환
+	public List<Map<String, Object>> getStudySearchResult(String search, int page, int size) {
+
+		List<Map<String, Object>> list = userMapper.getStudySearchResult(search);
+		int totalCount = list.size();
+		
+		// 페이징 (subList 사용)
+	    int fromIndex = Math.max(0, (page - 1) * size);
+	    int toIndex = Math.min(fromIndex + size, totalCount);
+
+	    if (fromIndex > toIndex) {
+	        return new ArrayList<>(); // 빈 리스트
+	    }
+
+		return list.subList(fromIndex, toIndex);
+	}
+
+	public int countReviewResult(String search) {
+		int reviewCount = userMapper.getReviewSearchResult(search).size();
+
+		return reviewCount;
+	}
+
+	public int countStudyResult(String search) {
+		int studyCount = userMapper.getStudySearchResult(search).size();
+		return studyCount;
+	}
 }

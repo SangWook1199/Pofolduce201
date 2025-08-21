@@ -1,6 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.kosa._musketeers.mapper.UserMapper">
+	<resultMap id="studyBoardMap"
+		type="org.kosa._musketeers.domain.StudyBoard">
+		<id property="studyId" column="study_id" />
+		<result property="title" column="title" />
+		<result property="viewCount" column="view_count" />
+		<result property="postHtml" column="post_html" />
+		<result property="postDate" column="post_date" />
+		<result property="likeCount" column="like_count" />
+		<result property="address" column="address" />
+		<association property="userId"
+			javaType="org.kosa._musketeers.domain.User">
+			<id property="userId" column="user_id" />
+			<result property="nickname" column="nickname" />
+			<result property="email" column="email" />
+		</association>
+	</resultMap>
+
+	<resultMap id="reviewBoardMap"
+		type="org.kosa._musketeers.domain.ReviewPost">
+		<id property="reviewPostId" column="review_post_id" />
+		<result property="title" column="title" />
+		<result property="viewCount" column="view_count" />
+		<result property="postHtml" column="post_html" />
+		<result property="createDate" column="create_date" />
+		<result property="likeCount" column="like_count" />
+		<association property="user"
+			javaType="org.kosa._musketeers.domain.User">
+			<id property="userId" column="user_id" />
+			<result property="nickname" column="nickname" />
+			<result property="email" column="email" />
+		</association>
+		<association property="portfolio"
+			javaType="org.kosa._musketeers.domain.Portfolio">
+			<id property="portfolioId" column="portfolio_id" />
+			<result property="portfolioName" column="portfolio_name" />
+			<result property="uploadDate" column="upload_date" />
+			<association property="userId"
+				javaType="org.kosa._musketeers.domain.User">
+				<id property="userId" column="user_id" />
+				<result property="nickname" column="nickname" />
+				<result property="email" column="email" />
+			</association>
+		</association>
+	</resultMap>
+
+
+
 	<select id="getUserIdByEmailPwd" parameterType="map"
 		resultType="org.kosa._musketeers.domain.User">
 		SELECT user_id
@@ -10,7 +57,8 @@
 	</select>
 
 	<select id="getUserInformation" parameterType="int">
-		SELECT user_id, email,
+		SELECT user_id,
+		email,
 		nickname, company_name, company_certification, point,
 		user_image_location
 		FROM users
@@ -51,27 +99,62 @@
 		VALUES
 		(#{email}, #{nickname}, #{password})
 	</insert>
-	
 
-	<update id="updateProfile" >
-		UPDATE users set user_image_location=#{imagePath}
+
+	<update id="updateProfile">
+		UPDATE users set
+		user_image_location=#{imagePath}
 		where user_id=#{userId}
 	</update>
-	
+
 
 
 	<select id="getTotalPortfolioCountById" resultType="int">
-		SELECT COUNT(*)
+		SELECT
+		COUNT(*)
 		FROM portfolio
 		WHERE user_id=#{userId};
 	</select>
-	
+
 
 	<select id="getUserById" parameterType="int"
 		resultType="org.kosa._musketeers.domain.User">
 		SELECT user_id, email, nickname, password, user_type,
 		company_name, company_certification, point, user_image_location
-		FROM users
+		FROM
+		users
 		WHERE user_id = #{userId}
 	</select>
+
+	<select id="getReviewSearchResult" parameterType="string"
+		resultMap="reviewBoardMap">
+		SELECT b.review_post_id, b.title, b.view_count, b.post_html,
+		b.create_date,
+		b.like_count, b.portfolio_id, u.user_id, u.nickname,
+		u.email FROM
+		review_post b
+		JOIN users u ON b.user_id = u.user_id
+		WHERE
+		b.title LIKE
+		CONCAT('%', #{param1}, '%')
+		OR b.post_html LIKE CONCAT('%',
+		#{param1},
+		'%')OR u.nickname LIKE CONCAT('%', #{param1}, '%');
+	</select>
+
+	<select id="getStudySearchResult" parameterType="string"
+		resultMap="studyBoardMap">
+		SELECT b.study_id, b.title, b.view_count, b.post_html,
+		b.post_date,
+		b.like_count, b.address, u.user_id, u.nickname, u.email
+		FROM study_post b
+		JOIN users u ON b.user_id = u.user_id
+		WHERE b.title
+		LIKE CONCAT('%', #{param1}, '%')
+		OR b.post_html LIKE CONCAT('%',
+		#{param1}, '%')
+		OR b.address LIKE CONCAT('%', #{param1}, '%')
+		OR u.nickname LIKE CONCAT('%', #{param1}, '%');
+	</select>
+
 </mapper>

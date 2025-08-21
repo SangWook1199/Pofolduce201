@@ -24,8 +24,9 @@
 					<div class="mypage-main-container">
 						<h1 id="mypage-title2">내 정보 > 내 댓글 목록</h1>
 
-			
-						<table class="table table-hover" th:if="${not #lists.isEmpty(myPageCommentList)}">
+
+						<table class="table table-hover"
+							th:if="${not #lists.isEmpty(myPageCommentList)}">
 							<thead>
 								<tr>
 									<th scope="col">#</th>
@@ -35,15 +36,16 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="myPageCommentList, iterStat : ${myPageCommentList}">
+								<tr th:each="myPageComment, iterStat : ${myPageCommentList}"
+								th:attr="data-url=${myPageComment.boardType == 'study' ? '/study/' + myPageComment.studyId : '/review/' + myPageComment.reviewId}">
 									<th scope="row"
 										th:text="${(currentPage - 1) * size + iterStat.index + 1}">
 									</th>
-									<td
-										th:text="${myPageCommentList.boardType== 'study' ? '스터디 게시판' : '첨삭 게시판'}">게시판
-										이름</td>
-									<td th:text="${myPageCommentList.commentsContents}">해당 댓글
-										내용</td>
+
+									<td th:text="${myPageComment.boardType == 'study' ? '스터디 게시판' : '첨삭 게시판'}"
+										></td>
+									<td th:text="${myPageComment.commentsContents}"
+										> </td>
 
 								</tr>
 							</tbody>
@@ -51,12 +53,13 @@
 
 						<!-- 데이터가 없을 때 -->
 						<div th:if="${#lists.isEmpty(myPageCommentList)}">
-							<h3  class="non-data">작성한 댓글이 없습니다.</h3>
+							<h3 class="non-data">작성한 댓글이 없습니다.</h3>
 						</div>
 
 
 
-						<nav th:if="${not #lists.isEmpty(myPageCommentList)}" aria-label="Page navigation example">
+						<nav th:if="${not #lists.isEmpty(myPageCommentList)}"
+							aria-label="Page navigation example">
 							<ul class="pagination justify-content-center">
 
 								<!-- 이전 페이지 -->
@@ -85,12 +88,13 @@
 
 					</div>
 
-
-
 				</div>
 			</div>
 
 		</div>
 	</div>
+</div>
+<div layout:fragment="script">
+	<script th:src="@{/js/mypage.js}"></script>
 </div>
 </html>

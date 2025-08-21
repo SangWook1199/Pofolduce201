@@ -45,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const penIcons = document.querySelectorAll(".pen-svg");
     const deleteBtn = document.getElementById("deleteBtn");
     const userinfo = document.getElementById("userinfo");
+	if(!editBtn) return;
 
     editBtn.addEventListener("click", (e) => {
         const isDisabled = Array.from(inputs).some(input => input.disabled);
@@ -85,7 +86,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-
+document.addEventListener('DOMContentLoaded', () => {
+    const rows = document.querySelectorAll('tbody tr[data-url]');
+    rows.forEach(row => {
+        row.addEventListener('click', () => {
+            const url = row.getAttribute('data-url');
+            if(url) {
+                window.location.href = url;
+            }
+        });
+    });
+});
 
 
 
