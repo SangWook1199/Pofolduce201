@@ -64,8 +64,8 @@ public class StudyBoardController {
 	// 스터디 게시글 상세 페이지
 	@GetMapping("/study/{studyId}")
 	public String studyBoardPost(@PathVariable int studyId, @RequestParam(defaultValue = "1") int page, Model model,
-			@SessionAttribute("userId") int userId) {
-
+			@SessionAttribute(name="userId", required = false) int userId) {
+		System.out.println(userId);
 		StudyBoard post = studyBoardService.getPostById(studyId);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		model.addAttribute("postDateFormatted", post.getPostDate().format(formatter));
@@ -109,7 +109,7 @@ public class StudyBoardController {
 	// 댓글 수정
 	@PostMapping("/study/{studyId}/comments/{commentId}/edit")
 	public String editComment(@PathVariable int studyId, @PathVariable int commentId,
-			@RequestParam("comment-content") String content, @SessionAttribute("userId") int userId) {
+			@RequestParam("comment-content") String content, @SessionAttribute(name="userId",required=false) int userId) {
 		StudyBoardComment comment = new StudyBoardComment();
 		comment.setCommentsId(commentId);
 		comment.setCommentsContents(content);
@@ -121,7 +121,7 @@ public class StudyBoardController {
 	// 댓글 삭제
 	@PostMapping("/study/{studyId}/comments/{commentId}/delete")
 	public String deleteComment(@PathVariable int studyId, @PathVariable int commentId,
-			@SessionAttribute("userId") int userId) {
+			@SessionAttribute(name="userId",required=false) int userId) {
 
 		studyBoardCommentService.deleteStudyComment(commentId);
 		return "redirect:/study/" + studyId;
@@ -135,7 +135,7 @@ public class StudyBoardController {
 
 	// 게시글 작성
 	@PostMapping("/study/write")
-	public String writeSubmit(@ModelAttribute StudyBoard board, @SessionAttribute("userId") int userId) {
+	public String writeSubmit(@ModelAttribute StudyBoard board, @SessionAttribute(name="userId",required=false) int userId) {
 		User user = new User();
 		user.setUserId(userId);
 

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.kosa._musketeers.mapper.ReportMapper">
+	<insert id="createReport"
+		parameterType="org.kosa._musketeers.domain.Report"
+		useGeneratedKeys="true" keyProperty="reportId">
+		INSERT INTO report (location,
+		report_contents, state, user_id, reported_id)
+		VALUES (#{location},
+		#{reportContents}, #{state},
+		#{userId.userId},#{reportedId.userId})
+	</insert>
+</mapper>
