@@ -1,5 +1,8 @@
 package org.kosa._musketeers.service;
 
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.List;
 
 import org.kosa._musketeers.domain.ReviewPost;
@@ -68,5 +71,13 @@ public class ReviewBoardService {
 	public int getTotalReviewPostCountById(int userId) {
 		return reviewBoardMapper.getTotalReviewPostCountById(userId);
 	}
+
+//	public String convertPdfToHtml(int portfolioId) {
+//		File file = 
+//		String html = "";
+//		try(InputStream inputStream = Files.newInputStream(file.to, null))
+//		
+//		return null;
+//	}
 	
 }

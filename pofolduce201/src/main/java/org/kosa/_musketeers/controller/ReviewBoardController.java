@@ -2,10 +2,12 @@ package org.kosa._musketeers.controller;
 
 import java.util.List;
 
+import org.kosa._musketeers.domain.Portfolio;
 import org.kosa._musketeers.domain.ReviewPost;
 import org.kosa._musketeers.domain.ReviewPostComment;
 import org.kosa._musketeers.domain.User;
 import org.kosa._musketeers.service.ReviewBoardService;
+import org.kosa._musketeers.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +22,10 @@ import jakarta.servlet.http.HttpServletRequest;
 public class ReviewBoardController {
 	
 	private ReviewBoardService reviewBoardService;
-	private ReviewBoardController(ReviewBoardService reviewBoardService, UserController userController) {
+	private UserService userService;
+	private ReviewBoardController(ReviewBoardService reviewBoardService, UserService userService) {
 		this.reviewBoardService = reviewBoardService;
+		this.userService = userService;
 	}
 
 	@GetMapping("/review")
@@ -105,4 +109,48 @@ public class ReviewBoardController {
 		reviewBoardService.deleteComment(reviewCommentId);
 		return "redirect:/review/post?reviewPostId=" + Integer.toString(reviewPostId);
 	}
+	
+	@GetMapping("/my-portfolio")
+	public String selectPortfolio(HttpServletRequest request, Model model) {
+		int userId = (int) request.getSession().getAttribute("userId");
+		List<Portfolio> myPortfolioList = userService.getPortfolioList(userId);
+		model.addAttribute("myPortfolioList", myPortfolioList);
+		
+		int repFolioId = userService.getRepPortfolio(userId);
+		model.addAttribute("repFolioId", repFolioId);
+		return "pages/review/review-select-folio";
+	}
+	
+	@GetMapping("/my-portfolio/{portfolioId}")
+	public String confirmSelectedPortfolio(@PathVariable int portfolioId, Model model) {
+		Portfolio portfolio = userService.getPortfolio(portfolioId);
+		model.addAttribute("portfolio", portfolio);
+		return "pages/review/review-select-folio-confirm";
+	}
+	
+//	@GetMapping("/my-portfolio/{portfolioId}/html-converted")
+//	public String sendConvertedPortfolioByFetch(@PathVariable int portfolioId) {
+//		
+//		String convertedHtml = reviewBoardService.convertPdfToHtml(portfolioId);
+//		
+//		return convertedHtml;
+//	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
