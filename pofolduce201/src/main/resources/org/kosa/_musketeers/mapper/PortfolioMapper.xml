@@ -25,9 +25,11 @@
 
 	<select id="getPortfolio" parameterType="int"
 		resultMap="portfolioMap">
-		SELECT p.*, u.user_id, u.nickname, u.email
+		SELECT p.portfolio_id, p.portfolio_name, p.user_id,
+		p.upload_date, u.user_id, u.nickname, u.email
 		FROM portfolio p
-		JOIN users u ON p.user_id = u.user_id
+		JOIN
+		users u ON p.user_id = u.user_id
 		WHERE p.portfolio_id =
 		#{portfolioId}
 	</select>

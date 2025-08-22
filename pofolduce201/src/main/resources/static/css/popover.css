@@ -5,7 +5,7 @@
 }
 
 .popover {
-	width: 250px;
+	width: 200px;
 	background-color: #ffffff;
 	border: 2px solid #FF4473;
 	border-radius: 20px;
@@ -33,12 +33,22 @@
 	margin-bottom: 18px;
 }
 
-.popover-image {
-	width: 80px;
-	height: 80px;
-	margin: auto;
-	border: 1px solid #FF4473;
-	border-radius: 50%;
+.popover-image-container {
+ width: 70px;
+ height: 70px;
+ margin: auto;
+ border: 1px solid #FF4473;
+ border-radius: 50%;
+ display: flex; 
+ justify-content: center;
+ align-items: center;
+}
+
+.popover-image-inner {
+ width: 90%; 
+ height: 90%;
+ object-fit: contain; 
+ border-radius: inherit;
 }
 
 .popover-button {

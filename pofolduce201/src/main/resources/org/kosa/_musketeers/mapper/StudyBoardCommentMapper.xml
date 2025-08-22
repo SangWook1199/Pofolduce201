@@ -58,4 +58,8 @@
 		WHERE comments_id = #{commentsId}
 	</delete>
 
+	<select id="getStudyCommentUserId" resultType="int">
+		SELECT user_id
+		FROM study_post_comments WHERE comments_id = #{commentsId}
+	</select>
 </mapper>

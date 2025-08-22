@@ -24,21 +24,28 @@ document.addEventListener("DOMContentLoaded", function() {
 				if (!response.ok) throw new Error("서버 응답 오류");
 
 				const data = await response.json();
-				const imageSrc = `/uploads/profile/${data.userId}.png`;
+				const loadImage = new Promise((resolve) => {
+					const img = new Image();
+					img.onload = () => resolve(`/uploads/profile/${data.userId}.png`); // 이미지 로딩 성공
+					img.onerror = () => resolve('/svg/person.svg'); // 이미지 로딩 실패
+					img.src = `/uploads/profile/${data.userId}.png`;
+				});
+
+				const imageSrc = await loadImage; // 이미지 경로 확정
 
 				const contentHtml = `
-				                  <div>
-								  	<div >
-								  		<img src="${imageSrc}" alt="프로필" class="popover-image">
-								  	</div>
-				                    <p class="popover-nickname">${data.nickname}</p>
-				                    <hr>
-				                    <p class="popover-content">획득한 포인트: ${data.point}</p>
-				                    <p class="popover-content">작성한 이력서: ${data.countPortfolio}</p>
-				                    <p class="popover-content popover-content-last">작성한 첨삭: ${data.countReview}</p>
-				                    <div class="popover-button">></div>
-				                  </div>
-				                `;
+				        <div>
+							<div class="popover-image-container">
+						 		<img src="${imageSrc}" alt="프로필" class="popover-image-inner">
+							</div>
+				            <p class="popover-nickname">${data.nickname}</p>
+				            <hr>
+				            <p class="popover-content">획득한 포인트: ${data.point}</p>
+				            <p class="popover-content">작성한 이력서: ${data.countPortfolio}</p>
+				            <p class="popover-content popover-content-last">작성한 첨삭: ${data.countReview}</p>
+				            <div class="popover-button">></div>
+				        </div>
+				    `;
 
 				popover.setContent({ '.popover-body': contentHtml });
 				popover.show();
