@@ -40,14 +40,14 @@
 
 			<div class="col-3 col-md-3 d-flex justify-content-end">
 				<div th:if="${session.userId == null}">
-					<button class="btn-sm btn-primary" onclick="location.href='/login'">Login</button>
+					<button class="btn-sm btn-primary"  id="btn-custom-header" onclick="location.href='/login'">로그인</button>
 				</div>
 				<div th:if="${session.userId != null}">
 					<div class="d-flex">
-						<button class="btn-sm btn-primary m-1"
-							onclick="location.href='/logout'">Log-out</button>
+						<button class="btn-sm btn-primary m-1" id="btn-custom-header"
+							onclick="location.href='/logout'">로그아웃</button>
 						<img class="img-fluid m-1" th:src="@{/svg/person.svg}"
-							onclick="location.href='/mypage'">
+							onclick="location.href='/mypage'" id="headerdiv3" >
 					</div>
 				</div>
 			</div>
