@@ -21,29 +21,33 @@
 
 					<div class="mypage-main-container">
 						<h1 id="mypage-title2">내 이력서</h1>
-						<div class="row row-cols-3 g-4">
-							<div class="col" th:each="portfolio : ${portfolios}">
-								<div class="card h-100 text-center">
-									<!-- 썸네일 -->
-									<a
-										th:href="@{/mypage/myportfolio/{portfolioId}(portfolioId=${portfolio.portfolioId})}">
-										<img class="card-img-top"
-										th:src="@{'/uploads/portfolio/' + ${portfolio.portfolioId} + '.png'}"
-										alt="썸네일" style="max-height: 300px; object-fit: cover;">
-									</a>
-									<!-- 제목 -->
-									<div
-										class="card-body d-flex justify-content-center align-items-center">
-										<div class="d-flex align-items-center">
-											<!-- 대표 포트폴리오면 아이콘 표시 -->
-											<img th:if="${repId == portfolio.portfolioId}"
-												th:src="@{/svg/crown.svg}" alt="왕관" class="crown me-1">
-											<h6 class="card-title mb-0 portfolio-title"
-												th:text="${portfolio.portfolioName}">포트폴리오 제목</h6>
+						<div class="row row-cols-md-3 row-cols-2 g-4">
+							<div th:if="${#lists.isEmpty(portfolios)}"
+								class="col-12 text-center mt-5">
+								<p class="text-muted">등록된 포트폴리오가 없습니다.</p>
+							</div>
+
+							<th:block th:unless="${#lists.isEmpty(portfolios)}">
+								<div class="col" th:each="portfolio : ${portfolios}">
+									<div class="card h-100 text-center">
+										<a
+											th:href="@{/mypage/myportfolio/{portfolioId}(portfolioId=${portfolio.portfolioId})}">
+											<img class="card-img-top"
+											th:src="@{'/uploads/portfolio/' + ${portfolio.portfolioId} + '.png'}"
+											alt="썸네일" style="max-height: 300px; object-fit: cover;">
+										</a>
+										<div
+											class="card-body d-flex justify-content-center align-items-center">
+											<div class="d-flex align-items-center">
+												<img th:if="${repId == portfolio.portfolioId}"
+													th:src="@{/svg/crown.svg}" alt="왕관" class="crown me-1">
+												<h6 class="card-title mb-0 portfolio-title"
+													th:text="${portfolio.portfolioName}">포트폴리오 제목</h6>
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
+							</th:block>
 						</div>
 
 						<button type="button"
@@ -90,5 +94,17 @@
 
 		</div>
 	</div>
+	<script type="text/javascript">
+		document.addEventListener('DOMContentLoaded', function() {
+			// 성공 메시지 표시
+			if ('[[${successMessage}]]') {
+				alert('[[${successMessage}]]');
+			}
+			// 에러 메시지 표시
+			if ('[[${errorMessage}]]') {
+				alert('[[${errorMessage}]]');
+			}
+		});
+	</script>
 </div>
 </html>

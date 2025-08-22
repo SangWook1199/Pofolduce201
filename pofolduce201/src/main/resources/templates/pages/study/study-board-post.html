@@ -11,35 +11,30 @@
 
 <title>게시글</title>
 </head>
-<div layout:fragment="content" class="main-content">
+<div layout:fragment="content" class="container main-content">
 	<div
 		th:replace="fragments/html/board-header :: board-header('스터디 게시판 > 게시글 보기')"></div>
-	<!-- 게시글 정보 -->
 	<div class="title-area mb-3">
-
-		<!-- 제목 + 버튼 영역 -->
+		<!-- 제목 -->
 		<div class="d-flex justify-content-between align-items-center mb-4"
 			id="study-post-title">
 			<h3 th:text="${post.title}" class="board-title mb-0">게시글 제목</h3>
+			<!-- 본인 게시물이면 수정,삭제 -->
 			<div
 				th:if="${session.userId != null and session.userId == post.userId.userId}">
-				<div>
-					<a th:href="@{/study/{studyId}/update(studyId=${post.studyId})}"
-						class="btn btn-sm btn-primary">수정</a>
-					<form
-						th:action="@{/study/{studyId}/delete(studyId=${post.studyId})}"
-						method="post" style="display: inline;">
-						<button type="submit" class="btn btn-sm btn-primary"
-							onclick="return confirmDelete();">삭제</button>
-					</form>
-				</div>
+				<a th:href="@{/study/{studyId}/update(studyId=${post.studyId})}"
+					class="btn btn-sm btn-primary">수정</a>
+				<form
+					th:action="@{/study/{studyId}/delete(studyId=${post.studyId})}"
+					method="post" class="d-inline">
+					<button type="submit" class="btn btn-sm btn-primary"
+						onclick="return confirmDelete();">삭제</button>
+				</form>
 			</div>
 		</div>
-
+		<!-- 프로필 구간 -->
 		<div class="d-flex align-items-center gap-3">
-
 			<img alt="프로필" th:src="@{/svg/sejung.svg}" class="profile">
-
 			<div class="d-flex flex-column">
 				<p th:text="${post.userId.nickname}"
 					class="mb-0 fw-bold nickname all-userName"
@@ -47,28 +42,28 @@
 					data-bs-toggle="popover" title="사용자 정보">김세정</p>
 				<p th:text="${postDateFormatted}" class="mb-0 text-muted small">2025-08-18</p>
 			</div>
-
-			<!-- 본인 게시글 아닌 경우에만 신고 버튼 -->
+			<!-- 다른 유저 게시물이면 신고버튼 활성화 -->
 			<div
-				th:if="${session.userId != null and session.userId != post.userId.userId}">
+				th:if="${session.userId != null and session.userId != post.userId.userId}"
+				class="ms-auto">
 				<button type="button" class="btn p-0 border-0 bg-transparent"
 					data-bs-toggle="modal" data-bs-target="#reportPostModal">
-					<img alt="김세정" class="ms-auto report-img"
+					<img alt="신고 버튼" class="report-img"
 						th:src="@{/svg/report-button.svg}">
 				</button>
 				<div
 					th:replace="fragments/html/report-modal :: reportModalFragment('reportPostModal', ${post.studyId}, ${post.userId.userId})"></div>
 			</div>
 		</div>
-
 	</div>
-	<!-- 게시글 내용 -->
+	<!-- 게시물 내용 -->
 	<div class="content-area">
 		<div th:utext="${post.postHtml}" class="board-content">content</div>
-
-		<div class="map-area">
-			<p class="map-title">위치 정보</p>
-			<div id="map" style="width: 800px; height: 300px;"></div>
+		<!-- 지도 -->
+		<div class="map-area text-center">
+			<p class="map-title d-inline-block border-bottom border-secondary">위치
+				정보</p>
+			<div id="map" class="map-container"></div>
 		</div>
 		<!-- 좋아요 버튼 -->
 		<div class="text-center">
@@ -76,26 +71,29 @@
 				class="btn btn-primary like-button"
 				th:attr="data-study-id=${post.studyId}">
 				좋아요 <img id="likeImg" th:src="@{/svg/like-off.svg}" alt="좋아요"
-					style="width: 24px; height: 24px;"> <span id="likeCount"
-					th:text="${post.likeCount}">0</span>
+					class="img-fluid" style="width: 24px; height: 24px;"> <span
+					id="likeCount" th:text="${post.likeCount}">0</span>
 			</button>
 		</div>
 	</div>
+
+	<!-- 댓글 -->
 	<div class="comment-area">
-		<div class="col text-end">
+		<div class="text-end">
 			<a class="btn btn-primary" href="/study" id="list-button">목록보기</a>
 		</div>
-		<div class="col">
-			<p class="comment-title">댓글 목록</p>
+		<div>
+			<p class="comment-title d-inline-block">댓글 목록</p>
 		</div>
-		<!-- 댓글 입력창 -->
 		<div class="row">
 			<form
 				th:action="@{/study/{studyId}/comments(studyId=${post.studyId})}"
 				method="post">
 				<input type="hidden" name="userId" th:value="${session.userId}">
-				<textarea class="form-control ps-3 pt-1" id="comment-content"
-					name="comment-content" placeholder="댓글을 입력하세요." required></textarea>
+				<div class="mb-3">
+					<textarea class="form-control comment-content"
+						name="comment-content" placeholder="댓글을 입력하세요." rows="4" required></textarea>
+				</div>
 				<div class="col text-end">
 					<button class="btn btn-sm btn-primary" id="list-button"
 						type="submit">댓글 작성</button>
@@ -103,65 +101,62 @@
 			</form>
 		</div>
 		<!-- 댓글 리스트 -->
-		<div class="row comment-list" th:each="comment : ${comments}">
-			<!-- 댓글 작성자 정보 -->
-			<p>
+		<div class="comment-list" th:each="comment : ${comments}">
+			<div class="d-flex align-items-center mb-1">
 				<strong th:text="${comment.userId.nickname}" tabindex="0"
 					th:attr="data-userid=${comment.userId.userId}"
 					data-bs-toggle="popover" data-bs-trigger="focus"
 					class="comment-userName all-userName">작성자</strong> <span
-					class="small"
+					class="small ms-2"
 					th:text="${#temporals.format(comment.commentsDate, 'yyyy-MM-dd HH:mm')}">작성일</span>
-			</p>
+			</div>
+			<p th:text="${comment.commentsContents}" class="mb-2">댓글 내용</p>
 
-			<p th:text="${comment.commentsContents}">댓글 내용</p>
-			<!-- 수정, 삭제, 신고 버튼 -->
-			<div class="col text-end">
-				<!-- 본인 댓글일 때만 수정 및 삭제 버튼 -->
+			<div class="text-end">
+				<!-- 본인 댓글이면 수정,삭제 -->
 				<div
 					th:if="${session.userId != null and session.userId == comment.userId.userId}">
 					<div class="d-flex justify-content-end align-items-center gap-2">
-						<!-- 수정 버튼 -->
 						<button class="btn btn-sm btn-primary" type="button"
 							th:onclick="|toggleEdit(${comment.commentsId})|">수정</button>
-						<!-- 삭제 -->
 						<form
 							th:action="@{/study/{studyId}/comments/{commentId}/delete(studyId=${post.studyId}, commentId=${comment.commentsId})}"
-							method="post" onsubmit="return confirmDelete();">
+							method="post" onsubmit="return confirmDelete();" class="d-inline">
 							<button class="btn btn-sm btn-primary" type="submit">삭제</button>
 						</form>
 					</div>
-					<!-- 숨겨진 수정창 -->
-					<div th:id="|edit-box-${comment.commentsId}|" class="hidden-update">
+					<div th:id="|edit-box-${comment.commentsId}|"
+						class="hidden-update mt-2">
 						<form
 							th:action="@{/study/{studyId}/comments/{commentId}/edit(studyId=${post.studyId}, commentId=${comment.commentsId})}"
 							method="post">
-							<textarea class="form-control" name="comment-content"
-								id="comment-content" th:text="${comment.commentsContents}"></textarea>
+							<textarea class="form-control comment-content"
+								name="comment-content" rows="3"
+								th:text="${comment.commentsContents}"></textarea>
 							<button class="btn btn-primary btn-sm mt-2" type="submit">수정
 								완료</button>
 						</form>
 					</div>
-
-
 				</div>
-				<!-- 본인 댓글 아닐때만 신고 버튼 -->
+				<!-- 다른 유저 댓글일 경우 신고 활성화 -->
 				<div
 					th:if="${session.userId != null and session.userId != comment.userId.userId}">
 					<button type="button" class="btn p-0 border-0 bg-transparent"
 						data-bs-toggle="modal"
-						th:data-bs-target="'#reportCommentModal-' + ${comment.userId.userId}">
-						<img alt="김세정" th:src="@{/svg/report-button.svg}"
-							class="ms-auto report-img">
+						th:data-bs-target="'#reportCommentModal-' + ${comment.commentsId}">
+						<img alt="신고 버튼" th:src="@{/svg/report-button.svg}"
+							class="report-img">
 					</button>
 				</div>
 				<div
-					th:replace="fragments/html/report-modal :: reportModalFragment('reportCommentModal-' + ${comment.userId.userId},, ${post.studyId}, ${comment.userId.userId})"></div>
+					th:replace="fragments/html/report-modal :: reportModalFragment('reportCommentModal-' + ${comment.commentsId}, ${post.studyId}, ${comment.userId.userId})"></div>
 			</div>
 		</div>
+		<div th:if="${not #lists.isEmpty(comments)}">
+			<hr class="comment-line">
+		</div>
 		<!-- 페이지네이션 -->
-		<div class="comment-pagination mt-3">
-			<div class="comment-line"></div>
+		<div class="comment-pagination mt-4" th:if="${totalPages > 0}">
 			<ul class="pagination justify-content-center">
 				<li class="page-item"
 					th:classappend="${currentPage == 1}? 'disabled'"><a
@@ -184,30 +179,39 @@
 		<script src="/js/study-like-button.js" defer></script>
 		<script src="/js/popover.js" defer></script>
 		<script>
-		var container = document.getElementById('map');
-		var options = {
-			center : new kakao.maps.LatLng(37.583743027324, 126.999963317958),
-			level : 1
-		};
+			document.addEventListener('DOMContentLoaded', function() {
+				// 성공 메시지 표시
+				if ('[[${successMessage}]]') {
+					alert('[[${successMessage}]]');
+				}
+				// 에러 메시지 표시
+				if ('[[${errorMessage}]]') {
+					alert('[[${errorMessage}]]');
+				}
+			});
+			var container = document.getElementById('map');
+			var options = {
+				center : new kakao.maps.LatLng(37.583743027324,
+						126.999963317958),
+				level : 1
+			};
+			var map = new kakao.maps.Map(container, options);
 
-		var map = new kakao.maps.Map(container, options);
-		function toggleEdit(commentId) {
-			const editBox = document.getElementById("edit-box-" + commentId);
-			// display가 none이면 보여주고, 아니면 숨김
-			if (editBox.style.display === "none"
-					|| editBox.style.display === "") {
-				editBox.style.display = "block";
-			} else {
-				editBox.style.display = "none";
+			function toggleEdit(commentId) {
+				const editBox = document
+						.getElementById("edit-box-" + commentId);
+				if (editBox.style.display === "none"
+						|| editBox.style.display === "") {
+					editBox.style.display = "block";
+				} else {
+					editBox.style.display = "none";
+				}
 			}
-		}
-		function confirmDelete() {
-			return confirm('정말 삭제하시겠습니까?');
-		}
-		
-		
 
-	</script>
+			function confirmDelete() {
+				return confirm('정말 삭제하시겠습니까?');
+			}
+		</script>
 	</div>
 </div>
 </html>

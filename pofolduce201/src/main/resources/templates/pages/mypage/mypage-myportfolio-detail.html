@@ -6,6 +6,22 @@
 <link th:href="@{/css/board-header.css}" rel="stylesheet">
 <link th:href="@{/css/page-css/mypage-myportfolio-detail.css}" rel="stylesheet">
 <title>내 이력서</title>
+<script type="text/javascript">
+	document.addEventListener('DOMContentLoaded', function() {
+		// 성공 메시지 표시
+		if ('[[${successMessage}]]') {
+			alert('[[${successMessage}]]');
+		}
+		// 에러 메시지 표시
+		if ('[[${errorMessage}]]') {
+			alert('[[${errorMessage}]]');
+		}
+		// 경고 메시지 표시
+		if ('[[${alertMessage}]]') {
+			alert('[[${alertMessage}]]');
+		}
+	});
+</script>
 </head>
 
 <div layout:fragment="content">
@@ -35,12 +51,6 @@
 				<button type="submit" class="btn btn-primary">삭제</button>
 			</form>
 		</div>
-	</div>
-	<div th:if="${errorMessage}" class="alert alert-danger" role="alert">
-		<span th:text="${errorMessage}"></span>
-	</div>
-	<div th:if="${successMessage}" class="alert alert-success" role="alert">
-		<span th:text="${successMessage}"></span>
 	</div>
 </div>
 </html>

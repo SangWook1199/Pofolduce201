@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class StudyBoardController {
@@ -32,65 +33,90 @@ public class StudyBoardController {
 
 	// 스터디 게시판 페이지
 	@GetMapping("/study")
-	public String studyBoard(@RequestParam(defaultValue = "1") int page, Model model) {
+	public String studyBoard(@SessionAttribute(name = "userId", required = false) Integer userId,
+			@RequestParam(defaultValue = "1") int page, Model model) {
+		try {
+			// 상위 3개 조회수
+			Map<String, StudyBoard> top3Map = studyBoardService.getTop3ByViewCount();
+			model.addAttribute("first", top3Map.get("first"));
+			model.addAttribute("second", top3Map.get("second"));
+			model.addAttribute("third", top3Map.get("third"));
 
-		// 상위 3개 조회수
-		Map<String, StudyBoard> top3Map = studyBoardService.getTop3ByViewCount();
-		model.addAttribute("first", top3Map.get("first"));
-		model.addAttribute("second", top3Map.get("second"));
-		model.addAttribute("third", top3Map.get("third"));
+			// 페이지네이션 적용 (17개)
+			int pageSize = 17;
+			List<StudyBoard> posts = studyBoardService.getPostsByPage(page, pageSize);
+			model.addAttribute("dateList", posts);
 
-		// 페이지네이션 적용 (17개)
-		int pageSize = 17;
-		List<StudyBoard> posts = studyBoardService.getPostsByPage(page, pageSize);
-		model.addAttribute("dateList", posts);
+			// 페이지 번호 계산
+			int totalPosts = studyBoardService.countPosts();
+			int totalPages = 0;
 
-		// 페이지 번호 계산
-		int totalPosts = studyBoardService.countPosts();
-		int totalPages = (int) Math.ceil((double) totalPosts / pageSize);
+			// 총 게시글 수가 3개 초과일 때만 페이지네이션을 계산
+			if (totalPosts > 0) {
+				totalPages = (int) Math.ceil((double) totalPosts / pageSize);
+			}
 
-		// 5페이지 단위로 나눠서 표시
-		int startPage = ((page - 1) / 5) * 5 + 1;
-		int endPage = Math.min(startPage + 4, totalPages);
+			// 5페이지 단위로 나눠서 표시
+			int startPage = ((page - 1) / 5) * 5 + 1;
+			int endPage = Math.min(startPage + 4, totalPages);
 
-		model.addAttribute("currentPage", page);
-		model.addAttribute("startPage", startPage);
-		model.addAttribute("endPage", endPage);
-		model.addAttribute("totalPages", totalPages);
-
+			model.addAttribute("currentPage", page);
+			model.addAttribute("startPage", startPage);
+			model.addAttribute("endPage", endPage);
+			model.addAttribute("totalPages", totalPages);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (userId == null) {
+			return "redirect:/not-logined?msg=login_required";
+		}
 		return "pages/study/study-board";
 	}
 
 	// 스터디 게시글 상세 페이지
 	@GetMapping("/study/{studyId}")
 	public String studyBoardPost(@PathVariable int studyId, @RequestParam(defaultValue = "1") int page, Model model,
-			@SessionAttribute(name="userId", required = false) int userId) {
-		System.out.println(userId);
-		StudyBoard post = studyBoardService.getPostById(studyId);
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		model.addAttribute("postDateFormatted", post.getPostDate().format(formatter));
-		model.addAttribute("post", post);
+			@SessionAttribute(name = "userId", required = false) Integer userId,
+			RedirectAttributes redirectAttributes) {
+		if (userId == null) {
+			return "redirect:/not-logined?msg=login_required";
+		}
+		try {
+			StudyBoard post = studyBoardService.getPostById(studyId);
+			if (post == null) {
+				redirectAttributes.addFlashAttribute("errorMessage", "게시글이 존재하지 않습니다.");
+				return "redirect:/study";
+			}
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+			model.addAttribute("postDateFormatted", post.getPostDate().format(formatter));
+			model.addAttribute("post", post);
 
-		int pageSize = 5; // 한 페이지 댓글 수
-		List<StudyBoardComment> comments = studyBoardCommentService.getCommentsByStudyIdWithPage(studyId, page,
-				pageSize);
-		model.addAttribute("comments", comments);
+			int pageSize = 5; // 한 페이지 댓글 수
+			List<StudyBoardComment> comments = studyBoardCommentService.getCommentsByStudyIdWithPage(studyId, page,
+					pageSize);
+			model.addAttribute("comments", comments);
 
-		int totalComments = studyBoardCommentService.countCommentsByStudyId(studyId);
-		int totalPages = (int) Math.ceil((double) totalComments / pageSize);
+			int totalComments = studyBoardCommentService.countCommentsByStudyId(studyId);
+			int totalPages = 0; // 초기값을 0으로 설정
 
-		model.addAttribute("currentPage", page);
-		model.addAttribute("totalPages", totalPages);
+			if (totalComments > 0) {
+				totalPages = (int) Math.ceil((double) totalComments / pageSize);
+			}
 
-		model.addAttribute("userId", userId);
+			model.addAttribute("currentPage", page);
+			model.addAttribute("totalPages", totalPages);
 
+			model.addAttribute("userId", userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "pages/study/study-board-post";
 	}
 
-	// 댓글 쓰기
+	// 댓글 작성
 	@PostMapping("/study/{studyId}/comments")
 	public String addComment(@PathVariable("studyId") int studyId, @RequestParam("comment-content") String content,
-			@RequestParam("userId") int userId) {
+			@RequestParam("userId") Integer userId, RedirectAttributes redirectAttributes) {
 		try {
 			StudyBoard studyBoard = new StudyBoard();
 			studyBoard.setStudyId(studyId);
@@ -100,6 +126,7 @@ public class StudyBoardController {
 
 			StudyBoardComment comment = new StudyBoardComment(content, studyBoard, user);
 			studyBoardCommentService.createStudyComment(comment);
+			redirectAttributes.addFlashAttribute("successMessage", "댓글을 성공적으로 작성하였습니다.");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -109,61 +136,151 @@ public class StudyBoardController {
 	// 댓글 수정
 	@PostMapping("/study/{studyId}/comments/{commentId}/edit")
 	public String editComment(@PathVariable int studyId, @PathVariable int commentId,
-			@RequestParam("comment-content") String content, @SessionAttribute(name="userId",required=false) int userId) {
-		StudyBoardComment comment = new StudyBoardComment();
-		comment.setCommentsId(commentId);
-		comment.setCommentsContents(content);
+			@RequestParam("comment-content") String content,
+			@SessionAttribute(name = "userId", required = false) Integer userId,
+			RedirectAttributes redirectAttributes) {
+		if (userId == null) {
+			return "redirect:/not-logined?msg=login_required";
+		}
+		try {
 
-		studyBoardCommentService.updateStudyComment(comment);
+			int commentUserId = studyBoardCommentService.getStudyCommentUserId(commentId);
+			if (commentUserId != userId) {
+				redirectAttributes.addFlashAttribute("errorMessage", "댓글을 작성한 회원이 아닙니다.");
+				return "redirect:/study/" + studyId;
+			}
+
+			StudyBoardComment comment = new StudyBoardComment();
+			comment.setCommentsId(commentId);
+			comment.setCommentsContents(content);
+
+			studyBoardCommentService.updateStudyComment(comment);
+			redirectAttributes.addFlashAttribute("successMessage", "댓글을 성공적으로 수정하였습니다.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return "redirect:/study/" + studyId;
 	}
 
 	// 댓글 삭제
 	@PostMapping("/study/{studyId}/comments/{commentId}/delete")
 	public String deleteComment(@PathVariable int studyId, @PathVariable int commentId,
-			@SessionAttribute(name="userId",required=false) int userId) {
+			@SessionAttribute(name = "userId", required = false) Integer userId,
+			RedirectAttributes redirectAttributes) {
+		if (userId == null) {
+			return "redirect:/not-logined?msg=login_required";
+		}
+		try {
 
-		studyBoardCommentService.deleteStudyComment(commentId);
+			int commentUserId = studyBoardCommentService.getStudyCommentUserId(commentId);
+			if (commentUserId != userId) {
+				redirectAttributes.addFlashAttribute("errorMessage", "댓글을 작성한 회원이 아닙니다.");
+				return "redirect:/study/" + studyId;
+			}
+			studyBoardCommentService.deleteStudyComment(commentId);
+			redirectAttributes.addFlashAttribute("successMessage", "댓글을 성공적으로 삭제하였습니다.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "redirect:/study/" + studyId;
 	}
 
 	// 게시글 작성 페이지
 	@GetMapping("/study/write")
-	public String getStudyBoardWrite() {
+	public String getStudyBoardWrite(@SessionAttribute(name = "userId", required = false) Integer userId) {
+		if (userId == null) {
+			return "redirect:/not-logined?msg=login_required";
+		}
+		try {
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "pages/study/study-board-write";
 	}
 
 	// 게시글 작성
 	@PostMapping("/study/write")
-	public String writeSubmit(@ModelAttribute StudyBoard board, @SessionAttribute(name="userId",required=false) int userId) {
-		User user = new User();
-		user.setUserId(userId);
+	public String writeSubmit(@ModelAttribute StudyBoard board,
+			@SessionAttribute(name = "userId", required = false) Integer userId,
+			RedirectAttributes redirectAttributes) {
+		if (userId == null) {
+			return "redirect:/not-logined?msg=login_required";
+		}
+		try {
+			User user = new User();
+			user.setUserId(userId);
 
-		board.setUserId(user);
-		studyBoardService.createPost(board);
-
+			board.setUserId(user);
+			studyBoardService.createPost(board);
+			redirectAttributes.addFlashAttribute("successMessage", "게시글을 성공적으로 작성하였습니다.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "redirect:/study";
 	}
 
 	// 게시글 수정 페이지
 	@GetMapping("/study/{studyId}/update")
-	public String editStudyPost(@PathVariable int studyId, Model model) {
-		StudyBoard post = studyBoardService.getPostById(studyId);
-		model.addAttribute("post", post);
+	public String editStudyPost(@PathVariable int studyId, Model model,
+			@SessionAttribute(name = "userId", required = false) Integer userId) {
+		if (userId == null) {
+			return "redirect:/not-logined?msg=login_required";
+		}
+		try {
+			int postUserId = studyBoardService.getStudyPostUserId(studyId); // 서비스에 메서드 추가 필요
+			if (postUserId != userId) {
+				return "redirect:/study/" + studyId;
+			}
+			StudyBoard post = studyBoardService.getPostById(studyId);
+			model.addAttribute("post", post);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "pages/study/study-board-update";
 	}
 
 	// 게시글 수정
 	@PostMapping("/study/{studyId}/update")
-	public String editPost(@PathVariable int studyId, @ModelAttribute StudyBoard board) {
-		studyBoardService.updatePost(board);
+	public String editPost(@PathVariable int studyId, @ModelAttribute StudyBoard board,
+			@SessionAttribute(name = "userId", required = false) Integer userId,
+			RedirectAttributes redirectAttributes) {
+		if (userId == null) {
+			return "redirect:/not-logined?msg=login_required";
+		}
+		try {
+			int postUserId = studyBoardService.getStudyPostUserId(studyId); // 서비스에 메서드 추가 필요
+			if (postUserId != userId) {
+				redirectAttributes.addFlashAttribute("errorMessage", "게시글을 작성한 회원이 아닙니다.");
+				return "redirect:/study/" + studyId;
+			}
+			studyBoardService.updatePost(board);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "redirect:/study/" + studyId;
 	}
 
 	// 게시글 삭제
 	@PostMapping("/study/{studyId}/delete")
-	public String deletePost(@PathVariable int studyId) {
-		studyBoardService.deletePost(studyId);
+	public String deletePost(@PathVariable int studyId,
+			@SessionAttribute(name = "userId", required = false) Integer userId,
+			RedirectAttributes redirectAttributes) {
+		if (userId == null) {
+			return "redirect:/not-logined?msg=login_required";
+		}
+		try {
+			int postUserId = studyBoardService.getStudyPostUserId(studyId); // 서비스에 메서드 추가 필요
+			if (postUserId != userId) {
+				redirectAttributes.addFlashAttribute("errorMessage", "게시글을 작성한 회원이 아닙니다.");
+				return "redirect:/study/" + studyId;
+			}
+			studyBoardService.deletePost(studyId);
+			redirectAttributes.addFlashAttribute("successMessage", "게시글을 성공적으로 삭제하였습니다.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "redirect:/study";
 	}
 }

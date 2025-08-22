@@ -31,16 +31,15 @@ public class StudyBoardService {
 		}
 		return top3;
 	}
-
+	// 상위 3개 제외 후 게시글 총 개수를 구하는 메서드입니다.
+	public int countPosts() {
+		int totalCount = studyBoardMapper.countPosts();	    
+	    return Math.max(0, totalCount - 3);
+	}
 	// 상위 3개 제외, 날짜순으로 페이지 단위로 조회하는 메서드입니다.
 	public List<StudyBoard> getPostsByPage(int page, int pageSize) {
 		int offset = (page - 1) * pageSize;
 		return studyBoardMapper.getPostsByPage(offset, pageSize);
-	}
-
-	// 상위 3개 제외 후 게시글 총 개수를 구하는 메서드입니다.
-	public int countPosts() {
-		return studyBoardMapper.countPosts() - 3;
 	}
 
 	// 게시글 조회하는 메서드입니다.
@@ -89,5 +88,9 @@ public class StudyBoardService {
         
         return newLikeCount;
     }
+
+	public int getStudyPostUserId(int studyId) {
+		return studyBoardMapper.getStudyPostUserId(studyId);
+	}
 
 }

@@ -54,3 +54,11 @@
 	width: 20px;
 	height: 20px;
 }
+
+.non-data{
+	display:flex;
+	color : #CACACA;
+	margin : 10%;
+	align-items:center;
+	justify-content : center;
+}
