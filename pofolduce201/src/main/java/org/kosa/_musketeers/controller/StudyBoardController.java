@@ -81,35 +81,32 @@ public class StudyBoardController {
 		if (userId == null) {
 			return "redirect:/not-logined?msg=login_required";
 		}
-		try {
-			StudyBoard post = studyBoardService.getPostById(studyId);
-			if (post == null) {
-				redirectAttributes.addFlashAttribute("errorMessage", "게시글이 존재하지 않습니다.");
-				return "redirect:/study";
-			}
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-			model.addAttribute("postDateFormatted", post.getPostDate().format(formatter));
-			model.addAttribute("post", post);
-
-			int pageSize = 5; // 한 페이지 댓글 수
-			List<StudyBoardComment> comments = studyBoardCommentService.getCommentsByStudyIdWithPage(studyId, page,
-					pageSize);
-			model.addAttribute("comments", comments);
-
-			int totalComments = studyBoardCommentService.countCommentsByStudyId(studyId);
-			int totalPages = 0; // 초기값을 0으로 설정
-
-			if (totalComments > 0) {
-				totalPages = (int) Math.ceil((double) totalComments / pageSize);
-			}
-
-			model.addAttribute("currentPage", page);
-			model.addAttribute("totalPages", totalPages);
-
-			model.addAttribute("userId", userId);
-		} catch (Exception e) {
-			e.printStackTrace();
+		StudyBoard post = studyBoardService.getPostById(studyId);
+		if (post == null) {
+			redirectAttributes.addFlashAttribute("errorMessage", "게시글이 존재하지 않습니다.");
+			return "redirect:/study";
 		}
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		model.addAttribute("postDateFormatted", post.getPostDate().format(formatter));
+		model.addAttribute("post", post);
+
+		int pageSize = 5; // 한 페이지 댓글 수
+		List<StudyBoardComment> comments = studyBoardCommentService.getCommentsByStudyIdWithPage(studyId, page,
+				pageSize);
+		model.addAttribute("comments", comments);
+
+		int totalComments = studyBoardCommentService.countCommentsByStudyId(studyId);
+		int totalPages = 0; // 초기값을 0으로 설정
+
+		if (totalComments > 0) {
+			totalPages = (int) Math.ceil((double) totalComments / pageSize);
+		}
+		studyBoardService.addViewCount(studyId);
+		model.addAttribute("currentPage", page);
+		model.addAttribute("totalPages", totalPages);
+
+		model.addAttribute("userId", userId);
+
 		return "pages/study/study-board-post";
 	}
 
@@ -117,19 +114,16 @@ public class StudyBoardController {
 	@PostMapping("/study/{studyId}/comments")
 	public String addComment(@PathVariable("studyId") int studyId, @RequestParam("comment-content") String content,
 			@RequestParam("userId") Integer userId, RedirectAttributes redirectAttributes) {
-		try {
-			StudyBoard studyBoard = new StudyBoard();
-			studyBoard.setStudyId(studyId);
+		StudyBoard studyBoard = new StudyBoard();
+		studyBoard.setStudyId(studyId);
 
-			User user = new User();
-			user.setUserId(userId);
+		User user = new User();
+		user.setUserId(userId);
 
-			StudyBoardComment comment = new StudyBoardComment(content, studyBoard, user);
-			studyBoardCommentService.createStudyComment(comment);
-			redirectAttributes.addFlashAttribute("successMessage", "댓글을 성공적으로 작성하였습니다.");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		StudyBoardComment comment = new StudyBoardComment(content, studyBoard, user);
+		studyBoardCommentService.createStudyComment(comment);
+		redirectAttributes.addFlashAttribute("successMessage", "댓글을 성공적으로 작성하였습니다.");
+
 		return "redirect:/study/" + studyId;
 	}
 
@@ -142,24 +136,19 @@ public class StudyBoardController {
 		if (userId == null) {
 			return "redirect:/not-logined?msg=login_required";
 		}
-		try {
-
-			int commentUserId = studyBoardCommentService.getStudyCommentUserId(commentId);
-			if (commentUserId != userId) {
-				redirectAttributes.addFlashAttribute("errorMessage", "댓글을 작성한 회원이 아닙니다.");
-				return "redirect:/study/" + studyId;
-			}
-
-			StudyBoardComment comment = new StudyBoardComment();
-			comment.setCommentsId(commentId);
-			comment.setCommentsContents(content);
-
-			studyBoardCommentService.updateStudyComment(comment);
-			redirectAttributes.addFlashAttribute("successMessage", "댓글을 성공적으로 수정하였습니다.");
-		} catch (Exception e) {
-			e.printStackTrace();
+		
+		int commentUserId = studyBoardCommentService.getStudyCommentUserId(commentId);
+		if (commentUserId != userId) {
+			redirectAttributes.addFlashAttribute("errorMessage", "댓글을 작성한 회원이 아닙니다.");
+			return "redirect:/study/" + studyId;
 		}
+		
+		StudyBoardComment comment = new StudyBoardComment();
+		comment.setCommentsId(commentId);
+		comment.setCommentsContents(content);
 
+		studyBoardCommentService.updateStudyComment(comment);
+		redirectAttributes.addFlashAttribute("successMessage", "댓글을 성공적으로 수정하였습니다.");
 		return "redirect:/study/" + studyId;
 	}
 
@@ -171,18 +160,14 @@ public class StudyBoardController {
 		if (userId == null) {
 			return "redirect:/not-logined?msg=login_required";
 		}
-		try {
-
-			int commentUserId = studyBoardCommentService.getStudyCommentUserId(commentId);
-			if (commentUserId != userId) {
-				redirectAttributes.addFlashAttribute("errorMessage", "댓글을 작성한 회원이 아닙니다.");
-				return "redirect:/study/" + studyId;
-			}
-			studyBoardCommentService.deleteStudyComment(commentId);
-			redirectAttributes.addFlashAttribute("successMessage", "댓글을 성공적으로 삭제하였습니다.");
-		} catch (Exception e) {
-			e.printStackTrace();
+		int commentUserId = studyBoardCommentService.getStudyCommentUserId(commentId);
+		if (commentUserId != userId) {
+			redirectAttributes.addFlashAttribute("errorMessage", "댓글을 작성한 회원이 아닙니다.");
+			return "redirect:/study/" + studyId;
 		}
+		studyBoardCommentService.deleteStudyComment(commentId);
+		redirectAttributes.addFlashAttribute("successMessage", "댓글을 성공적으로 삭제하였습니다.");
+
 		return "redirect:/study/" + studyId;
 	}
 
@@ -191,11 +176,6 @@ public class StudyBoardController {
 	public String getStudyBoardWrite(@SessionAttribute(name = "userId", required = false) Integer userId) {
 		if (userId == null) {
 			return "redirect:/not-logined?msg=login_required";
-		}
-		try {
-
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return "pages/study/study-board-write";
 	}
@@ -208,16 +188,11 @@ public class StudyBoardController {
 		if (userId == null) {
 			return "redirect:/not-logined?msg=login_required";
 		}
-		try {
-			User user = new User();
-			user.setUserId(userId);
+		User user = new User();
+		user.setUserId(userId);
 
-			board.setUserId(user);
-			studyBoardService.createPost(board);
-			redirectAttributes.addFlashAttribute("successMessage", "게시글을 성공적으로 작성하였습니다.");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		board.setUserId(user);
+		studyBoardService.createPost(board);
 		return "redirect:/study";
 	}
 
@@ -228,16 +203,13 @@ public class StudyBoardController {
 		if (userId == null) {
 			return "redirect:/not-logined?msg=login_required";
 		}
-		try {
-			int postUserId = studyBoardService.getStudyPostUserId(studyId); // 서비스에 메서드 추가 필요
-			if (postUserId != userId) {
-				return "redirect:/study/" + studyId;
-			}
-			StudyBoard post = studyBoardService.getPostById(studyId);
-			model.addAttribute("post", post);
-		} catch (Exception e) {
-			e.printStackTrace();
+		int postUserId = studyBoardService.getStudyPostUserId(studyId); // 서비스에 메서드 추가 필요
+		if (postUserId != userId) {
+			return "redirect:/study/" + studyId;
 		}
+		StudyBoard post = studyBoardService.getPostById(studyId);
+		model.addAttribute("post", post);
+
 		return "pages/study/study-board-update";
 	}
 
@@ -249,16 +221,13 @@ public class StudyBoardController {
 		if (userId == null) {
 			return "redirect:/not-logined?msg=login_required";
 		}
-		try {
-			int postUserId = studyBoardService.getStudyPostUserId(studyId); // 서비스에 메서드 추가 필요
-			if (postUserId != userId) {
-				redirectAttributes.addFlashAttribute("errorMessage", "게시글을 작성한 회원이 아닙니다.");
-				return "redirect:/study/" + studyId;
-			}
-			studyBoardService.updatePost(board);
-		} catch (Exception e) {
-			e.printStackTrace();
+		int postUserId = studyBoardService.getStudyPostUserId(studyId); // 서비스에 메서드 추가 필요
+		if (postUserId != userId) {
+			redirectAttributes.addFlashAttribute("errorMessage", "게시글을 작성한 회원이 아닙니다.");
+			return "redirect:/study/" + studyId;
 		}
+		studyBoardService.updatePost(board);
+
 		return "redirect:/study/" + studyId;
 	}
 
@@ -270,17 +239,14 @@ public class StudyBoardController {
 		if (userId == null) {
 			return "redirect:/not-logined?msg=login_required";
 		}
-		try {
-			int postUserId = studyBoardService.getStudyPostUserId(studyId); // 서비스에 메서드 추가 필요
-			if (postUserId != userId) {
-				redirectAttributes.addFlashAttribute("errorMessage", "게시글을 작성한 회원이 아닙니다.");
-				return "redirect:/study/" + studyId;
-			}
-			studyBoardService.deletePost(studyId);
-			redirectAttributes.addFlashAttribute("successMessage", "게시글을 성공적으로 삭제하였습니다.");
-		} catch (Exception e) {
-			e.printStackTrace();
+		int postUserId = studyBoardService.getStudyPostUserId(studyId); // 서비스에 메서드 추가 필요
+		if (postUserId != userId) {
+			redirectAttributes.addFlashAttribute("errorMessage", "게시글을 작성한 회원이 아닙니다.");
+			return "redirect:/study/" + studyId;
 		}
+		studyBoardService.deletePost(studyId);
+		redirectAttributes.addFlashAttribute("successMessage", "게시글을 성공적으로 삭제하였습니다.");
+
 		return "redirect:/study";
 	}
 }
