@@ -137,4 +137,10 @@
 		SELECT user_id FROM
 		study_post WHERE study_id = #{studyId}
 	</select>
+
+	<update id="addViewCount" parameterType="int">
+		UPDATE study_post SET view_count = view_count + 1
+		WHERE
+		study_id = #{studyId}
+	</update>
 </mapper>
