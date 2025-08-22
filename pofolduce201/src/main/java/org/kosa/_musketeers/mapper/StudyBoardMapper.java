@@ -31,4 +31,6 @@ public interface StudyBoardMapper {
 
 	int getStudyPostUserId(int studyId);
 
+	void addViewCount(int studyId);
+
 }

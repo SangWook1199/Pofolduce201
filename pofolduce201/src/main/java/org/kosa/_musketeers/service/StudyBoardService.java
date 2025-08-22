@@ -93,4 +93,8 @@ public class StudyBoardService {
 		return studyBoardMapper.getStudyPostUserId(studyId);
 	}
 
+	public void addViewCount(int studyId) {
+		studyBoardMapper.addViewCount(studyId);
+	}
+
 }
