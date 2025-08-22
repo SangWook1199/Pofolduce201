@@ -26,9 +26,9 @@
 				<a href="/mypage/myportfolio" class="btn btn-primary">목록</a>
 
 				<!-- 팝업창에서 원래 창으로 데이터 전송 -->
-				<button th:data-portfolio-id="${portfolio.portfolioId}"
-					th:data-portfolio-name="${portfolio.portfolioName}"
-					onclick="confirmSelectedPortfolio(this)">이력서 선택</button>
+				<button
+					th:onclick=|confirmSelectedPortfolio(`${portfolio.portfolioId}`)|>이력서
+					선택</button>
 				<!-- 팝업창에서 원래 창으로 데이터 전송 -->
 
 			</div>
@@ -43,28 +43,25 @@
 	</div>
 	<script>
 		// 선택한 이력서의 정보를 부모 창으로 전송하는 함수
-		async function confirmSelectedPortfolio(buttonElement) {
+		async function confirmSelectedPortfolio(portfolioId) {
 
-			// 1. 버튼 요소에서 data-* 속성에 보관된 '데이터'를 추출합니다.
-			const portfolioId = buttonElement.getAttribute('data-portfolio-id');
-			const portfolioName = buttonElement
-					.getAttribute('data-portfolio-name');
-			
-			//2. 추출한 데이터로 controller에 요청을 보내 PDF파일을 HTML로 변환한 문자열을 받습니다.
+			//AJAX 통한 PDF TO HTML 파일 변환 데이터 전송받음
 			let portfolioHTML = '';
-			try{
-				const response = await fetch(`/test-ajax3?use`);
-				if(!response.ok){
+			try {
+				const response = await
+				fetch(`/my-portfolio/${portfolioId}/html-converted`);
+				if (!response.ok) {
 					throw new Error(`HTTP error status: ${response.status}`)
 				}
 				// Http Response의 body(응답데이터)를 입력받음
-				portfolioHTML = await response.text();
-			} catch(error){
+				portfolioHTML = await
+				response.text();
+			} catch (error) {
 				console.error("Fetch Error:", error);
 			}
 
-			// 3. 부모 창의 함수에 '변환한 포트폴리오'를 전달하고 창을 닫습니다.
-			window.opener.receiveDataFromPopup(portfolioHTML);
+			//부모 창의 함수에 '변환한 포트폴리오'를 전달하고 창을 닫음
+			window.opener.receivePortfolioFromPopup(portfolioHTML);
 			window.close();
 		}
 	</script>

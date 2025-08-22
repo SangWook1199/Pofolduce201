@@ -48,14 +48,14 @@
 
 	<insert id="createPost" parameterType="map">
 		INSERT INTO
-		review_post(title, post_html, user_id, portfolio_id) VALUE(#{title},
-		#{postHtml}, #{user.userId}, 1);
+		review_post(title, post_html, portfolio_html, user_id)
+		VALUE(#{title}, #{postHtml}, #{portfolioHtml}, #{user.userId});
 	</insert>
 
 	<select id="getReviewPostByReviewPostId" parameterType="int"
 		resultMap="viewReviewPostResultMap">
-		SELECT review_post_id, title, post_html, view_count,
-		create_date, like_count, users.user_id, portfolio_id, nickname
+		SELECT review_post_id, title, post_html, portfolio_html, view_count,
+		create_date, like_count, users.user_id, nickname
 		FROM
 		review_post JOIN users on review_post.user_id=users.user_id
 		WHERE

@@ -6,31 +6,33 @@ public class ReviewPost {
 	private int reviewPostId;
 	private String title;
 	private String postHtml;
+	private String portfolioHtml;
 	private int viewCount;
 	private LocalDateTime createDate;
 	private int likeCount;
 	private User user;
-	private Portfolio portfolio;
 
+	// 기본생성자
 	public ReviewPost() {
 		super();
 	}
 
-	public ReviewPost(int reviewPostId, String title, String postHtml, int viewCount, LocalDateTime createDate,
-			int likeCount, User user, Portfolio portfolio) {
+	// 전체 생성자
+	public ReviewPost(int reviewPostId, String title, String postHtml, String portfolioHtml, int viewCount,
+			LocalDateTime createDate, int likeCount, User user) {
 		super();
 		this.reviewPostId = reviewPostId;
 		this.title = title;
 		this.postHtml = postHtml;
+		this.portfolioHtml = portfolioHtml;
 		this.viewCount = viewCount;
 		this.createDate = createDate;
 		this.likeCount = likeCount;
 		this.user = user;
-		this.portfolio = portfolio;
 	}
-	
+
 	public ReviewPost(int reviewPostId, String title, String postHtml, int viewCount, LocalDateTime createDate,
-			int likeCount, int userId, Portfolio portfolio, String nickname) {
+			int likeCount, int userId, String nickname) {
 		super();
 		this.reviewPostId = reviewPostId;
 		this.title = title;
@@ -39,18 +41,23 @@ public class ReviewPost {
 		this.createDate = createDate;
 		this.likeCount = likeCount;
 		this.user = new User(userId, nickname);
-		this.portfolio = portfolio;
 	}
 
-	public ReviewPost(String title, String postHtml, User user, Portfolio portfolio) {
+	public ReviewPost(String title, String postHtml, String portfolioHtml, User user) {
 		super();
 		this.title = title;
 		this.postHtml = postHtml;
 		this.user = user;
-		this.portfolio = portfolio;
 	}
 	
-	public ReviewPost(int reviewPostId, String title, int viewCount, LocalDateTime createDate, int userId, String nickname) {
+	public ReviewPost(String title, String postHtml, String portfolioHtml) {
+		super();
+		this.title = title;
+		this.postHtml = postHtml;
+	}
+
+	public ReviewPost(int reviewPostId, String title, int viewCount, LocalDateTime createDate, int userId,
+			String nickname) {
 		super();
 		this.reviewPostId = reviewPostId;
 		this.title = title;
@@ -81,6 +88,14 @@ public class ReviewPost {
 
 	public void setPostHtml(String postHtml) {
 		this.postHtml = postHtml;
+	}
+
+	public String getPortfolioHtml() {
+		return portfolioHtml;
+	}
+
+	public void setPortfolioHtml(String portfolioHtml) {
+		this.portfolioHtml = portfolioHtml;
 	}
 
 	public int getViewCount() {
@@ -115,20 +130,11 @@ public class ReviewPost {
 		this.user = user;
 	}
 
-	public Portfolio getPortfolio() {
-		return portfolio;
-	}
-
-	public void setPortfolio(Portfolio portfolio) {
-		this.portfolio = portfolio;
-	}
-
 	@Override
 	public String toString() {
 		return "ReviewPost [reviewPostId=" + reviewPostId + ", title=" + title + ", postHtml=" + postHtml
 				+ ", viewCount=" + viewCount + ", createDate=" + createDate + ", likeCount=" + likeCount + ", user="
-				+ user + ", portfolio=" + portfolio + "]";
+				+ user + "]";
 	}
 
-	
 }

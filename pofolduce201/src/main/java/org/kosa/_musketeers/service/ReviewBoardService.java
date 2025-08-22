@@ -1,10 +1,16 @@
 package org.kosa._musketeers.service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.fit.pdfdom.PDFDomTree;
 import org.kosa._musketeers.domain.ReviewPost;
 import org.kosa._musketeers.domain.ReviewPostComment;
 import org.kosa._musketeers.domain.User;
@@ -72,12 +78,28 @@ public class ReviewBoardService {
 		return reviewBoardMapper.getTotalReviewPostCountById(userId);
 	}
 
-//	public String convertPdfToHtml(int portfolioId) {
-//		File file = 
-//		String html = "";
-//		try(InputStream inputStream = Files.newInputStream(file.to, null))
-//		
-//		return null;
-//	}
-	
+	public String convertPdfToHtml(int portfolioId) {
+		String html = "";
+		File file = new File("src/main/resources/static/uploads/portfolio/" + portfolioId + ".pdf");
+		if(!file.exists()) {
+			return "<p style='color: red;'>해당 이력서 파일을 찾을 수 없습니다.</p>";
+		}
+		try(InputStream inputStream = Files.newInputStream(file.toPath())){
+			// 1. PDF 문서 로드
+			PDDocument pdf = PDDocument.load(inputStream);
+			PDFDomTree parser = new PDFDomTree();
+			// 2. HTML로 변환하기 위한 Writer 생성
+	        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			//3. PDFDomTree를 사용하여 HTML로 변환
+	        try (PrintWriter output = new PrintWriter(new OutputStreamWriter(baos, StandardCharsets.UTF_8), true)){
+				parser.writeText(pdf, output);
+				html = new String(baos.toByteArray(), StandardCharsets.UTF_8);
+	        } catch(Exception e) {
+	        	html="fail";
+	        }
+		} catch(Exception e) {
+			html = "fail";
+		}
+		return html;
+	}
 }
