@@ -8,27 +8,27 @@ public class ReviewBoard {
 	private String title;
 	private int viewCount;
 	private String postHtml;
+	private String portfolio_html;
 	private LocalDateTime createDate;
 	private int likeCount;
 	private int userId;
-	private int portfolioId;
 	
 	public ReviewBoard() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public ReviewBoard(int reviewPostId, String title, int viewCount, String postHtml, LocalDateTime createDate,
-			int likeCount, int userId, int portfolioId) {
+	public ReviewBoard(int reviewPostId, String title, int viewCount, String postHtml, String portfolio_html,
+			LocalDateTime createDate, int likeCount, int userId) {
 		super();
 		this.reviewPostId = reviewPostId;
 		this.title = title;
 		this.viewCount = viewCount;
 		this.postHtml = postHtml;
+		this.portfolio_html = portfolio_html;
 		this.createDate = createDate;
 		this.likeCount = likeCount;
 		this.userId = userId;
-		this.portfolioId = portfolioId;
 	}
 
 	public int getReviewPostId() {
@@ -63,6 +63,14 @@ public class ReviewBoard {
 		this.postHtml = postHtml;
 	}
 
+	public String getPortfolio_html() {
+		return portfolio_html;
+	}
+
+	public void setPortfolio_html(String portfolio_html) {
+		this.portfolio_html = portfolio_html;
+	}
+
 	public LocalDateTime getCreateDate() {
 		return createDate;
 	}
@@ -87,20 +95,13 @@ public class ReviewBoard {
 		this.userId = userId;
 	}
 
-	public int getPortfolioId() {
-		return portfolioId;
-	}
-
-	public void setPortfolioId(int portfolioId) {
-		this.portfolioId = portfolioId;
-	}
-
 	@Override
 	public String toString() {
 		return "ReviewBoard [reviewPostId=" + reviewPostId + ", title=" + title + ", viewCount=" + viewCount
-				+ ", postHtml=" + postHtml + ", createDate=" + createDate + ", likeCount=" + likeCount + ", userId="
-				+ userId + ", portfolioId=" + portfolioId + "]";
+				+ ", postHtml=" + postHtml + ", portfolio_html=" + portfolio_html + ", createDate=" + createDate
+				+ ", likeCount=" + likeCount + ", userId=" + userId + "]";
 	}
+
 	
 	
 }

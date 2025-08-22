@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class HomeController {
 
 	// 스터디 게시글을 조회하는 서비스를 가져옵니다.
-	StudyBoardService studyBoardService;
+	private final StudyBoardService studyBoardService;
 
 	public HomeController(StudyBoardService studyBoardService) {
 		this.studyBoardService = studyBoardService;

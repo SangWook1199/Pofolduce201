@@ -14,7 +14,8 @@
 
 
 	<div class="search-home">
-		<div class="search-main">
+
+		<div class="container-fluid px-0 ">
 			<div id="search-header">
 				<div
 					th:replace="fragments/html/board-header :: board-header('검색 결과')"></div>
@@ -23,25 +24,26 @@
 			</div>
 
 			<div class="container-fluid px-0">
-					<div id="nav-container">
+				<div id="nav-container">
 					<ul class="nav m-0 p-0" id="nav-container">
 						<li class="nav-item " id="nav-item-custom"><a
-							class="nav-link active" id="nav-custom" aria-current="page"
+							class="nav-link" id="nav-custom" aria-current="page"
 							th:href="@{/search(search=${search})}">전체</a>
-						<div id="underbar"></div></li>
+							<div id="underbar"></div></li>
 						<li class="nav-item" id="nav-item-custom"><a
 							class="nav-link active" id="nav-custom" aria-current="page"
 							th:href="@{/search/review(search=${search})}">이력서/포트폴리오 첨삭</a>
-						<div id="underbar"></div></li>
+							<div id="underbar-active"></div></li>
 						<li class="nav-item" id="nav-item-custom"><a class="nav-link"
 							th:href="@{/search/study(search=${search})}" id="nav-custom">스터디</a>
-						<div id="underbar"></div></li>
+							<div id="underbar"></div></li>
 						<li class="nav-item" id="nav-item-custom"><a class="nav-link"
 							th:href="@{/search/recruit(search=${search})}" id="nav-custom">채용
 								공고</a>
-						<div id="underbar"></div></li>
+							<div id="underbar"></div></li>
 
 					</ul>
+					<div id="underbar-down"></div>
 				</div>
 				<div class="row">
 					<div id="search-home-content">
@@ -119,8 +121,8 @@
 
 				</div>
 
-			
-			
+
+
 
 
 			</div>

@@ -1,6 +1,7 @@
 @charset "UTF-8";
 #header3nav {
-	width: 1000px;
+	width : 100%;
+	max-width: 1000px;
 	margin: auto;
 	background-color: #ff4473;
 }
@@ -10,7 +11,7 @@
 	font-size: 20px;
 	text-align: center;
 	margin: auto;
-	margin-right: 190px;
+	margin-right: 200px;
 }
 
 .header3white {
