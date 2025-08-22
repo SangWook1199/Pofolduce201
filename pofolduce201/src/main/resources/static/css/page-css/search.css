@@ -1,15 +1,13 @@
 .search-home {
-	display: grid;
-	justify-content: center;
+	width: 100%;
+	max-width: 1000px;
+ margin: 0 auto; /* 전체 컨테이너가 가운데로 오게 할 수 있음*/
+ margin-top: 5%;
 }
 
-.search-main {
-	margin-top: 5%;
-	width: 1000px;
-	height: 100%;
-}
 
-.portfolio {
+
+/*.portfolio {
 	width: 1000px;
 	height: 500px;
 	display:flex;
@@ -20,7 +18,7 @@
 	align-items : center;
 	gap:30px;
 }
-
+*/
 #search-header {
 	display: flex;
 	justify-content: space-between;
@@ -31,67 +29,73 @@
 	margin-bottom: 5%;
 }
 
-.nodata{
-	display:flex;
-	justify-content : center;
-	align-items : center;
-	margin : 10%;
+.nodata {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 10%;
 }
 
-.nodata h3{
-	color : #DEDEDE;
-	font-size : 30px;
-	
+.nodata h3 {
+	color: #DEDEDE;
+	font-size: 30px;
 }
 
-
-#nav-container{
-	margin-bottom : 5%;
+#nav-container {
+	margin-bottom: 5%;
 }
 
-
-#nav-custom{
-	all:unset;
-	color :#E3E3E3;
-	font-size : 30px;
-	padding :0%;
-	margin:0%;
-	 display: inline-block;	
-	  line-height: 1; 
-	
+#nav-custom {
+	all: unset;
+	color: #E3E3E3;
+	font-size: 30px;
+	padding: 0%;
+	margin: 0%;
+	display: inline-block;
+	line-height: 1;
 }
 
-#nav-custom.active{
-	all:unset;
-	color :#FF4473;
-	font-size : 30px;
-	padding :0%;
-	margin:0%;
-	display: inline-block;	
-	line-height: 1; 
-	
+#nav-custom.active {
+	all: unset;
+	color: #FF4473;
+	font-size: 30px;
+	padding: 0%;
+	margin: 0%;
+	display: inline-block;
+	line-height: 1;
 }
 
-#underbar{
-	width : 100%;
-	height : 3px;
-	background-color : #E3E3E3;
+#underbar {
+	width: 100%;
+	height: 3px;
+	background-color: #E3E3E3;
 	/*#E3E3E3 #FF4473;*/
 	margin: 0;
-	padding :0;
+	padding: 0;
 }
 
-#underbar.active-bar{
-	width : 100%;
-	height : 3px;
-	background-color : #FF4473;
+#underbar-down {
+	width: 100%;
+	height: 3px;
+	background-color: #E3E3E3;
+	/*#E3E3E3 #FF4473;*/
+	position: relative;
+	margin-top: -3px;
+	z-index: -100;
+	padding: 0;
+}
+
+#underbar-active {
+	width: 100%;
+	height: 3px;
+	background-color: #FF4473;
 	/*#E3E3E3 #FF4473;*/
 	margin: 0;
-	padding :0;
+	padding: 0;
 }
-#nav-item-custom{
-	margin-right : 5%;
-	padding :0%;
-	cursor:pointer;
-	
+
+#nav-item-custom {
+	margin-right: 3%;
+	padding: 0%;
+	cursor: pointer;
 }
