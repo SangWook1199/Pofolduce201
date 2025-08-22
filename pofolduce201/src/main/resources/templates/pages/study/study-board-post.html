@@ -10,15 +10,7 @@
 	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=70c0de37da587509ef9f5d9da9f64303"></script>
 
 <title>게시글</title>
-<style type="text/css">
-.report-content {
-	resize: none;
-}
-</style>
 </head>
-<!--/* 
-		body tag 는 명시하지 않는다  layout.html 의 content fragment 영역에 삽입될 부분이기 때문 
- */-->
 <div layout:fragment="content" class="main-content">
 	<div
 		th:replace="fragments/html/board-header :: board-header('스터디 게시판 > 게시글 보기')"></div>
@@ -79,8 +71,10 @@
 			<div id="map" style="width: 800px; height: 300px;"></div>
 		</div>
 		<!-- 좋아요 버튼 -->
-		<div class="text-center like-button">
-			<button id="likeBtn" type="button" class="btn btn-light">
+		<div class="text-center">
+			<button id="likeBtn" type="button"
+				class="btn btn-primary like-button"
+				th:attr="data-study-id=${post.studyId}">
 				좋아요 <img id="likeImg" th:src="@{/svg/like-off.svg}" alt="좋아요"
 					style="width: 24px; height: 24px;"> <span id="likeCount"
 					th:text="${post.likeCount}">0</span>
@@ -187,7 +181,8 @@
 				</li>
 			</ul>
 		</div>
-
+		<script src="/js/study-like-button.js" defer></script>
+		<script src="/js/popover.js" defer></script>
 		<script>
 		var container = document.getElementById('map');
 		var options = {
@@ -209,76 +204,8 @@
 		function confirmDelete() {
 			return confirm('정말 삭제하시겠습니까?');
 		}
-		document.addEventListener("DOMContentLoaded", function() {
-			const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
-
-			popoverTriggerList.forEach(el => {
-				// Popover 초기화 (manual trigger)
-				const popover = new bootstrap.Popover(el, {
-					html: true,
-					content: '불러오는 중...',
-					placement: 'top',
-					trigger: 'manual',
-					fallbackPlacements: []
-				});
-
-				// 닉네임 클릭 시 실행
-				el.addEventListener("click", async (e) => {
-					e.stopPropagation(); // 클릭 이벤트 버블링 방지
-					const userId = el.dataset.userid;
-
-					try {
-						const response = await fetch(`/api/user/${userId}`);
-						if (!response.ok) throw new Error("서버 응답 오류");
-
-						const data = await response.json();
-
-						const contentHtml = `
-				                  <div>
-				                    <div class="popover-image">
-				                        <img src="/svg/crown.svg" alt="프로필" style="width:30px; height:30px;">
-				                    </div>
-				                    <p class="popover-nickname">${data.nickname}</p>
-				                    <hr>
-				                    <p class="popover-content">획득한 포인트: ${data.point}</p>
-				                    <p class="popover-content">작성한 이력서: ${data.countPortfolio}</p>
-				                    <p class="popover-content">작성한 첨삭: ${data.countReview}</p>
-				                    <div class="popover-button">></div>
-				                  </div>
-				                `;
-
-						popover.setContent({ '.popover-body': contentHtml });
-						popover.show();
-
-						// 팝오버 내부 버튼 클릭 시 상세페이지 이동
-						const btn = document.querySelector('.popover-button');
-						if (btn) {
-							btn.addEventListener("click", () => {
-								window.location.href = `/userpage/${data.userId}`;
-							});
-						}
-
-					} catch (err) {
-						console.error(err);
-						popover.setContent({ '.popover-body': '정보를 불러오지 못했습니다.' });
-						popover.show();
-					}
-				});
-			});
-
-			// 문서 클릭 시 팝오버 닫기
-			document.addEventListener('click', function(e) {
-				popoverTriggerList.forEach(el => {
-					const popoverInstance = bootstrap.Popover.getInstance(el);
-					if (popoverInstance &&
-						!el.contains(e.target) &&
-						!document.querySelector('.popover')?.contains(e.target)) {
-						popoverInstance.hide();
-					}
-				});
-			});
-		});
-
+		
+		
 
 	</script>
 	</div>

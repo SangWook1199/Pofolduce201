@@ -25,8 +25,8 @@ public interface StudyBoardMapper {
 
 	List<Map<String, Object>> getStudyBoardByViewCount();
 
-	int getLikeCount(int studyId);
+	int updateLikeCount(int studyId);
 
-	void updateLikeCount(int studyId, int i);
+	Integer getLikeCount(int studyId);
 
 }

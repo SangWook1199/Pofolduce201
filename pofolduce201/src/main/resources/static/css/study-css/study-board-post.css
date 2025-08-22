@@ -89,6 +89,9 @@
 	width: 25px;
 	height: 25px;
 }
+.report-content {
+	resize: none;
+}
 
 .comment-title {
 	margin: 0;
@@ -132,6 +135,18 @@
 
 .all-userName:hover {
 	cursor: pointer;
+}
+.like-button {
+	background-color: #FF4473;
+	color: #ffff;
+}
+
+.like-button:hover, .like-button:disabled {
+	box-shadow: none; 
+	background-color: #FF4473; 
+	border-color: #FF4473; /* 클릭 시 테두리색 변화 방지 */
+	color: #ffff; 
+	opacity: 1; 
 }
 /* 페이지네이션 전체 글자 색 */
 .pagination .page-link {

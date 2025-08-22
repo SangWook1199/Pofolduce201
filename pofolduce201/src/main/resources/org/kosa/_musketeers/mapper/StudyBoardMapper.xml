@@ -83,30 +83,37 @@
 		ranked.user_id,
 		u.nickname
 		FROM (
-		SELECT title,
+		SELECT
+		title,
 		view_count,
 		study_id,
 		post_html,
 		address,
 		user_id,
-		RANK() OVER (ORDER BY view_count DESC) AS rnk
+		RANK() OVER (ORDER
+		BY view_count DESC) AS rnk
 		FROM study_post
 		) ranked
-		JOIN users u ON ranked.user_id = u.user_id
-		WHERE ranked.rnk <![CDATA[ < ]]> 6;
+		JOIN users u ON
+		ranked.user_id = u.user_id
+		WHERE ranked.rnk <![CDATA[ < ]]>
+		6;
 
 	</select>
-	
-    <select id="getLikeCount" resultType="int">
-        SELECT like_count
-        FROM study_post
-        WHERE study_id = #{studyId}
-    </select>
 
-    <update id="updateLikeCount"
-    parameterType="org.kosa._musketeers.domain.StudyBoard">
-        UPDATE study_post
-        SET like_count = #{i}
-        WHERE study_id = #{studyId}
-    </update>
+	<update id="updateLikeCount" parameterType="int">
+		UPDATE study_post
+		SET
+		like_count = like_count + 1
+		WHERE study_id =
+		#{studyId}
+	</update>
+
+	<select id="getLikeCount" resultType="int">
+		SELECT like_count
+		FROM
+		study_post
+		WHERE study_id = #{studyId}
+	</select>
+
 </mapper>
