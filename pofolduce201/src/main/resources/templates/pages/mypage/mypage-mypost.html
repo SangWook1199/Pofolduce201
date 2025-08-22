@@ -35,8 +35,8 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="post, iterStat : ${myPagePostList}"
-									th:attr="data-url=${post.boardType == 'study' ? '/study/' + post.postId : '/review/' + post.postId}"
+								<tr th:each="post, iterStat : ${myPagePostList}" 
+									th:attr="data-url=${post.boardType == 'study' ? '/study/' + post.postId : '/review/post?reviewPostId=' + post.postId}"
 									style="cursor: pointer;">
 									<!-- (현재 페이지 - 1) * 페이지당 크기 + 현재 인덱스 + 1 -->
 									<th scope="row"

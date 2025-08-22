@@ -7,23 +7,23 @@ import java.time.LocalDateTime;
  */
 
 public class MyPagePost {
-	private int postId;             // 게시글 id
-    private String boardType;       // 게시판 구분 ("review", "study")
-    private String title;
-    private int viewCount;
-    private String postHtml;
-    private LocalDateTime createDate;
-    private int likeCount;
-    private int userId;
-    
- // 선택적으로 필요한 필드
-    private Integer portfolioId;    // ReviewBoard 전용
-    private String address;         // StudyBoard 전용
+	private int postId; // 게시글 id
+	private String boardType; // 게시판 구분 ("review", "study")
+	private String title;
+	private int viewCount;
+	private String postHtml;
+	private LocalDateTime createDate;
+	private int likeCount;
+	private int userId;
 
-    public MyPagePost() {}
+	// 선택적으로 필요한 필드
+	private String address; // StudyBoard 전용
+
+	public MyPagePost() {
+	}
 
 	public MyPagePost(int postId, String boardType, String title, int viewCount, String postHtml,
-			LocalDateTime createDate, int likeCount, int userId, Integer portfolioId, String address) {
+			LocalDateTime createDate, int likeCount, int userId, String address) {
 		super();
 		this.postId = postId;
 		this.boardType = boardType;
@@ -33,7 +33,7 @@ public class MyPagePost {
 		this.createDate = createDate;
 		this.likeCount = likeCount;
 		this.userId = userId;
-		this.portfolioId = portfolioId;
+
 		this.address = address;
 	}
 
@@ -101,13 +101,7 @@ public class MyPagePost {
 		this.userId = userId;
 	}
 
-	public Integer getPortfolioId() {
-		return portfolioId;
-	}
-
-	public void setPortfolioId(Integer portfolioId) {
-		this.portfolioId = portfolioId;
-	}
+	
 
 	public String getAddress() {
 		return address;
@@ -121,8 +115,7 @@ public class MyPagePost {
 	public String toString() {
 		return "MyPagePostVO [postId=" + postId + ", boardType=" + boardType + ", title=" + title + ", viewCount="
 				+ viewCount + ", postHtml=" + postHtml + ", createDate=" + createDate + ", likeCount=" + likeCount
-				+ ", userId=" + userId + ", portfolioId=" + portfolioId + ", address=" + address + "]";
+				+ ", userId=" + userId + ", address=" + address + "]";
 	}
-    
-    
+
 }

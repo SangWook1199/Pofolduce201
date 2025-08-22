@@ -38,7 +38,7 @@ public class MyBoardService {
 
 			result.add(new MyPagePost(rb.getReviewPostId(), "review", // 게시판 타입
 					rb.getTitle(), rb.getViewCount(), rb.getPostHtml(), rb.getCreateDate(), rb.getLikeCount(),
-					rb.getUserId(), rb.getPortfolioId(), // Review 전용
+					rb.getUserId(), // Review 전용
 					null // Study 전용 없음
 			));
 
@@ -50,8 +50,7 @@ public class MyBoardService {
 
 			result.add(new MyPagePost(sb.getStudyId(), "study", // 게시판 타입
 					sb.getTitle(), sb.getViewCount(), sb.getPostHtml(), sb.getPostDate(), sb.getLikeCount(),
-					sb.getUserId(), null, // Review 전용 없음
-					sb.getAddress() // Study 전용
+					sb.getUserId(), sb.getAddress() // Study 전용
 			));
 
 		}
