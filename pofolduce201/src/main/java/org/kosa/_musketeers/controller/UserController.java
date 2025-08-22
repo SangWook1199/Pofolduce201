@@ -33,7 +33,7 @@ public class UserController {
 
 	private final MyBoardService myBoardService;
 
-	UserService userService;
+	private final UserService userService;
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -122,6 +122,9 @@ public class UserController {
 		List<MyPagePost> myPagePostList = myBoardService.findMyPost(userId, page, size);
 		int totalCount = myBoardService.countMyPost(userId);
 		int totalPages = (int) Math.ceil((double) totalCount / size);
+		System.out.println("총 개수: " + totalCount);
+		System.out.println("페이지 크기: " + size);
+		System.out.println("총 페이지 수: " + totalPages);
 
 		model.addAttribute("myPagePostList", myPagePostList);
 		model.addAttribute("currentPage", page);

@@ -1,6 +1,7 @@
 package org.kosa._musketeers.mapper;
 
-import java.nio.file.Path;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -35,5 +36,11 @@ public interface UserMapper {
 	
 	// user 정보 (관리자 확인용)
 	User getUserById(int userId);
+
+	
+	//검색
+	List<Map<String, Object>> getReviewSearchResult(@Param("search") String search);
+
+	List<Map<String, Object>> getStudySearchResult(@Param("search") String search);
 
 }

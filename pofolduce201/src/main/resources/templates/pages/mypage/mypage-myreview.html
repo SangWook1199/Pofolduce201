@@ -24,7 +24,8 @@
 						<h1 id="mypage-title2">내 정보 > 내 첨삭 목록</h1>
 
 
-						<table class="table table-hover" th:if="${not #lists.isEmpty(myPageReviewList)}">
+						<table class="table table-hover"
+							th:if="${not #lists.isEmpty(myPageReviewList)}">
 							<thead>
 								<tr>
 									<th scope="col">#</th>
@@ -33,48 +34,49 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="myPageReviewList, iterStat : ${myPageReviewList}">
+								<tr th:each="myPageReviewList, iterStat : ${myPageReviewList}"
+									th:attr="data-url=${'/review/' + myPageReviewList.reviewId}">
 									<!-- (현재 페이지 - 1) * 페이지당 크기 + 현재 인덱스 + 1 -->
 									<th scope="row"
 										th:text="${(currentPage - 1) * size + iterStat.index + 1}">
 									</th>
-									<td th:text="${myPageReviewList.reviewContents}">해당 댓글
-										내용</td>
+									<td th:text="${myPageReviewList.reviewContents}"></td>
 								</tr>
 							</tbody>
 						</table>
-						
-							<!-- 데이터가 없을 때 -->
+
+						<!-- 데이터가 없을 때 -->
 						<div th:if="${#lists.isEmpty(myPageReviewList)}">
-							<h3  class="non-data">작성한 첨삭이 없습니다.</h3>
+							<h3 class="non-data">작성한 첨삭이 없습니다.</h3>
 						</div>
-						
-						<nav th:if="${not #lists.isEmpty(myPageReviewList)}" aria-label="Page navigation example">
-						<ul class="pagination justify-content-center">
 
-							<!-- 이전 페이지 -->
-							<li class="page-item"
-								th:classappend="${currentPage == 1} ? 'disabled'"><a
-								class="page-link"
-								th:href="@{/mypage/myreview(page=${currentPage - 1}, size=${size})}"
-								tabindex="-1" aria-disabled="true">Previous</a></li>
+						<nav th:if="${not #lists.isEmpty(myPageReviewList)}"
+							aria-label="Page navigation example">
+							<ul class="pagination justify-content-center">
 
-							<!-- 페이지 번호 반복 -->
-							<li class="page-item"
-								th:each="i : ${#numbers.sequence(1, totalPages)}"
-								th:classappend="${i == currentPage} ? 'active'"><a
-								class="page-link"
-								th:href="@{/mypage/myreview(page=${i}, size=${size})}"
-								th:text="${i}">1</a></li>
+								<!-- 이전 페이지 -->
+								<li class="page-item"
+									th:classappend="${currentPage == 1} ? 'disabled'"><a
+									class="page-link"
+									th:href="@{/mypage/myreview(page=${currentPage - 1}, size=${size})}"
+									tabindex="-1" aria-disabled="true">Previous</a></li>
 
-							<!-- 다음 페이지 -->
-							<li class="page-item"
-								th:classappend="${currentPage == totalPages} ? 'disabled'">
-								<a class="page-link"
-								th:href="@{/mypage/myreview(page=${currentPage + 1}, size=${size})}">Next</a>
-							</li>
-						</ul>
-					</nav>
+								<!-- 페이지 번호 반복 -->
+								<li class="page-item"
+									th:each="i : ${#numbers.sequence(1, totalPages)}"
+									th:classappend="${i == currentPage} ? 'active'"><a
+									class="page-link"
+									th:href="@{/mypage/myreview(page=${i}, size=${size})}"
+									th:text="${i}">1</a></li>
+
+								<!-- 다음 페이지 -->
+								<li class="page-item"
+									th:classappend="${currentPage == totalPages} ? 'disabled'">
+									<a class="page-link"
+									th:href="@{/mypage/myreview(page=${currentPage + 1}, size=${size})}">Next</a>
+								</li>
+							</ul>
+						</nav>
 					</div>
 
 
@@ -84,5 +86,8 @@
 
 		</div>
 	</div>
+</div>
+<div layout:fragment="script">
+	<script th:src="@{/js/mypage.js}"></script>
 </div>
 </html>

@@ -105,7 +105,7 @@
 						</div>
 						<div class="main-study">
 							<div th:each="board:${Board}">
-								<a th:href="@{'/study/' + ${board.study_id}}"
+								<a th:href="${session.userId == null ? '/login' : '/study/' + board.study_id}"
 									style="all: unset;">
 									<div id="main-study-component">
 

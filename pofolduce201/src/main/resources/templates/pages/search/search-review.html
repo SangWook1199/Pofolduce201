@@ -23,7 +23,7 @@
 			</div>
 
 			<div class="container-fluid px-0">
-				<div id="nav-container">
+					<div id="nav-container">
 					<ul class="nav m-0 p-0" id="nav-container">
 						<li class="nav-item " id="nav-item-custom"><a
 							class="nav-link active" id="nav-custom" aria-current="page"
@@ -61,14 +61,7 @@
 
 					</div>
 				</div>
-				<!--  
-				<div class="portfolio">
-					<img th:src="@{/img/portfolio.png}" width="300"> <img
-						th:src="@{/img/portfolio.png}" width="300"> <img
-						th:src="@{/img/portfolio.png}" width="300">
-				</div>
-				-->
-				<!-- 첨삭 게시글 조회 (임시) -->
+
 				<div>
 					<table class="table table-hover" id="search-table"
 						th:if="${not #lists.isEmpty(reviewList)}">
@@ -126,108 +119,8 @@
 
 				</div>
 
-				<div class="row">
-					<div id="search-home-content">
-
-
-						<div class="col">
-
-							<div id="search-header">
-								<div
-									th:replace="fragments/html/board-header :: board-header('스터디')"></div>
-
-								<img th:src="@{/svg/arrow.svg}" width="35" height="35"
-									onclick="location.href='/study'">
-							</div>
-
-
-							<!-- 스터디 게시글 조회 -->
-
-							<div>
-								<table class="table table-hover" id="search-table"
-									th:if="${not #lists.isEmpty(studyList)}">
-									<thead>
-										<tr>
-											<th scope="col">#</th>
-											<th scope="col">작성자</th>
-											<th scope="col">제목</th>
-											<th scope="col">조회수</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr th:each="study, iterStat : ${studyList}"
-											th:onclick="|location.href='/study/' + ${study.studyId}|">
-											<th scope="row"
-												th:text="${(studyCurrentPage - 1) * studySize + iterStat.index + 1}">1</th>
-											<td th:text="${study.userId.nickname}">작성자</td>
-											<td th:text="${study.title}">제목</td>
-											<td th:text="${study.viewCount}">조회수</td>
-										</tr>
-									</tbody>
-								</table>
-								<!-- 데이터가 없을 때 -->
-								<div class="nodata" th:if="${#lists.isEmpty(studyList)}">
-									<h3 class="non-data">검색 결과가 없습니다.</h3>
-								</div>
-
-								<nav th:if="${not #lists.isEmpty(studyList)}"
-									aria-label="Page navigation example">
-									<ul class="pagination justify-content-center">
-
-										<!-- 이전 페이지 -->
-										<li class="page-item"
-											th:classappend="${studyCurrentPage == 1} ? 'disabled'"><a
-											class="page-link"
-											th:href="@{/search(search=${search},studyPage=${studyCurrentPage - 1}, studySize=${studySize})}"
-											tabindex="-1" aria-disabled="true">Previous</a></li>
-
-										<!-- 페이지 번호 반복 -->
-										<li class="page-item"
-											th:each="i : ${#numbers.sequence(1, studyTotalPages)}"
-											th:classappend="${i == studyCurrentPage} ? 'active'"><a
-											class="page-link"
-											th:href="@{/search(search=${search},studyPage=${i}, studySize=${studySize})}"
-											th:text="${i}">1</a></li>
-
-										<!-- 다음 페이지 -->
-										<li class="page-item"
-											th:classappend="${studyCurrentPage == studyTotalPages} ? 'disabled'">
-											<a class="page-link"
-											th:href="@{/search(search=${search},studyPage=${studyCurrentPage + 1}, studySize=${studySize})}">Next</a>
-										</li>
-									</ul>
-								</nav>
-							</div>
-						</div>
-
-
-					</div>
-				</div>
-
-				<div class="row">
-					<div id="search-home-content">
-
-
-						<div class="col">
-
-							<div id="search-header">
-								<div
-									th:replace="fragments/html/board-header :: board-header('채용 공고')"></div>
-
-								<img th:src="@{/svg/arrow.svg}" width="35" height="35"
-									onclick="location.href='/recruit'">
-							</div>
-
-							<!-- 데이터가 없을 때 -->
-							<div class="nodata">
-								<h3 class="non-data">검색 결과가 없습니다.</h3>
-							</div>
-						</div>
-
-
-					</div>
-				</div>
-
+			
+			
 
 
 			</div>

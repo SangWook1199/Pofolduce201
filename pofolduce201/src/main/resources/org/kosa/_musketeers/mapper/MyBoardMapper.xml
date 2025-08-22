@@ -6,7 +6,7 @@
 from review_post
 where user_id=#{userId};
 </select>
-<select id="findMyStudyPost" parameterType="int" resultType="org.kosa._musketeers.domain.StudyBoard">
+<select id="findMyStudyPost" parameterType="int" >
 	select study_id, title, post_html, view_count, post_date, like_count, address, user_id
 from study_post
 where user_id=#{userId};
