@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -47,7 +48,6 @@ public class ReviewBoardController {
 	public String reviewViewPost(@RequestParam int reviewPostId, Model model) {
 		ReviewPost reviewPost = reviewBoardService.viewPost(reviewPostId);
 		List<ReviewPostComment> commentList = reviewBoardService.loadReviewPostCommentList(reviewPostId);
-		System.out.println(commentList.get(0).getUserId().getUserId());
 		model.addAttribute("reviewPost", reviewPost);
 		model.addAttribute("commentsList", commentList);
 		return "pages/review/review-post";
@@ -62,6 +62,10 @@ public class ReviewBoardController {
 	public String saveReviewPost(@ModelAttribute ReviewPost reviewPost, HttpServletRequest request) {
 
 		reviewPost.setUser(new User((Integer)request.getSession().getAttribute("userId")));
+		System.out.println(reviewPost);
+		System.out.println(reviewPost);
+		System.out.println(reviewPost);
+		System.out.println(reviewPost);
 		reviewBoardService.createPost(reviewPost);
 		return "redirect:/review";
 	}
@@ -128,13 +132,12 @@ public class ReviewBoardController {
 		return "pages/review/review-select-folio-confirm";
 	}
 	
-//	@GetMapping("/my-portfolio/{portfolioId}/html-converted")
-//	public String sendConvertedPortfolioByFetch(@PathVariable int portfolioId) {
-//		
-//		String convertedHtml = reviewBoardService.convertPdfToHtml(portfolioId);
-//		
-//		return convertedHtml;
-//	}
+	@GetMapping("/my-portfolio/{portfolioId}/html-converted")
+	@ResponseBody
+	public String sendConvertedPortfolioByFetch(@PathVariable int portfolioId) {
+		String convertedHtml = reviewBoardService.convertPdfToHtml(portfolioId);
+		return convertedHtml;
+	}
 }
 
 
