@@ -37,6 +37,9 @@
 					</div>
 				</div>
 				<div class="pt-3 border-top border-1 mt">
+					<p th:utext="${reviewPost.portfolioHtml}"></p>
+				</div>
+				<div class="pt-3 border-top border-1 mt">
 					<p th:utext="${reviewPost.postHtml}"></p>
 				</div>
 
@@ -91,7 +94,7 @@
 								style="display: none;">
 								<form
 									th:action="@{/review/comment/{reviewCommentId}/edit(reviewCommentId=${comments.commentsId})}"
-									method="post">	
+									method="post">
 									<textarea class="form-control" name="comment-content"
 										id="comment-content" th:text="${comments.commentsContents}"></textarea>
 									<button class="btn btn-primary btn-sm mt-2" type="submit">수정
