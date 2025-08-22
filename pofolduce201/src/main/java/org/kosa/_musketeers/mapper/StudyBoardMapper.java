@@ -29,4 +29,6 @@ public interface StudyBoardMapper {
 
 	Integer getLikeCount(int studyId);
 
+	int getStudyPostUserId(int studyId);
+
 }

@@ -7,24 +7,17 @@
 	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=70c0de37da587509ef9f5d9da9f64303"></script>
 <link th:href="@{/css/board-header.css}" rel="stylesheet">
 <link th:href="@{/css/banner.css}" rel="stylesheet">
-<link th:href="@{/css/study-css/story-board.css}" rel="stylesheet">
-<script type="text/javascript"
-	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=70c0de37da587509ef9f5d9da9f64303"></script>
-
+<link th:href="@{/css/study-css/study-board.css}" rel="stylesheet">
 <title>스터디 게시판</title>
-
 </head>
-<!--/* 
-		body tag 는 명시하지 않는다  layout.html 의 content fragment 영역에 삽입될 부분이기 때문 
- */-->
-<div layout:fragment="content" class="main-content">
+<div layout:fragment="content" class="main-content container-fluid">
 	<div
 		th:replace="fragments/html/board-header :: board-header('스터디 게시판')"></div>
+	<div id="map" class="map-container"></div>
 	<div
 		th:replace="fragments/html/banner :: banner('이력서 및 자기소개서, 포트폴리오를 첨삭받을 수 있는 게시판 입니다.', '관련 없는 게시글 및 광고성 정보, 욕설이 포함된 게시글은 예고 없이 삭제될 수 있습니다.','첨삭 시 반드시 매너를 지켜주세요!')"></div>
-	<div id="map" style="width: 800px; height: 400px;"></div>
-	<div class="study-table">
-		<table class="table table-hover">
+	<div class="study-table mt-3">
+		<table class="table table-hover text-center">
 			<colgroup>
 				<col class="col-center" style="width: 3%">
 				<col class="col-center" style="width: 10%">
@@ -43,74 +36,88 @@
 			</thead>
 			<tbody>
 				<tr class="clickable-row"
-					th:onclick="|window.location='/study/' + [[${first.studyId}]]|">
+					th:onclick="|window.location='/study/' + [[${first.studyId}]]|"
+					th:if="${first != null}" >
 					<td><img alt="왕관" th:src="@{/svg/crown.svg}"
-						class="banner-image"></td>
+						class="img-fluid banner-image"></td>
 					<th scope="row">1</th>
 					<td th:text="${first.userId.nickname}"></td>
 					<td th:text="${first.title}"></td>
 					<td th:text="${first.viewCount}"></td>
 				</tr>
-				<tr th:onclick="|window.location='/study/' + [[${second.studyId}]]|">
+				<tr th:onclick="|window.location='/study/' + [[${second.studyId}]]|"
+				th:if="${second != null}">
 					<td><img alt="왕관" th:src="@{/svg/2nd-crown.svg}"
-						class="banner-image"></td>
+						class="img-fluid banner-image"></td>
 					<th scope="row">2</th>
-					<td th:text="${second.userId.nickname}">Jacob</td>
-					<td th:text="${second.title}">Thornton</td>
-					<td th:text="${second.viewCount}">@fat</td>
+					<td th:text="${second.userId.nickname}"></td>
+					<td th:text="${second.title}"></td>
+					<td th:text="${second.viewCount}"></td>
 				</tr>
-				<tr class="line"
-					th:onclick="|window.location='/study/' + [[${third.studyId}]]|">
+				<tr class="table-border-bottom"
+					th:onclick="|window.location='/study/' + [[${third.studyId}]]|"
+					th:if="${third!= null}">
 					<td><img alt="왕관" th:src="@{/svg/3rd-crown.svg}"
-						class="banner-image"></td>
+						class="img-fluid banner-image"></td>
 					<th scope="row">3</th>
-					<td th:text="${third.userId.nickname}">haha</td>
-					<td th:text="${third.title}">Larry the Bird</td>
-					<td th:text="${third.viewCount}">@twitter</td>
+					<td th:text="${third.userId.nickname}"></td>
+					<td th:text="${third.title}"></td>
+					<td th:text="${third.viewCount}"></td>
 				</tr>
 
 				<tr th:each="list:${dateList}"
-					th:onclick="|window.location='/study/' + [[${list.studyId}]]|">
+					th:onclick="|window.location='/study/' + [[${list.studyId}]]|"
+					th:unless="${#lists.isEmpty(dateList)}">
 					<td></td>
 					<td th:text="${listStat.count}">#</td>
 					<td th:text="${list.userId.nickname}">작성자</td>
 					<td th:text="${list.title}">제목</td>
 					<td th:text="${list.viewCount}">조회수</td>
 				</tr>
+				<tr th:if="${#lists.isEmpty(dateList)}">
+					<td colspan="5" class="text-center non-data">등록된 게시글이 없습니다.</td>
+				</tr>
 			</tbody>
 		</table>
 	</div>
 	<div class="col text-end">
-		<a class="btn btn-primary" href="/study/write" id="write-button">+</a>
+		<a class="btn btn-primary rounded-circle" href="/study/write"
+			id="write-button">+</a>
 	</div>
-	<nav aria-label="Page navigation example">
-		<ul class="pagination justify-content-center">
-			<!-- 이전 페이지 -->
-			<li class="page-item"
-				th:classappend="${currentPage == 1} ? 'disabled'"><a
-				class="page-link" th:href="@{/study(page=${currentPage - 1})}"
-				tabindex="-1" aria-disabled="true">Previous</a></li>
+	<nav aria-label="Page navigation example" th:if="${totalPages > 0}">
+    <ul class="pagination justify-content-center">
+        <li class="page-item"
+            th:classappend="${currentPage == 1} ? 'disabled'"><a
+            class="page-link" th:href="@{/study(page=${currentPage - 1})}"
+            tabindex="-1" aria-disabled="true">Previous</a></li>
 
-			<!-- 페이지 번호 반복 -->
-			<li class="page-item"
-				th:each="i : ${#numbers.sequence(1, totalPages)}"
-				th:classappend="${i == currentPage} ? 'active'"><a
-				class="page-link" th:href="@{/study(page=${i})}" th:text="${i}">1</a></li>
+        <li class="page-item"
+            th:each="i : ${#numbers.sequence(1, totalPages)}"
+            th:classappend="${i == currentPage} ? 'active'"><a
+            class="page-link" th:href="@{/study(page=${i})}" th:text="${i}">1</a></li>
 
-			<!-- 다음 페이지 -->
-			<li class="page-item"
-				th:classappend="${currentPage == totalPages} ? 'disabled'"><a
-				class="page-link" th:href="@{/study(page=${currentPage + 1})}">Next</a></li>
-		</ul>
-	</nav>
+        <li class="page-item"
+            th:classappend="${currentPage == totalPages} ? 'disabled'"><a
+            class="page-link" th:href="@{/study(page=${currentPage + 1})}">Next</a></li>
+    </ul>
+</nav>
 	<script>
 		var container = document.getElementById('map');
 		var options = {
 			center : new kakao.maps.LatLng(37.583743027324, 126.999963317958),
 			level : 1
 		};
-
 		var map = new kakao.maps.Map(container, options);
+		document.addEventListener('DOMContentLoaded', function() {
+			// 성공 메시지 표시
+			if ('[[${successMessage}]]') {
+				alert('[[${successMessage}]]');
+			}
+			// 에러 메시지 표시
+			if ('[[${errorMessage}]]') {
+				alert('[[${errorMessage}]]');
+			}
+		});
 	</script>
 </div>
 </html>

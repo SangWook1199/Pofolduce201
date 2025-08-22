@@ -86,23 +86,21 @@ public class UserController {
 		}
 
 		int userId = (int) session.getAttribute("userId");
-		
+
 		User userData = userService.getUserInformation(userId);
-		
-		//프로필 사진이 서버에 있는 지 확인합니다. 없으면 기본 프로필을 띄웁니다.
+
+		// 프로필 사진이 서버에 있는 지 확인합니다. 없으면 기본 프로필을 띄웁니다.
 		String fileLocation = userData.getUserImageLocation();
-	
+
 		String uploadDir = new ClassPathResource("static/uploads/profile/").getFile().getAbsolutePath();
 
 		// 사용자 프로필 이미지 파일
 		File profileFile = new File(uploadDir + "/" + userData.getUserId() + ".png");
 		boolean hasProfileImage = profileFile.exists();
 
-		//전달
+		// 전달
 		model.addAttribute("hasProfileImage", hasProfileImage);
 		model.addAttribute("userData", userData);
-		
-	
 
 		return "/pages/mypage/mypage-main";
 
@@ -206,7 +204,10 @@ public class UserController {
 
 	// 내 이력서 페이지
 	@GetMapping("/mypage/myportfolio")
-	public String getMyPortfolio(Model model, @SessionAttribute("userId") int userId) {
+	public String getMyPortfolio(Model model, @SessionAttribute("userId") Integer userId) {
+		if (userId == null) {
+			return "redirect:/not-logined?msg=login_required";
+		}
 		List<Portfolio> portfolio = userService.getPortfolioList(userId);
 		Integer pofId = userService.getRepPortfolio(userId);
 		model.addAttribute("portfolios", portfolio);
@@ -217,15 +218,29 @@ public class UserController {
 	// 이력서 업로드
 	@PostMapping("/mypage/myportfolio/upload")
 	public String uploadPortfolio(@RequestParam("file") MultipartFile file,
-			@RequestParam("portfolioName") String portfolioName, @SessionAttribute("userId") int userId)
-			throws IOException {
-		User user = new User();
-		user.setUserId(userId);
-		Integer repId = userService.getRepPortfolio(userId);
-		userService.createPortfolio(file, portfolioName, user);
-		if (repId == null) {
-			int portId = userService.getPortfolioById(userId);
-			userService.setFirstRepPortfolio(userId, portId);
+			@RequestParam("portfolioName") String portfolioName, @SessionAttribute("userId") int userId,
+			RedirectAttributes redirectAttributes) throws IOException {
+		// 파일이 비어있는지 체크
+		if (file.isEmpty()) {
+			redirectAttributes.addFlashAttribute("errorMessage", "파일을 선택해 주세요.");
+			return "redirect:/mypage/myportfolio";
+		}
+
+		try {
+			User user = new User();
+			user.setUserId(userId);
+			Integer repId = userService.getRepPortfolio(userId);
+			userService.createPortfolio(file, portfolioName, user);
+
+			if (repId == null) {
+				int portId = userService.getPortfolioById(userId);
+				userService.setFirstRepPortfolio(userId, portId);
+			}
+			redirectAttributes.addFlashAttribute("successMessage", "포트폴리오가 성공적으로 업로드되었습니다.");
+		} catch (IOException e) {
+			redirectAttributes.addFlashAttribute("errorMessage", "파일 업로드에 실패했습니다. 다시 시도해 주세요.");
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("errorMessage", "업로드 중 오류가 발생했습니다.");
 		}
 		return "redirect:/mypage/myportfolio";
 	}
@@ -261,17 +276,31 @@ public class UserController {
 
 	// 대표 이력서 설정
 	@PostMapping("/mypage/myportfolio/{portfolioId}/rep")
-	public String setRepPortfolio(@PathVariable int portfolioId, @SessionAttribute("userId") int userId, Model model) {
-		Integer pofId = userService.getRepPortfolio(userId);
-		Portfolio portfolio = userService.getPortfolio(portfolioId);
-		model.addAttribute("portfolio", portfolio);
-		// 대표 이력서라면
-		// 나중에 알람 설정
-		if (pofId != null && pofId == portfolioId) {
-			return "/pages/mypage/mypage-myportfolio-detail";
+	public String setRepPortfolio(@PathVariable int portfolioId, @SessionAttribute("userId") int userId, Model model,
+			RedirectAttributes redirectAttributes) {
+		try {
+			Integer pofId = userService.getRepPortfolio(userId);
+			Portfolio portfolio = userService.getPortfolio(portfolioId);
+
+			if (portfolio == null) {
+				return "redirect:/mypage/myportfolio?error=notfound";
+			}
+
+			if (portfolio.getUserId().getUserId() != userId) {
+				return "redirect:/mypage/myportfolio?error=아이디가 일치하지 않습니다.";
+			}
+
+			if (pofId != null && pofId.equals(portfolioId)) {
+				redirectAttributes.addFlashAttribute("alertMessage", "이미 대표 이력서입니다.");
+				return "redirect:/mypage/myportfolio/" + portfolioId;
+			}
+
+			model.addAttribute("portfolio", portfolio);
+			// 대표 이력서로 설정
+			userService.setRepPortfolio(userId, portfolioId);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		// 대표 이력서로 설정
-		userService.setRepPortfolio(userId, portfolioId);
 		return "redirect:/mypage/myportfolio";
 	}
 
@@ -279,19 +308,22 @@ public class UserController {
 	@PostMapping("/mypage/myportfolio/{portfolioId}/delete")
 	public String deletePortfolio(@PathVariable int portfolioId, @SessionAttribute("userId") int userId,
 			RedirectAttributes redirectAttributes) {
-		Integer pofId = userService.getRepPortfolio(userId);
-		// 나중에 ajax 처리
-		if (pofId != null && pofId == portfolioId) {
-			redirectAttributes.addFlashAttribute("errorMessage", "대표 이력서는 삭제할 수 없습니다.");
-			return "redirect:/mypage/myportfolio/" + portfolioId;
+		try {
+			Integer pofId = userService.getRepPortfolio(userId);
+			// 나중에 ajax 처리
+			if (pofId != null && pofId == portfolioId) {
+				redirectAttributes.addFlashAttribute("errorMessage", "대표 이력서는 삭제할 수 없습니다.");
+				return "redirect:/mypage/myportfolio/" + portfolioId;
+			}
+			
+			// 대표 이력서가 아니라면 삭제
+			userService.deletePortfolio(portfolioId);
+			redirectAttributes.addFlashAttribute("successMessage", "이력서가 삭제되었습니다.");
+		}catch (Exception e) {
+			e.printStackTrace();
 		}
-
-		// 대표 이력서가 아니라면 삭제
-		userService.deletePortfolio(portfolioId);
-		redirectAttributes.addFlashAttribute("successMessage", "이력서가 삭제되었습니다.");
 		return "redirect:/mypage/myportfolio";
 	}
-
 
 	// 유저의 프로필을 업로드하는 메소드입니다.
 	@PostMapping("/mypage/profile")
@@ -303,7 +335,7 @@ public class UserController {
 			// 로그인 안 된 상태면 로그인 페이지로
 			return "redirect:/login";
 		}
-		
+
 		int userId = (int) session.getAttribute("userId");
 
 		userService.updateProfile(file, userId);
@@ -311,21 +343,23 @@ public class UserController {
 		return "redirect:/mypage";
 
 	}
-	
-	
-	
+
 	// 다른 유저 페이지
 	@GetMapping("/userpage/{userId}")
 	public String userPage(@PathVariable int userId, Model model) {
-		User userData = userService.getUserInformation(userId);
-		Integer repPortId = userService.getRepPortfolio(userId);
-		Portfolio portfolio = null; 
-	    if (repPortId != null) {
-	        portfolio = userService.getPortfolio(repPortId);
-	    }
-	    
-		model.addAttribute("portfolio", portfolio);
-		model.addAttribute("userData", userData);
+		try {
+			User userData = userService.getUserInformation(userId);
+			Integer repPortId = userService.getRepPortfolio(userId);
+			Portfolio portfolio = null;
+			if (repPortId != null) {
+				portfolio = userService.getPortfolio(repPortId);
+			}
+			
+			model.addAttribute("portfolio", portfolio);
+			model.addAttribute("userData", userData);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "pages/mypage/userpage";
 	}
 

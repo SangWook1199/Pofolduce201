@@ -42,5 +42,10 @@ public class StudyBoardCommentService {
 	public void deleteStudyComment(int commentId) {
 		studyBoardCommentMapper.deleteStudyComment(commentId);
 	}
+	
+	// 댓글 작성자를 구하는 메서드입니다.
+	public int getStudyCommentUserId(int commentId) {
+		return studyBoardCommentMapper.getStudyCommentUserId(commentId);
+	}
 
 }

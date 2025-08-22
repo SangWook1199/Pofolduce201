@@ -29,22 +29,35 @@
 	</insert>
 
 	<select id="getPostOrderByViewCount" resultMap="studyBoardMap">
-		SELECT b.*,
+		SELECT
+		b.study_id, b.title,
+		b.view_count, b.post_html, b.post_date,
+		b.like_count, b.address, b.user_id,
 		u.user_id, u.nickname, u.email
-		FROM study_post b
+		FROM
+		study_post b
 		JOIN users u ON
 		b.user_id = u.user_id
-		ORDER BY b.view_count DESC
+		ORDER BY b.view_count
+		DESC
 	</select>
 
 	<select id="getPostsByPage" resultMap="studyBoardMap">
-		SELECT b.*, u.user_id,
+		SELECT
+		b.study_id, b.title,
+		b.view_count, b.post_html, b.post_date,
+		b.like_count, b.address,
+		b.user_id, u.user_id,
 		u.nickname, u.email
-		FROM study_post b
-		JOIN users u ON b.user_id =
+		FROM
+		study_post b
+		JOIN users u
+		ON b.user_id =
 		u.user_id
-		ORDER BY b.post_date DESC
-		LIMIT #{size} OFFSET #{offset}
+		ORDER BY b.post_date
+		DESC
+		LIMIT #{size} OFFSET
+		#{offset}
 	</select>
 
 	<select id="countPosts" resultType="int">
@@ -54,9 +67,13 @@
 
 	<select id="getPostById" parameterType="int"
 		resultMap="studyBoardMap">
-		SELECT b.*, u.user_id, u.nickname, u.email
+		SELECT b.study_id, b.title,
+		b.view_count, b.post_html,
+		b.post_date, b.like_count, b.address, b.user_id, u.user_id,
+		u.nickname, u.email
 		FROM study_post b
-		JOIN users u ON b.user_id = u.user_id
+		JOIN users u ON b.user_id =
+		u.user_id
 		WHERE b.study_id = #{studyId}
 	</select>
 
@@ -116,4 +133,8 @@
 		WHERE study_id = #{studyId}
 	</select>
 
+	<select id="getStudyPostUserId" resultType="int">
+		SELECT user_id FROM
+		study_post WHERE study_id = #{studyId}
+	</select>
 </mapper>

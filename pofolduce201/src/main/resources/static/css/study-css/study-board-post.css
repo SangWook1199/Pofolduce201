@@ -13,18 +13,15 @@
 	padding-top: 20px;
 	padding-left: 30px;
 	padding-bottom: 15px;
-	margin-bottom: 30px;
 }
 
 .profile {
 	width: 45px;
 	height: 45px;
-	float: left;
-	margin-right: 10px;
+	border-radius: 50%;
 }
 
 .title-area p {
-	margin: 0px;
 	font-size: 20px;
 }
 
@@ -37,37 +34,31 @@
 	margin-bottom: 20px;
 }
 
-.profile-right {
-	float: right;
-	width: 30px;
-	height: 30px;
-}
-
 .board-title {
 	margin-bottom: 30px;
 }
 
 .content-area {
 	padding-left: 30px;
-	border-bottom: 1px solid;
+	border-bottom: 1px solid #dee2e6;
+	margin-bottom: 20px;
 }
-/* 일단 margin-bottom 주는 데 나중에 지도와 좋아요 추가 */
+
 .board-content {
 	font-size: 25px;
 	margin-bottom: 80px;
 }
 
-#map {
-	margin: auto;
+.map-container {
+	width: 100%;
+	height: 300px;
 	border-radius: 20px;
-	margin-bottom: 50px;
+	margin: 0 auto 50px auto;
 }
 
 .map-title {
 	color: #C9CACA;
 	font-size: 25px;
-	border-bottom: 1px solid #C9CACA;
-	text-align: center;
 	width: 120px;
 	margin: auto;
 	margin-bottom: 20px;
@@ -75,6 +66,17 @@
 
 .like-button {
 	margin-bottom: 40px;
+	background-color: #FF4473;
+	color: #ffff;
+	border-color: #FF4473;
+}
+
+.like-button:hover, .like-button:disabled {
+	box-shadow: none;
+	background-color: #FF4473;
+	border-color: #FF4473; /* 클릭 시 테두리색 변화 방지 */
+	color: #ffff;
+	opacity: 1;
 }
 
 .comment-area {
@@ -82,31 +84,31 @@
 }
 
 #list-button {
-	margin: 10px 0px 10px 0px;
+	margin: 10px 0;
 }
 
 .report-img {
 	width: 25px;
 	height: 25px;
 }
+
 .report-content {
 	resize: none;
 }
 
 .comment-title {
 	margin: 0;
-	line-height: 1; /* 글자 높이에 맞춤 */
+	line-height: 1;
 	font-weight: bold;
 	font-size: 25px;
 	display: inline-block;
-	border-bottom: 3px solid #ff4473; /* 하단만 핑크 밑줄 */
+	border-bottom: 3px solid #ff4473;
 	white-space: nowrap;
 	margin-bottom: 20px;
 }
 
-#comment-content {
+.comment-content {
 	resize: none;
-	width: 970px;
 	height: 100px;
 	border-radius: 20px;
 }
@@ -128,45 +130,34 @@
 
 .comment-line {
 	border: none;
+	color:none;
 	border-top: 1px solid #DEE2E6;
 	margin-top: 10px;
 	margin-bottom: 10px;
+	opacity:0.1;
 }
 
 .all-userName:hover {
 	cursor: pointer;
 }
-.like-button {
-	background-color: #FF4473;
-	color: #ffff;
-}
-
-.like-button:hover, .like-button:disabled {
-	box-shadow: none; 
-	background-color: #FF4473; 
-	border-color: #FF4473; /* 클릭 시 테두리색 변화 방지 */
-	color: #ffff; 
-	opacity: 1; 
-}
 /* 페이지네이션 전체 글자 색 */
 .pagination .page-link {
-	color: #6C757D; /* 기본 글자색 */
-	background-color: #ffffff; /* 기본 배경색 */
-	border-color: #E9ECEF; /* 테두리 색 */
+	color: #6C757D;
+	background-color: #ffffff;
+	border-color: #E9ECEF;
 }
 
 /* 활성 페이지 */
 .pagination .page-item.active .page-link {
-	color: #ffffff; /* 활성 글자색 */
-	background-color: #FF4473; /* 활성 배경색 */
-	border-color: #ff5733; /* 테두리 색 */
+	color: #ffffff;
+	background-color: #FF4473;
+	border-color: #ff5733;
 }
 
 /* 비활성화된 이전/다음 버튼 */
 .pagination .page-item.disabled .page-link {
-	color: #ADB5BD; /* 비활성 글자색 */
+	color: #ADB5BD;
 	pointer-events: none;
-	background-color: #ffffff; /* 비활성 배경색 */
+	background-color: #ffffff;
 	border-color: #E9ECEF;
-	margin-bottom: 40px
 }

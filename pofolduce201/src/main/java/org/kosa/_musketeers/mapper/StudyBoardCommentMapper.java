@@ -18,6 +18,8 @@ public interface StudyBoardCommentMapper {
 
 	int countStudyComments(int studyId);
 
+	int getStudyCommentUserId(int commentId);
+
 
 
 }
