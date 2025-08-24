@@ -130,7 +130,7 @@
 		resultMap="reviewBoardMap">
 		SELECT b.review_post_id, b.title, b.view_count, b.post_html,
 		b.create_date,
-		b.like_count, b.portfolio_id, u.user_id, u.nickname,
+		b.like_count, b.portfolio_html, u.user_id, u.nickname,
 		u.email FROM
 		review_post b
 		JOIN users u ON b.user_id = u.user_id
