@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.kosa._musketeers.mapper.ReviewMapper">
+	<insert id="insertReview"
+		parameterType="org.kosa._musketeers.domain.Review">
+		INSERT INTO review(review_location_x, review_location_y, review_contents, review_post_id, user_id)
+		values(#{reviewLocationX}, #{reviewLocationY}, #{reviewContents}, #{reviewPost.reviewPostId}, #{user.userId})
+	</insert>
+	<select id="selectAllReviews" resultMap="selectAllReviewsResultMap">
+		SELECT review_id, review_location_x, review_location_y, review_contents, review_date, like_count, review_post.review_post_id, user.user_id   
+		FROM review
+	</select>
+	
+	<resultMap type="org.kosa._musketeers.domain.Review" id="selectAllReviewsResultMap">
+		<result column="review_post_id" property="reviewPost.reviewPostId"></result>
+		<result column="user_id" property="user.userId"></result>
+	</resultMap>
+</mapper>

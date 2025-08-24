@@ -36,7 +36,8 @@
 						</div>
 					</div>
 				</div>
-				<div class="pt-3 border-top border-1 mt">
+				<div class="pt-3 border-top border-1 mt position-relative"
+					id="portfolio-div">
 					<p th:utext="${reviewPost.portfolioHtml}"></p>
 				</div>
 				<div class="pt-3 border-top border-1 mt">
@@ -106,8 +107,108 @@
 				</div>
 			</div>
 		</div>
+		<div id="data-container" th:data-post-id="${reviewPost.reviewPostId}">
+		</div>
 	</div>
+	<th:block layout:fragment="script">
 	<script>
+		let startX = 0;
+		let startY = 0;
+
+		function createReviewForm(event) {
+			// 드래그는 제외하고, 일반 클릭일 때만 review-div를 생성한다
+			if (Math.abs(startX - event.clientX)
+					+ Math.abs(startY - event.clientY) >= 100) {
+				return;
+			}
+			// review-div가 이미 존재할 때, review-div 밖을 클릭하면 review-div가 사라진다
+			// review-div가 이미 존재한다면, 아무 작업도 하지 않고 함수 즉시 종료.
+			if (document.querySelector('.review-div')) {
+				return;
+			}
+			const portfolioDiv = document.querySelector("#portfolio-div");
+
+			const rect = portfolioDiv.getBoundingClientRect();
+			const x = event.clientX - rect.left;
+			const y = event.clientY - rect.top;
+
+			const reviewDiv = document.createElement("div");
+			reviewDiv.className = "card p-2 text-center bg-light review-div";
+			reviewDiv.style.position = "absolute";
+			reviewDiv.style.zIndex = "9999";
+			reviewDiv.style.left = x + "px";
+			reviewDiv.style.top = y + "px";
+
+			//review form 
+			const reviewForm = document.createElement('form');
+			reviewForm.setAttribute('id', 'review-form');
+			reviewDiv.appendChild(reviewForm);
+
+			//review input hidden reviewLocationX, reviewLocationY
+			const reviewLocationX = document.createElement("input");
+			reviewLocationX.setAttribute('type', 'hidden');
+			reviewLocationX.setAttribute('value', parseInt(reviewDiv.style.left, 10));
+			reviewLocationX.setAttribute('name', 'reviewLocationX');
+			reviewForm.appendChild(reviewLocationX);
+
+			const reviewLocationY = document.createElement("input");
+			reviewLocationY.setAttribute('type', 'hidden');
+			reviewLocationY.setAttribute('value', parseInt(reviewDiv.style.top, 10));
+			reviewLocationY.setAttribute('name', 'reviewLocationY');
+			reviewForm.appendChild(reviewLocationY);
+
+			//review input text reviewContents
+			const reviewText = document.createElement("textarea");
+			reviewText.setAttribute('class', 'form-control');
+			reviewText.setAttribute('name', 'reviewContents');
+			reviewForm.appendChild(reviewText);
+
+			//review input hidden reviewPostId
+			const reviewPostId = document.createElement("input");
+			reviewPostId.setAttribute('type', 'hidden');
+			reviewPostId.setAttribute('value', document
+					.getElementById('data-container').dataset.postId);
+			reviewPostId.setAttribute('name', 'reviewPost.reviewPostId');
+			reviewForm.appendChild(reviewPostId);
+
+			//review submit button
+			const reviewSubmitButton = document.createElement("button");
+			reviewSubmitButton.setAttribute('class', 'btn btn-primary m-2');
+			reviewSubmitButton.setAttribute('type', 'submit');
+			reviewSubmitButton.textContent = "작성";
+			reviewForm.appendChild(reviewSubmitButton);
+
+			// reviewForm에서 submit시, fetch를 통한 post
+			reviewForm.addEventListener('submit', async function(event){
+				event.preventDefault();
+				
+	 			const formData = new FormData(reviewForm);
+				try{
+					const response = await fetch('/review',{
+						method: 'post',
+						body: formData,
+					});
+					if(!response.ok){
+						throw new Error(`HTTP error status: ${response.status}`);
+					}
+				} catch (error){
+					console.error("Fetch Error:", error);
+				}
+				
+				console.log("submit event handler");
+			})
+			
+			portfolioDiv.appendChild(reviewDiv);
+		}
+
+		document.querySelector("#portfolio-div").addEventListener('mousedown',
+				function(event) {
+					startX = event.clientX;
+					startY = event.clientY;
+				});
+		document.querySelector("#portfolio-div").addEventListener('mouseup',
+				createReviewForm)
+		//댓글 수정
 		document
 				.addEventListener(
 						'DOMContentLoaded',
@@ -120,11 +221,11 @@
 											: "none";
 								}
 							}
-
 							function confirmDelete() {
 								return confirm('정말 삭제하시겠습니까?');
 							}
 						});
 	</script>
+	</th:block>
 </body>
 </html>
