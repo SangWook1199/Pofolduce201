@@ -42,7 +42,7 @@ public class HomeController {
 		// 데이터가 있다면 db에서 데이터를 가져옵니다.
 		List<Map<String, String>> recruitList = recruitService.getRecruit(2,4);
 		if (recruitList.isEmpty()) {
-			recruitService.createRecruit(1);
+			recruitService.createRecruit(10);
 			recruitList = recruitService.getRecruit(2,4);
 
 		}

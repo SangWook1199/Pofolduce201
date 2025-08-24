@@ -33,7 +33,7 @@ public class RecruitController {
 		// 크롤링한 데이터가 없다면 크롤링을 실행합니다.
 		List<Map<String, String>> recruitList = recruitService.getRecruit(page, size);
 		if (recruitList.isEmpty()) {
-			recruitService.createRecruit(1);
+			recruitService.createRecruit(7);
 			recruitList = recruitService.getRecruit(page, size);
 
 		}

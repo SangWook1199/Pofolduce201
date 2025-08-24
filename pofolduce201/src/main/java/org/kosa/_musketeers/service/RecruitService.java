@@ -88,12 +88,12 @@ public class RecruitService {
 					// "합격보상 100만원" 들어간 줄 통째로 제거
 					text = text.replaceAll(".*합격보상 100만원.*(\\r?\\n)?", "");
 					String[] lines = text.split("\n");
-					System.out.println("회사: " + lines[0]);
-					System.out.println("직종: " + lines[1]);
-					System.out.println("조건: " + lines[2]);
-					System.out.println("링크: " + link);
-					System.out.println("이미지: " + imgUrl);
-					System.out.println("-----");
+//					System.out.println("회사: " + lines[0]);
+//					System.out.println("직종: " + lines[1]);
+//					System.out.println("조건: " + lines[2]);
+//					System.out.println("링크: " + link);
+//					System.out.println("이미지: " + imgUrl);
+//					System.out.println("-----");
 
 					recruitMapper.saveRecruit(lines[0], lines[1], lines[2], link, imgUrl);
 
