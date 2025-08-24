@@ -20,8 +20,8 @@ public class ReviewService {
 		reviewMapper.insertReview(review);
 	}
 
-	public List<Review> findAllReviews() {
-		return reviewMapper.selectAllReviews();
+	public List<Review> findReviewsByReviewPostId(int reviewPostId) {
+		return reviewMapper.selectReviewsByReviewPostId(reviewPostId);
 	}
 
 }

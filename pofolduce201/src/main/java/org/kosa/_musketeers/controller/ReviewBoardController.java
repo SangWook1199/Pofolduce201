@@ -29,7 +29,7 @@ public class ReviewBoardController {
 		this.userService = userService;
 	}
 
-	@GetMapping("/review")
+	@GetMapping("/review-post")
 	public String review(@RequestParam(defaultValue = "1") int page, Model model) {
 		
 		int pagePostCount = 15;

@@ -111,7 +111,7 @@
 		</div>
 	</div>
 	<th:block layout:fragment="script">
-	<script>
+		<script>
 		let startX = 0;
 		let startY = 0;
 
@@ -132,28 +132,28 @@
 			const x = event.clientX - rect.left;
 			const y = event.clientY - rect.top;
 
-			const reviewDiv = document.createElement("div");
-			reviewDiv.className = "card p-2 text-center bg-light review-div";
-			reviewDiv.style.position = "absolute";
-			reviewDiv.style.zIndex = "9999";
-			reviewDiv.style.left = x + "px";
-			reviewDiv.style.top = y + "px";
+			const newReviewDiv = document.createElement("div");
+			newReviewDiv.className = "card p-2 text-center bg-light review-div";
+			newReviewDiv.style.position = "absolute";
+			newReviewDiv.style.zIndex = "9999";
+			newReviewDiv.style.left = x + "px";
+			newReviewDiv.style.top = y + "px";
 
 			//review form 
 			const reviewForm = document.createElement('form');
 			reviewForm.setAttribute('id', 'review-form');
-			reviewDiv.appendChild(reviewForm);
+			newReviewDiv.appendChild(reviewForm);
 
 			//review input hidden reviewLocationX, reviewLocationY
 			const reviewLocationX = document.createElement("input");
 			reviewLocationX.setAttribute('type', 'hidden');
-			reviewLocationX.setAttribute('value', parseInt(reviewDiv.style.left, 10));
+			reviewLocationX.setAttribute('value', parseInt(newReviewDiv.style.left, 10));
 			reviewLocationX.setAttribute('name', 'reviewLocationX');
 			reviewForm.appendChild(reviewLocationX);
 
 			const reviewLocationY = document.createElement("input");
 			reviewLocationY.setAttribute('type', 'hidden');
-			reviewLocationY.setAttribute('value', parseInt(reviewDiv.style.top, 10));
+			reviewLocationY.setAttribute('value', parseInt(newReviewDiv.style.top, 10));
 			reviewLocationY.setAttribute('name', 'reviewLocationY');
 			reviewForm.appendChild(reviewLocationY);
 
@@ -195,19 +195,62 @@
 					console.error("Fetch Error:", error);
 				}
 				
-				console.log("submit event handler");
+				const reviews = await loadReviews(document
+						.getElementById('data-container').dataset.postId);
+				for(const review of reviews){
+					const reviewDiv = document.createElement('div');
+					reviewDiv.className = "card p-2 text-center bg-light review";
+					reviewDiv.style.position = "absolute";
+					reviewDiv.style.zIndex = "9999";
+					reviewDiv.style.left = review.reviewLocationX + "px";
+					reviewDiv.style.top = review.reviewLocationY + "px";
+					reviewDiv.textContent = review.reviewContents;
+					document.getElementById('portfolio-div').appendChild(reviewDiv);
+				}
+				portfolioDiv.removeChild(newReviewDiv);
 			})
-			
-			portfolioDiv.appendChild(reviewDiv);
+		
+			portfolioDiv.appendChild(newReviewDiv);
 		}
-
+		
+		async function loadReviews(reviewPostId){
+			let reviewList = null;
+			try{
+				response = await fetch(`/review/${reviewPostId}`);
+				if(!response.ok){
+					const errorData = await response.json();
+					throw new Error(errorData.message);
+				}
+				reviewList = await response.json();
+			} catch(error){
+				console.error("Fetch Error:", error);
+			}
+			console.log("reviewList");
+			return reviewList;
+		}
+		//dom 생성 후 리뷰 로드
+		document.addEventListener('DOMContentLoaded', async function(){
+			const reviews = await loadReviews(document
+						.getElementById('data-container').dataset.postId);
+			for(const review of reviews){
+				const reviewDiv = document.createElement('div');
+				reviewDiv.className = "card p-2 text-center bg-light review";
+				reviewDiv.style.position = "absolute";
+				reviewDiv.style.zIndex = "9999";
+				reviewDiv.style.left = review.reviewLocationX + "px";
+				reviewDiv.style.top = review.reviewLocationY + "px";
+				reviewDiv.textContent = review.reviewContents;
+				document.getElementById('portfolio-div').appendChild(reviewDiv);
+			}
+		})
 		document.querySelector("#portfolio-div").addEventListener('mousedown',
 				function(event) {
 					startX = event.clientX;
 					startY = event.clientY;
 				});
 		document.querySelector("#portfolio-div").addEventListener('mouseup',
-				createReviewForm)
+				createReviewForm);
+		
 		//댓글 수정
 		document
 				.addEventListener(
