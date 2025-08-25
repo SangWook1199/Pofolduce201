@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.kosa._musketeers.mapper.RecruitMapper">
+	<insert id="saveRecruit">
+		insert into recruit( company, content, job, link,
+		imgLink) values (
+		#{company}, #{content}, #{job}, #{link}, #{imgLink})
+
+	</insert>
+
+	<select id="getRecruit">
+		select company, content, job, link, imgLink, date
+		from recruit
+
+	</select>
+	<select id="findRecruitByLink" resultType="int">
+		select count(*) from
+		recruit
+		where link = #{link}
+	</select>
+
+	<select id="getAllRecruit">
+		select count(*) from recruit
+	</select>
+
+</mapper>

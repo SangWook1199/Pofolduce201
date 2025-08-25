@@ -6,18 +6,111 @@
 
 <link th:href="@{/css/board-header.css}" rel="stylesheet">
 
-<link rel="stylesheet" th:href="@{/css/page-css/home.css}" />
+<link rel="stylesheet" th:href="@{/css/page-css/recruit.css}" />
 
 <title>포폴듀스201 채용공고</title>
 </head>
 
 <div layout:fragment="content">
+	<div class="recruit">
+		<div class="container-fluid px-0">
 
-	<div>채용공고 홈입니다.</div>
+
+			<div class="row">
+				<div class="col" id="main-board-header">
+
+					<div
+						th:replace="fragments/html/board-header :: board-header('오늘의 채용 공고')"></div>
+				</div>
+
+				<!-- 메인 캐러셀 -->
+				<div id="main-container">
+					<div id="carouselExampleControls" class="carousel slide"
+						data-bs-ride="carousel">
+						<div class="portfolio">
+							<div class="carousel-inner">
+									<div id="today-box" th:each="chunk, stat : ${recruitChunks}"
+										th:classappend="${stat.index == 0} ? 'carousel-item active' : 'carousel-item'">
+										<div class="justify-content-center gap-4" id="box">
+											<div th:each="recruit : ${chunk}" class="recruit-box">
+												<a th:href="${recruit.link}" target="_blank"
+													style="all: unset;"> <img th:src="${recruit.imgLink}"
+													class="recruit-img">
+													<div class="recruit-box-text">
+														<h3 th:text="${recruit.company}" class="recruit-text"></h3>
+														<h4 th:text="${recruit.content}" class="recruit-text"></h4>
+													</div>
+												</a>
+											</div>
+										</div>
+									</div>
+							</div>
+						</div>
+						<button class="carousel-control-prev" type="button"
+							data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+							<img th:src="@{/svg/left.svg}" id="left-button"> <span
+								class="visually-hidden">Previous</span>
+						</button>
+						<button class="carousel-control-next" type="button"
+							data-bs-target="#carouselExampleControls" data-bs-slide="next">
+							<img th:src="@{/svg/right.svg}" id="right-button"> <span
+								class="visually-hidden">Next</span>
+						</button>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="col" id="main-board-header">
+
+				<div
+					th:replace="fragments/html/board-header :: board-header('공고 목록')"></div>
+			</div>
+		</div>
+		<div id="recruit-container">
+			<div class="recruit-box" th:each="recruit : ${recruitList}">
+				<a th:href="${recruit.link}" target="_blank" style="all: unset;">
+					<img th:src="${recruit.imgLink}" class="recruit-img">
+					<div class="recruit-box-text">
+						<h3 th:text="${recruit.company}" class="recruit-text"></h3>
+						<h4 th:text="${recruit.content}" class="recruit-text"></h4>
+					</div>
+				</a>
+			</div>
+		</div>
+
+		<nav th:if="${not #lists.isEmpty(recruitList)}"
+			aria-label="Page navigation example">
+			<ul class="pagination justify-content-center">
+
+				<!-- 이전 페이지 -->
+				<li class="page-item"
+					th:classappend="${currentPage == 1} ? 'disabled'"><a
+					class="page-link"
+					th:href="@{/recruit(page=${currentPage - 1}, size=${size})}"
+					tabindex="-1" aria-disabled="true">Previous</a></li>
+
+				<!-- 페이지 번호 반복 -->
+				<li class="page-item"
+					th:each="i : ${#numbers.sequence(1, totalPages)}"
+					th:classappend="${i == currentPage} ? 'active'"><a
+					class="page-link" th:href="@{/recruit(page=${i}, size=${size})}"
+					th:text="${i}">1</a></li>
+
+				<!-- 다음 페이지 -->
+				<li class="page-item"
+					th:classappend="${currentPage == totalPages} ? 'disabled'"><a
+					class="page-link"
+					th:href="@{/recruit(page=${currentPage + 1}, size=${size})}">Next</a>
+				</li>
+			</ul>
+		</nav>
+	</div>
+
 </div>
+
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<div layout:fragment="script">
-</div>
+<div layout:fragment="script"></div>
 </html>
