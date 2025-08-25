@@ -97,4 +97,12 @@ public class StudyBoardService {
 		studyBoardMapper.addViewCount(studyId);
 	}
 
+	public List<String> getAllAddresses() {
+	    return studyBoardMapper.getAllAddresses();
+	}
+
+	public List<StudyBoard> getAllPosts() {
+		return studyBoardMapper.getAllPosts();
+	}
+
 }

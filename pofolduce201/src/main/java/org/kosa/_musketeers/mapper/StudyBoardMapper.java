@@ -33,4 +33,8 @@ public interface StudyBoardMapper {
 
 	void addViewCount(int studyId);
 
+	List<String> getAllAddresses();
+
+	List<StudyBoard> getAllPosts();
+
 }

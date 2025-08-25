@@ -77,6 +77,12 @@
 		WHERE b.study_id = #{studyId}
 	</select>
 
+	<select id="getAllAddresses" resultType="string">
+		SELECT address
+		FROM
+		study_post
+	</select>
+
 	<update id="updatePost"
 		parameterType="org.kosa._musketeers.domain.StudyBoard">
 		UPDATE study_post
@@ -139,8 +145,13 @@
 	</select>
 
 	<update id="addViewCount" parameterType="int">
-		UPDATE study_post SET view_count = view_count + 1
+		UPDATE study_post SET
+		view_count = view_count + 1
 		WHERE
 		study_id = #{studyId}
 	</update>
+	<select id="getAllPosts" resultMap="studyBoardMap">
+		SELECT study_id, title,
+		address FROM study_post
+	</select>
 </mapper>

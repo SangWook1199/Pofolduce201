@@ -1,6 +1,8 @@
 package org.kosa._musketeers.controller;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -35,44 +38,60 @@ public class StudyBoardController {
 	@GetMapping("/study")
 	public String studyBoard(@SessionAttribute(name = "userId", required = false) Integer userId,
 			@RequestParam(defaultValue = "1") int page, Model model) {
-		try {
-			// 상위 3개 조회수
-			Map<String, StudyBoard> top3Map = studyBoardService.getTop3ByViewCount();
-			model.addAttribute("first", top3Map.get("first"));
-			model.addAttribute("second", top3Map.get("second"));
-			model.addAttribute("third", top3Map.get("third"));
-
-			// 페이지네이션 적용 (17개)
-			int pageSize = 17;
-			List<StudyBoard> posts = studyBoardService.getPostsByPage(page, pageSize);
-			model.addAttribute("dateList", posts);
-
-			// 페이지 번호 계산
-			int totalPosts = studyBoardService.countPosts();
-			int totalPages = 0;
-
-			// 총 게시글 수가 3개 초과일 때만 페이지네이션을 계산
-			if (totalPosts > 0) {
-				totalPages = (int) Math.ceil((double) totalPosts / pageSize);
-			}
-
-			// 5페이지 단위로 나눠서 표시
-			int startPage = ((page - 1) / 5) * 5 + 1;
-			int endPage = Math.min(startPage + 4, totalPages);
-
-			model.addAttribute("currentPage", page);
-			model.addAttribute("startPage", startPage);
-			model.addAttribute("endPage", endPage);
-			model.addAttribute("totalPages", totalPages);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		if (userId == null) {
 			return "redirect:/not-logined?msg=login_required";
 		}
+
+		// 상위 3개 조회수
+		Map<String, StudyBoard> top3Map = studyBoardService.getTop3ByViewCount();
+		model.addAttribute("first", top3Map.get("first"));
+		model.addAttribute("second", top3Map.get("second"));
+		model.addAttribute("third", top3Map.get("third"));
+
+		// 페이지네이션 적용 (17개)
+		int pageSize = 17;
+		List<StudyBoard> posts = studyBoardService.getPostsByPage(page, pageSize);
+		model.addAttribute("dateList", posts);
+
+		// 페이지 번호 계산
+		int totalPosts = studyBoardService.countPosts();
+		int totalPages = 0;
+
+		// 총 게시글 수가 3개 초과일 때만 페이지네이션을 계산
+		if (totalPosts > 0) {
+			totalPages = (int) Math.ceil((double) totalPosts / pageSize);
+		}
+
+		// 5페이지 단위로 나눠서 표시
+		int startPage = ((page - 1) / 5) * 5 + 1;
+		int endPage = Math.min(startPage + 4, totalPages);
+		
+		model.addAttribute("currentPage", page);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
+		model.addAttribute("totalPages", totalPages);
+
 		return "pages/study/study-board";
 	}
-
+	
+	// 지도
+	@GetMapping("/study/api/map")
+    @ResponseBody
+    public List<Map<String, Object>> getAllPostData() {
+        List<StudyBoard> allPosts = studyBoardService.getAllPosts(); // 모든 게시글 가져오는 서비스 메서드
+        List<Map<String, Object>> result = new ArrayList<>();
+        
+        for (StudyBoard post : allPosts) {
+            if (post.getAddress() != null && !post.getAddress().isEmpty()) {
+                Map<String, Object> postData = new HashMap<>();
+                postData.put("address", post.getAddress());
+                postData.put("studyId", post.getStudyId());
+                postData.put("title", post.getTitle());
+                result.add(postData);
+            }
+        }
+        return result;
+    }
 	// 스터디 게시글 상세 페이지
 	@GetMapping("/study/{studyId}")
 	public String studyBoardPost(@PathVariable int studyId, @RequestParam(defaultValue = "1") int page, Model model,
@@ -136,13 +155,13 @@ public class StudyBoardController {
 		if (userId == null) {
 			return "redirect:/not-logined?msg=login_required";
 		}
-		
+
 		int commentUserId = studyBoardCommentService.getStudyCommentUserId(commentId);
 		if (commentUserId != userId) {
 			redirectAttributes.addFlashAttribute("errorMessage", "댓글을 작성한 회원이 아닙니다.");
 			return "redirect:/study/" + studyId;
 		}
-		
+
 		StudyBoardComment comment = new StudyBoardComment();
 		comment.setCommentsId(commentId);
 		comment.setCommentsContents(content);
