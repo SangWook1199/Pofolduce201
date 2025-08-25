@@ -67,7 +67,7 @@ public class ReviewBoardController {
 		System.out.println(reviewPost);
 		System.out.println(reviewPost);
 		reviewBoardService.createPost(reviewPost);
-		return "redirect:/review";
+		return "redirect:/review-post";
 	}
 	
 	@GetMapping("/review/post/{reviewPostId}/edit")

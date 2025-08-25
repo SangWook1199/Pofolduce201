@@ -6,6 +6,7 @@ import org.kosa._musketeers.domain.Review;
 import org.kosa._musketeers.domain.User;
 import org.kosa._musketeers.service.ReviewService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,5 +34,11 @@ public class ReviewController {
 	@GetMapping("/review/{reviewPostId}")
 	public List<Review> getReview(@PathVariable int reviewPostId) {
 		return reviewService.findReviewsByReviewPostId(reviewPostId);
+	}
+	
+	@DeleteMapping("/review/{reviewId}")
+	public ResponseEntity<String> deleteReview(@PathVariable int reviewId){
+		reviewService.removeReview(reviewId);
+		return ResponseEntity.ok("리뷰가 성공적으로 삭제되었습니다.");
 	}
 }

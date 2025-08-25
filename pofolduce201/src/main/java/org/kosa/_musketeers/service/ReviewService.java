@@ -24,4 +24,8 @@ public class ReviewService {
 		return reviewMapper.selectReviewsByReviewPostId(reviewPostId);
 	}
 
+	public void removeReview(int reviewId) {
+		reviewMapper.deleteReview(reviewId);
+	}
+
 }
