@@ -100,7 +100,7 @@
 										<li class="page-item"
 											th:classappend="${studyCurrentPage == 1} ? 'disabled'"><a
 											class="page-link"
-											th:href="@{/search(search=${search},studyPage=${studyCurrentPage - 1}, studySize=${studySize})}"
+											th:href="@{/search/study(search=${search},studyPage=${studyCurrentPage - 1}, studySize=${studySize})}"
 											tabindex="-1" aria-disabled="true">Previous</a></li>
 
 										<!-- 페이지 번호 반복 -->
@@ -108,14 +108,14 @@
 											th:each="i : ${#numbers.sequence(1, studyTotalPages)}"
 											th:classappend="${i == studyCurrentPage} ? 'active'"><a
 											class="page-link"
-											th:href="@{/search(search=${search},studyPage=${i}, studySize=${studySize})}"
+											th:href="@{/search/study(search=${search},studyPage=${i}, studySize=${studySize})}"
 											th:text="${i}">1</a></li>
 
 										<!-- 다음 페이지 -->
 										<li class="page-item"
 											th:classappend="${studyCurrentPage == studyTotalPages} ? 'disabled'">
 											<a class="page-link"
-											th:href="@{/search(search=${search},studyPage=${studyCurrentPage + 1}, studySize=${studySize})}">Next</a>
+											th:href="@{/search/study(search=${search},studyPage=${studyCurrentPage + 1}, studySize=${studySize})}">Next</a>
 										</li>
 									</ul>
 								</nav>

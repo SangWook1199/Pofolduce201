@@ -79,16 +79,45 @@
 
 
 							<!-- 데이터가 없을 때 -->
-							<div class="nodata">
+							<div class="nodata" th:if="${#lists.isEmpty(recruitList)}">
 								<h3 class="non-data">검색 결과가 없습니다.</h3>
 							</div>
+
+
+
 						</div>
 
 
 					</div>
 				</div>
 
+				<nav th:if="${not #lists.isEmpty(recruitList)}"
+					aria-label="Page navigation example">
+					<ul class="pagination justify-content-center">
 
+						<!-- 이전 페이지 -->
+						<li class="page-item"
+							th:classappend="${recruitCurrentPage == 1} ? 'disabled'"><a
+							class="page-link"
+							th:href="@{/search/recruit(search=${search},recruitPage=${recruitCurrentPage - 1}, recruitSize=${recruitSize})}"
+							tabindex="-1" aria-disabled="true">Previous</a></li>
+
+						<!-- 페이지 번호 반복 -->
+						<li class="page-item"
+							th:each="i : ${#numbers.sequence(1, recruitTotalPages)}"
+							th:classappend="${i == recruitCurrentPage} ? 'active'"><a
+							class="page-link"
+							th:href="@{/search/recruit(search=${search},recruitPage=${i}, recruitSize=${recruitSize})}"
+							th:text="${i}">1</a></li>
+
+						<!-- 다음 페이지 -->
+						<li class="page-item"
+							th:classappend="${recruitCurrentPage == recruitTotalPages} ? 'disabled'">
+							<a class="page-link"
+							th:href="@{/search/recruit(search=${search},recruitPage=${recruitCurrentPage + 1}, recruitSize=${recruitSize})}">Next</a>
+						</li>
+					</ul>
+				</nav>
 
 			</div>
 

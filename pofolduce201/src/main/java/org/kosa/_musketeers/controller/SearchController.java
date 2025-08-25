@@ -1,5 +1,6 @@
 package org.kosa._musketeers.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,12 +26,23 @@ public class SearchController {
 	// 검색 컨트롤러 입니다.
 	@GetMapping("/search")
 	// RequestParam(해당 input의 name) 으로 검색어를 받아옵니다.
-	public String search(@RequestParam("search") String search, Model model, @RequestParam(defaultValue = "1") int reviewPage,
-			@RequestParam(defaultValue = "5") int reviewSize, @RequestParam(defaultValue = "1") int studyPage,
-			@RequestParam(defaultValue = "5") int studySize, @RequestParam(defaultValue = "1") int recruitPage,
-			@RequestParam(defaultValue = "20") int recruitSize) {
+	public String search(@RequestParam("search") String search, Model model,
+			@RequestParam(defaultValue = "1") int reviewPage, @RequestParam(defaultValue = "5") int reviewSize,
+			@RequestParam(defaultValue = "1") int studyPage, @RequestParam(defaultValue = "5") int studySize,
+			@RequestParam(defaultValue = "1") int recruitPage, @RequestParam(defaultValue = "8") int recruitSize) {
+
+		// 첨삭 게시글 검색 결과를 가져옵니다. 이미지를 띄워줍니다.
+		List<Map<String, Object>> reviewBoardList = userService.getReviewSearchResult(search, reviewPage, reviewSize);
 		
-		List<Map<String, Object>> reviewList = userService.getReviewSearchResult(search, reviewPage, reviewSize);
+		// 3개씩 잘라서 chunkList 만들기
+		List<List<Map<String, Object>>> reviewChunks = new ArrayList<>();
+		
+		int chunkSize = 3;
+		for (int i = 0; i < reviewBoardList.size(); i += chunkSize) {
+			int end = Math.min(i + chunkSize, reviewBoardList.size());
+			reviewChunks.add(reviewBoardList.subList(i, end));
+		}
+		
 		List<Map<String, Object>> studyList = userService.getStudySearchResult(search, studyPage, studySize);
 		List<Map<String, Object>> recruitList = userService.getRecruitSearchResult(search, recruitPage, recruitSize);
 
@@ -40,58 +52,53 @@ public class SearchController {
 		int studyTotalPages = (int) Math.ceil((double) studyTotalCount / studySize);
 		int recruitTotalCount = userService.countRecruitResult(search);
 		int recruitTotalPages = (int) Math.ceil((double) recruitTotalCount / recruitSize);
-		
+
 		model.addAttribute("search", search);
+
+		model.addAttribute("reviewList", reviewChunks);
+		// System.out.println(reviewList);
 		
-		model.addAttribute("reviewList", reviewList);
-		//System.out.println(reviewList);
-		model.addAttribute("reviewCurrentPage", reviewPage);
-		model.addAttribute("reviewTotalPages", reviewTotalPages);
-		model.addAttribute("reviewSize", reviewSize);
-		
+
 		model.addAttribute("studyList", studyList);
-		//System.out.println(studyList);
+		// System.out.println(studyList);
 		model.addAttribute("studyCurrentPage", studyPage);
 		model.addAttribute("studyTotalPages", studyTotalPages);
 		model.addAttribute("studySize", studySize);
-		
 
 		model.addAttribute("recruitList", recruitList);
-		model.addAttribute("studyCurrentPage", recruitPage);
+		model.addAttribute("recruitCurrentPage", recruitPage);
 		model.addAttribute("recruitTotalPages", recruitTotalPages);
 		model.addAttribute("recruitSize", recruitSize);
-		
-		
+
 		return "/pages/search/search";
 	}
-	
-	//첨삭 게시판 검색 결과 입니다.
+
+	// 첨삭 게시판 검색 결과 입니다.
 	@GetMapping("/search/review")
-	public String searchReview(@RequestParam("search") String search, Model model, @RequestParam(defaultValue = "1") int reviewPage,
-			@RequestParam(defaultValue = "20") int reviewSize) {
+	public String searchReview(@RequestParam("search") String search, Model model,
+			@RequestParam(defaultValue = "1") int reviewPage, @RequestParam(defaultValue = "20") int reviewSize) {
 		List<Map<String, Object>> reviewList = userService.getReviewSearchResult(search, reviewPage, reviewSize);
 		int reviewTotalCount = userService.countReviewResult(search);
 		int reviewTotalPages = (int) Math.ceil((double) reviewTotalCount / reviewSize);
-		
-		
+
 		model.addAttribute("search", search);
 		model.addAttribute("reviewList", reviewList);
 		model.addAttribute("reviewCurrentPage", reviewPage);
 		model.addAttribute("reviewTotalPages", reviewTotalPages);
 		model.addAttribute("reviewSize", reviewSize);
-		
+
 		return "/pages/search/search-review";
 	}
-	
-	//스터디 게시판 검색 결과 입니다.
+
+	// 스터디 게시판 검색 결과 입니다.
 	@GetMapping("/search/study")
-	public String searchStudy(@RequestParam("search") String search, Model model,  @RequestParam(defaultValue = "1") int studyPage,
-			@RequestParam(defaultValue = "20") int studySize) {
-		
+	public String searchStudy(@RequestParam("search") String search, Model model,
+			@RequestParam(defaultValue = "1") int studyPage, @RequestParam(defaultValue = "20") int studySize) {
+
 		List<Map<String, Object>> studyList = userService.getStudySearchResult(search, studyPage, studySize);
 		int studyTotalCount = userService.countStudyResult(search);
 		int studyTotalPages = (int) Math.ceil((double) studyTotalCount / studySize);
-		
+
 		model.addAttribute("search", search);
 		model.addAttribute("studyList", studyList);
 		model.addAttribute("studyCurrentPage", studyPage);
@@ -100,24 +107,24 @@ public class SearchController {
 
 		return "/pages/search/search-study";
 	}
-	
-	//채용 공고 검색 결과 입니다.
+
+	// 채용 공고 검색 결과 입니다.
 	@GetMapping("/search/recruit")
-	public String searchRecruit(@RequestParam("search") String search, Model model,  @RequestParam(defaultValue = "1") int recruitPage,
-			@RequestParam(defaultValue = "20") int recruitSize) {
-		
+	public String searchRecruit(@RequestParam("search") String search, Model model,
+			@RequestParam(defaultValue = "1") int recruitPage, @RequestParam(defaultValue = "20") int recruitSize) {
+
 		List<Map<String, Object>> recruitList = userService.getRecruitSearchResult(search, recruitPage, recruitSize);
-		
+
 		int recruitTotalCount = userService.countRecruitResult(search);
 		int recruitTotalPages = (int) Math.ceil((double) recruitTotalCount / recruitSize);
-		//System.out.println(recruitList);
-		
+		// System.out.println(recruitList);
+
 		model.addAttribute("search", search);
 		model.addAttribute("recruitList", recruitList);
-		model.addAttribute("studyCurrentPage", recruitPage);
+		model.addAttribute("recruitCurrentPage", recruitPage);
 		model.addAttribute("recruitTotalPages", recruitTotalPages);
 		model.addAttribute("recruitSize", recruitSize);
-		
+
 		return "/pages/search/search-recruit";
 	}
 

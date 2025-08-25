@@ -24,6 +24,7 @@
 		<result property="title" column="title" />
 		<result property="viewCount" column="view_count" />
 		<result property="postHtml" column="post_html" />
+		<result property="portfolioHtml" column="portfolio_html" />
 		<result property="createDate" column="create_date" />
 		<result property="likeCount" column="like_count" />
 		<association property="user"
