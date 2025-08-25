@@ -67,7 +67,7 @@ public class ReviewBoardController {
 		System.out.println(reviewPost);
 		System.out.println(reviewPost);
 		reviewBoardService.createPost(reviewPost);
-		return "redirect:/review";
+		return "redirect:/review-post";
 	}
 	
 	@GetMapping("/review/post/{reviewPostId}/edit")
@@ -83,13 +83,13 @@ public class ReviewBoardController {
 		reviewBoardService.editReviewPost(reviewPost);
 		System.out.println("******");
 		System.out.println(reviewBoardService.getReviewPostById(reviewPost.getReviewPostId()));
-		return "redirect:/review";
+		return "redirect:/review-post";
 	}
 	
 	@PostMapping("/review/post/{reviewPostId}/delete")
 	public String deleteReviewPost(@PathVariable int reviewPostId) {
 		reviewBoardService.deleteReviewPost(reviewPostId);
-		return "redirect:/review";
+		return "redirect:/review-post";
 	}
 	
 	@PostMapping("/review/comment")
