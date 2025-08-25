@@ -8,9 +8,13 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface RecruitMapper {
 
-	void saveRecruit(String title, String company, String content, String link, String imgLink);
+	void saveRecruit(String company, String content, String job, String link, String imgLink);
 
 	List<Map<String, String>> getRecruit();
+
+	int findRecruitByLink(String link);
+
+	int getAllRecruit();
 
 	
 
