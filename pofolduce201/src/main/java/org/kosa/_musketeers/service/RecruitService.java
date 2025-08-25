@@ -87,15 +87,25 @@ public class RecruitService {
 					String text = job.getText();
 					// "합격보상 100만원" 들어간 줄 통째로 제거
 					text = text.replaceAll(".*합격보상 100만원.*(\\r?\\n)?", "");
+					
 					String[] lines = text.split("\n");
-//					System.out.println("회사: " + lines[0]);
-//					System.out.println("직종: " + lines[1]);
-//					System.out.println("조건: " + lines[2]);
-//					System.out.println("링크: " + link);
-//					System.out.println("이미지: " + imgUrl);
-//					System.out.println("-----");
 
-					recruitMapper.saveRecruit(lines[0], lines[1], lines[2], link, imgUrl);
+					// 안전하게 꺼내기
+					String company = (lines.length > 0) ? lines[0] : "";
+					String job1    = (lines.length > 1) ? lines[1] : "";
+					String cond    = (lines.length > 2) ? lines[2] : "";
+
+					// 출력
+					System.out.println("회사: " + company);
+					System.out.println("직종: " + job1);
+					System.out.println("조건: " + cond);
+					System.out.println("링크: " + link);
+					System.out.println("이미지: " + imgUrl);
+					System.out.println("-----");
+
+					// DB 저장도 안전 변수 사용
+					recruitMapper.saveRecruit(company, job1, cond, link, imgUrl);
+
 
 					collected++;
 
