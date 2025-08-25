@@ -15,8 +15,12 @@ function createReviewForm(event) {
 		+ Math.abs(startY - event.clientY) >= 100) {
 		return;
 	}
-	// review-div가 이미 존재한다면, 아무 작업도 하지 않고 함수 즉시 종료.
+	// new-review-div가 이미 존재한다면, 아무 작업도 하지 않고 함수 즉시 종료.
 	if (document.querySelector('.new-review-div')) {
+		return;
+	}
+	// review-div 위에 있는 
+	if (event.target.closest('.review-div')) {
 		return;
 	}
 	const portfolioDiv = document.querySelector("#portfolio-div");
@@ -69,10 +73,8 @@ function createReviewForm(event) {
 		const reviews = await loadReviews(document
 			.getElementById('data-container').dataset.postId);
 		appendReviews(reviews);
-		portfolioDiv.removeChild(newReviewDiv);
+		portfolioDiv.removeChild(document.querySelector('.new-review-div'));
 	})
-
-	portfolioDiv.appendChild(newReviewDiv);
 }
 
 // review를 페이지에 로드
@@ -97,20 +99,19 @@ function appendReviews(reviews) {
 		reviewDiv.remove();
 	});
 	for (const review of reviews) {
-		console.log(review);
-
 		let buttonsHTML = "";
 		if (sessionUserId && sessionUserId == review.user.userId) {
 			buttonsHTML = `
-		        <div class="col-3 mt-2">
+		        <div class="mb-1 ">
 		            <a href="#" class="btn btn-sm btn-primary">수정</a>
 		            <a href="#" class="btn btn-sm btn-secondary">삭제</a>
 		        </div>
 		    `;
 		}
 		else {
-			console.log("sessionUserId:" + sessionUserId)
-			console.log(review.user.userId);
+			console.log('review.user.Id:' + review.user.userId);
+			console.log('sessionUserId:' + sessionUserId);
+			console.log('reviewPostId:' + reviewPostId);
 		}
 		const portfolioDiv = document.getElementById('portfolio-div');
 		const reviewHTML = `
@@ -119,7 +120,7 @@ function appendReviews(reviews) {
 				 <img class="col-3 rounded-circle" src="${review.user.userImageLocation.split('static')[1]}" style="width:50px"/>
 				 <div class="row">
 				 <div class="col card p-2 text-center bg-light review review-div m-0">
-					<div class="row border-bottom m-1 justify-content-center">
+					<div class="row m-1 justify-content-center">
 						<div class="row">
 							<span class="col-12 fs-6 fw-bold">${review.user.nickname}</span>
 							<span class="col-12" style="font-size: small;">${review.reviewDate.substring(0, 10)}</span>
@@ -138,7 +139,7 @@ function appendReviews(reviews) {
 //dom 생성 후 리뷰 로드
 document.addEventListener('DOMContentLoaded', async function() {
 
-	sessionUserId = document.getElementById('data-container').dataset.sessionUserId;
+	sessionUserId = document.getElementById('data-container').dataset.sessionUserid;
 	reviewPostId = document.getElementById('data-container').dataset.sessionUserId;
 
 	const reviews = await loadReviews(document
