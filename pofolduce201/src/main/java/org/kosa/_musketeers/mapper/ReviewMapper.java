@@ -13,4 +13,6 @@ public interface ReviewMapper {
 	public List<Review> selectReviewsByReviewPostId(int reviewPostId);
 
 	public void deleteReview(int reviewId);
+
+	public void updateReview(int reviewId, String reviewContents);
 }
