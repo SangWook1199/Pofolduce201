@@ -11,4 +11,6 @@ public interface ReviewMapper {
 	public void insertReview(Review review);
 
 	public List<Review> selectReviewsByReviewPostId(int reviewPostId);
+
+	public void deleteReview(int reviewId);
 }

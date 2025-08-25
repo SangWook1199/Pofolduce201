@@ -18,4 +18,9 @@
 		<result column="nickname" property="user.nickname"></result>
 		<result column="user_image_location" property="user.userImageLocation"></result>
 	</resultMap>
+	
+	<delete id="deleteReview">
+		DELETE FROM review
+		WHERE review_id=#{reviewId}
+	</delete>
 </mapper>
