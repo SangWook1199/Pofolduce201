@@ -32,6 +32,7 @@
 			<result property="nickname" column="nickname" />
 			<result property="email" column="email" />
 		</association>
+		<!-- 
 		<association property="portfolio"
 			javaType="org.kosa._musketeers.domain.Portfolio">
 			<id property="portfolioId" column="portfolio_id" />
@@ -44,6 +45,7 @@
 				<result property="email" column="email" />
 			</association>
 		</association>
+		 -->
 	</resultMap>
 
 
