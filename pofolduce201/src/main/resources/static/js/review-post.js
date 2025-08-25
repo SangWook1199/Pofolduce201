@@ -90,12 +90,11 @@ async function loadReviews(reviewPostId) {
 	} catch (error) {
 		console.error("Fetch Error:", error);
 	}
-	console.log("reviewList");
 	return reviewList;
 }
 
 function appendReviews(reviews) {
-	document.querySelectorAll('#review-div').forEach(function(reviewDiv) {
+	document.querySelectorAll('.review-div').forEach(function(reviewDiv) {
 		reviewDiv.remove();
 	});
 	for (const review of reviews) {
@@ -103,8 +102,8 @@ function appendReviews(reviews) {
 		if (sessionUserId && sessionUserId == review.user.userId) {
 			buttonsHTML = `
 		        <div class="mb-1 ">
-		            <a href="#" class="btn btn-sm btn-primary">수정</a>
-		            <a href="#" class="btn btn-sm btn-secondary">삭제</a>
+		            <button type="button" class="btn btn-sm btn-primary" onclick="updateReview(${review.reviewId}, ${review.reviewPost.reviewPostId})">수정</button>
+		            <button type="button" class="btn btn-sm btn-secondary" onclick="deleteReview(${review.reviewId}, ${review.reviewPost.reviewPostId})">삭제</button>
 		        </div>
 		    `;
 		}
@@ -115,11 +114,11 @@ function appendReviews(reviews) {
 		}
 		const portfolioDiv = document.getElementById('portfolio-div');
 		const reviewHTML = `
-		    <div class="row justify-content-center" 
+		    <div class="row review-div" 
 		         style="position: absolute; z-index: 9999; left: ${review.reviewLocationX}px; top: ${review.reviewLocationY}px;">
 				 <img class="col-3 rounded-circle" src="${review.user.userImageLocation.split('static')[1]}" style="width:50px"/>
 				 <div class="row">
-				 <div class="col card p-2 text-center bg-light review review-div m-0">
+				 <div class="col card p-2 text-center bg-light review m-0">
 					<div class="row m-1 justify-content-center">
 						<div class="row">
 							<span class="col-12 fs-6 fw-bold">${review.user.nickname}</span>
@@ -135,6 +134,35 @@ function appendReviews(reviews) {
 		portfolioDiv.insertAdjacentHTML('beforeend', reviewHTML);
 	}
 }
+
+async function deleteReview(reviewId, reviewPostId) {
+	try {
+		const response = await fetch(`/review/${reviewId}`, {
+			method: 'delete',
+		});
+		if (!response.ok) {
+			throw new Error(`HTTP error status: ${response.status}`);
+		}
+	} catch(error){
+		console.error('fetch error:' + error);
+	}
+	appendReviews(await loadReviews(reviewPostId));
+}
+
+//async function updateReview(reviewId, reviewPostId){
+//	
+//	try{
+//		const response = await fetch(`/review/${reviewId}`,{
+//			method: 'update',
+//		});
+//		if(!response.ok){
+//			throw new Error(`HTTP error status: ${response.status}`);
+//		}
+//	} catch(error){
+//		console.error('fetch error:' + error);
+//	}
+//	appendReviews(await loadReviews(reviewPostId));
+//}
 
 //dom 생성 후 리뷰 로드
 document.addEventListener('DOMContentLoaded', async function() {
