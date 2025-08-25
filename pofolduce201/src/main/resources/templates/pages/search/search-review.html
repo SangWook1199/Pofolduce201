@@ -99,7 +99,7 @@
 							<li class="page-item"
 								th:classappend="${reviewCurrentPage == 1} ? 'disabled'"><a
 								class="page-link"
-								th:href="@{/search(search=${search},reviewPage=${reviewCurrentPage - 1}, reviewSize=${reviewSize})}"
+								th:href="@{/search/review(search=${search},reviewPage=${reviewCurrentPage - 1}, reviewSize=${reviewSize})}"
 								tabindex="-1" aria-disabled="true">Previous</a></li>
 
 							<!-- 페이지 번호 반복 -->
@@ -107,14 +107,14 @@
 								th:each="i : ${#numbers.sequence(1, reviewTotalPages)}"
 								th:classappend="${i == reviewCurrentPage} ? 'active'"><a
 								class="page-link"
-								th:href="@{/search(search=${search},reviewPage=${i}, reviewSize=${reviewSize})}"
+								th:href="@{/search/review(search=${search},reviewPage=${i}, reviewSize=${reviewSize})}"
 								th:text="${i}">1</a></li>
 
 							<!-- 다음 페이지 -->
 							<li class="page-item"
 								th:classappend="${reviewCurrentPage == reviewTotalPages} ? 'disabled'">
 								<a class="page-link"
-								th:href="@{/search(search=${search},reviewPage=${reviewCurrentPage + 1}, reviewSize=${reviewSize})}">Next</a>
+								th:href="@{/search/review(search=${search},reviewPage=${reviewCurrentPage + 1}, reviewSize=${reviewSize})}">Next</a>
 							</li>
 						</ul>
 					</nav>

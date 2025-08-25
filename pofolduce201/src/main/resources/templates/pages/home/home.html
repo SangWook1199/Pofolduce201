@@ -26,126 +26,115 @@
 				</div>
 
 
-			</div>
+				<!-- 메인 캐러셀 -->
+				<div id="main-container">
+					<div id="carouselExampleControls" class="carousel slide"
+						data-bs-ride="carousel">
+						<div class="portfolio">
 
-
-
-
-
-			<!-- 메인 캐러셀 -->
-			<div id="main-container">
-				<div id="carouselExampleControls" class="carousel slide"
-					data-bs-ride="carousel">
-					<div class="portfolio">
-
-						<div class="carousel-inner">
-    <div th:each="chunk, iterStat : ${reviewChunks}"
-         th:classappend="${iterStat.index == 0} ? 'carousel-item active' : 'carousel-item'" id="best-box">
-        <div class="justify-content-center gap-4 box" id="review-box">
-            <div th:each="review : ${chunk}" >
-                <iframe th:attr="srcdoc=${review.portfolioHtml}"
-                        class="portfolio-img" scrolling="no"></iframe>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-						<button class="carousel-control-prev" type="button"
-							data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-							<img th:src="@{/svg/left.svg}" id="left-button"> <span
-								class="visually-hidden">Previous</span>
-						</button>
-						<button class="carousel-control-next" type="button"
-							data-bs-target="#carouselExampleControls" data-bs-slide="next">
-							<img th:src="@{/svg/right.svg}" id="right-button"> <span
-								class="visually-hidden">Next</span>
-						</button>
-					</div>
-				</div>
-
-
-
-				<div class="row">
-					<div class="col-6">
-						<div id="main-board-header-two">
-							<div
-								th:replace="fragments/html/board-header :: board-header('오늘의 채용 공고')"></div>
-							<img th:src="@{/svg/arrow.svg}" width="35" height="35"
-								onclick="location.href='/recruit'">
-						</div>
-
-						<div class="row g-3" id="recruit">
-							<div class="col-6" th:each="recruit, stat:${recruitList}"
-								th:if="${stat.index < 4}">
-								<div class="recruit-box">
-									<a th:href="${recruit.link}" target="_blank"
-										style="all: unset;"> <img th:src="${recruit.imgLink}"
-										class="recruit-img">
-										<div class="recruit-box-text">
-											<h3 th:text="${recruit.company}" class="recruit-text"></h3>
-											<h4 th:text="${recruit.content}" class="recruit-text"></h4>
+							<div class="carousel-inner">
+								<div th:each="chunk, iterStat : ${reviewChunks}"
+									th:classappend="${iterStat.index == 0} ? 'carousel-item active' : 'carousel-item'"
+									id="best-box">
+									<div class="justify-content-center gap-4 box" id="review-box">
+										<div th:each="review : ${chunk}">
+											<iframe th:attr="srcdoc=${review.portfolioHtml}"
+												class="portfolio-img" scrolling="no"></iframe>
 										</div>
-									</a>
+									</div>
 								</div>
 							</div>
 
-						</div>
 
-					</div>
 
-					<div class="col-6">
-						<div id="main-board-header-two">
-							<div
-								th:replace="fragments/html/board-header :: board-header('인기 스터디')"></div>
-							<img th:src="@{/svg/arrow.svg}" width="35" height="35"
-								onclick="location.href='/study'">
-						</div>
-						<div class="main-study">
-							<div th:each="board:${Board}">
-								<a
-									th:href="${session.userId == null ? '/login' : '/study/' + board.study_id}">
-									<div id="main-study-component">
-
-										<h3 id="h3-text" th:text="${board.title}">스터디 글의 제목 입니다.
-											길이 테스트 길이 테스트</h3>
-
-										<div id="main-study-line"></div>
-										<h3 id="h3-text" th:text="${board.nickname}">아이디</h3>
-
-									</div>
-								</a>
-							</div>
-
+							<button class="carousel-control-prev" type="button"
+								data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+								<img th:src="@{/svg/left.svg}" id="left-button"> <span
+									class="visually-hidden">Previous</span>
+							</button>
+							<button class="carousel-control-next" type="button"
+								data-bs-target="#carouselExampleControls" data-bs-slide="next">
+								<img th:src="@{/svg/right.svg}" id="right-button"> <span
+									class="visually-hidden">Next</span>
+							</button>
 						</div>
 					</div>
-
 
 				</div>
 
+
 			</div>
+
+			<div class="row">
+				<div class="col-6">
+					<div id="main-board-header-two">
+						<div
+							th:replace="fragments/html/board-header :: board-header('오늘의 채용 공고')"></div>
+						<img th:src="@{/svg/arrow.svg}" width="35" height="35"
+							onclick="location.href='/recruit'">
+					</div>
+
+					<div class="row g-3" id="recruit">
+						<div class="col-6" th:each="recruit, stat:${recruitList}"
+							th:if="${stat.index < 4}">
+							<div class="recruit-box">
+								<a th:href="${recruit.link}" target="_blank" style="all: unset;">
+									<img th:src="${recruit.imgLink}" class="recruit-img">
+									<div class="recruit-box-text">
+										<h3 th:text="${recruit.company}" class="recruit-text"></h3>
+										<h4 th:text="${recruit.content}" class="recruit-text"></h4>
+									</div>
+								</a>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+
+				<div class="col-6">
+					<div id="main-board-header-two">
+						<div
+							th:replace="fragments/html/board-header :: board-header('인기 스터디')"></div>
+						<img th:src="@{/svg/arrow.svg}" width="35" height="35"
+							onclick="location.href='/study'">
+					</div>
+					<div class="main-study">
+						<div th:each="board:${Board}">
+							<a style="all: unset;"
+								th:href="${session.userId == null ? '/login' : '/study/' + board.study_id}">
+								<div id="main-study-component">
+
+									<h3 id="h3-text" th:text="${board.title}">스터디 글의 제목 입니다.
+										길이 테스트 길이 테스트</h3>
+
+									<div id="main-study-line"></div>
+									<h3 id="h3-text" th:text="${board.nickname}">아이디</h3>
+
+								</div>
+							</a>
+						</div>
+
+					</div>
+				</div>
+
+
+			</div>
+
+
 		</div>
 
 	</div>
+</div>
+
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 
+<div layout:fragment="script">
 	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+		src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-
-	<div layout:fragment="script">
-		<script
-			src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-		<script th:src="@{/js/home.js}"></script>
-	</div>
+	<script th:src="@{/js/home.js}"></script>
+</div>
 </html>
