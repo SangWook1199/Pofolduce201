@@ -28,4 +28,8 @@ public class ReviewService {
 		reviewMapper.deleteReview(reviewId);
 	}
 
+	public void modifyReview(int reviewId, String reviewContents) {
+		reviewMapper.updateReview(reviewId, reviewContents);
+	}
+
 }

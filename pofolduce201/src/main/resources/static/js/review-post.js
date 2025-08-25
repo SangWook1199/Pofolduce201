@@ -36,7 +36,7 @@ function createReviewForm(event) {
 	// 2. 백틱을 사용해 전체 HTML 구조를 하나의 문자열로 만듭니다.
 	const formHTML = `
 	    <div class="card p-2 text-center bg-light new-review-div" 
-	         style="position: absolute; z-index: 9999; left: ${x}px; top: ${y}px;">
+	         style="position: absolute; z-index: 9999; left: ${x}px; top: ${y}px; transform:translate(-50%, 0);">
 	        <form id="review-form">
 	            <input type="hidden" name="reviewLocationX" value="${intX}">
 	            <input type="hidden" name="reviewLocationY" value="${intY}">
@@ -102,7 +102,7 @@ function appendReviews(reviews) {
 		if (sessionUserId && sessionUserId == review.user.userId) {
 			buttonsHTML = `
 		        <div class="mb-1 ">
-		            <button type="button" class="btn btn-sm btn-primary" onclick="updateReview(${review.reviewId}, ${review.reviewPost.reviewPostId})">수정</button>
+		            <button type="button" class="btn btn-sm btn-primary" onclick="addUpdateForm(${review.reviewId}, '${review.reviewContents}', ${review.reviewPost.reviewPostId})">수정</button>
 		            <button type="button" class="btn btn-sm btn-secondary" onclick="deleteReview(${review.reviewId}, ${review.reviewPost.reviewPostId})">삭제</button>
 		        </div>
 		    `;
@@ -114,8 +114,9 @@ function appendReviews(reviews) {
 		}
 		const portfolioDiv = document.getElementById('portfolio-div');
 		const reviewHTML = `
-		    <div class="row review-div" 
-		         style="position: absolute; z-index: 9999; left: ${review.reviewLocationX}px; top: ${review.reviewLocationY}px;">
+		    <div class="row review-div justify-content-center"
+				 id="review-div-${review.reviewId}"
+		         style="position: absolute; z-index: 9999; left: ${review.reviewLocationX}px; top: ${review.reviewLocationY}px; transform:translate(-50%, 0);">
 				 <img class="col-3 rounded-circle" src="${review.user.userImageLocation.split('static')[1]}" style="width:50px"/>
 				 <div class="row">
 				 <div class="col card p-2 text-center bg-light review m-0">
@@ -143,26 +144,52 @@ async function deleteReview(reviewId, reviewPostId) {
 		if (!response.ok) {
 			throw new Error(`HTTP error status: ${response.status}`);
 		}
-	} catch(error){
+	} catch (error) {
 		console.error('fetch error:' + error);
 	}
 	appendReviews(await loadReviews(reviewPostId));
 }
 
-//async function updateReview(reviewId, reviewPostId){
-//	
-//	try{
-//		const response = await fetch(`/review/${reviewId}`,{
-//			method: 'update',
-//		});
-//		if(!response.ok){
-//			throw new Error(`HTTP error status: ${response.status}`);
-//		}
-//	} catch(error){
-//		console.error('fetch error:' + error);
-//	}
-//	appendReviews(await loadReviews(reviewPostId));
-//}
+async function addUpdateForm(reviewId, reviewContents, reviewPostId) {
+	const reviewDiv = document.getElementById(`review-div-${reviewId}`);
+	const formHTML = `
+		<div class="card p-2 text-center bg-light" id="update-review-div">
+			<textarea id='update-review-textarea'></textarea>
+			<div>
+				<button class="btn btn-sm btn-primary" id="review-update-button">완료</button>
+				<button class="btn btn-sm btn-primary" onclick="cancelUpdate(${reviewId})">취소</button>
+			</div>
+			
+		</div>
+	`;
+	reviewDiv.insertAdjacentHTML('beforeend', formHTML);
+	document.getElementById('update-review-textarea').value = reviewContents;
+	
+	const updateButton = document.getElementById('review-update-button');
+	updateButton.addEventListener('click', async function(){
+		try{
+		const response = await fetch(`/review/${reviewId}`, {
+			method: 'PATCH',
+			headers: {
+			               'Content-Type': 'text/plain' // 순수 텍스트를 보낸다고 명시
+			},
+			body: document.getElementById('update-review-textarea').value,
+			});
+			if(!response.ok) {
+				throw new Error(`HTTP error status: ${response.status}`);
+			}
+		}catch(error){
+			console.error("fetch error:" + error);
+		}
+		appendReviews(await loadReviews(reviewPostId));
+	})
+		
+}
+
+function cancelUpdate(reviewId){
+	const reviewDiv = document.getElementById(`review-div-${reviewId}`);
+	reviewDiv.removeChild(document.getElementById('update-review-div'));
+}
 
 //dom 생성 후 리뷰 로드
 document.addEventListener('DOMContentLoaded', async function() {
@@ -182,6 +209,7 @@ document.querySelector("#portfolio-div").addEventListener('mousedown',
 document.querySelector("#portfolio-div").addEventListener('mouseup',
 	createReviewForm);
 
+	
 //댓글 수정
 document
 	.addEventListener(
