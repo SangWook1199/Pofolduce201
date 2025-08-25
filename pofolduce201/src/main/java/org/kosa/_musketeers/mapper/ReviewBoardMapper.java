@@ -1,6 +1,7 @@
 package org.kosa._musketeers.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.kosa._musketeers.domain.ReviewPost;
@@ -32,4 +33,6 @@ public interface ReviewBoardMapper {
 	void deleteReviewComment(int reviewCommentId);
 	
 	int getTotalReviewPostCountById(int userId);
+
+	List<Map<String, Object>> getReviewBoardByViewCount();
 }

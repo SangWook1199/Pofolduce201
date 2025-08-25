@@ -43,4 +43,6 @@ public interface UserMapper {
 
 	List<Map<String, Object>> getStudySearchResult(@Param("search") String search);
 
+	List<Map<String, Object>> getRecruitSearchResult(String search);
+
 }

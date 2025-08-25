@@ -32,18 +32,12 @@
 			<result property="nickname" column="nickname" />
 			<result property="email" column="email" />
 		</association>
-		<association property="portfolio"
-			javaType="org.kosa._musketeers.domain.Portfolio">
-			<id property="portfolioId" column="portfolio_id" />
-			<result property="portfolioName" column="portfolio_name" />
-			<result property="uploadDate" column="upload_date" />
-			<association property="userId"
-				javaType="org.kosa._musketeers.domain.User">
-				<id property="userId" column="user_id" />
-				<result property="nickname" column="nickname" />
-				<result property="email" column="email" />
-			</association>
-		</association>
+		<!-- <association property="portfolio" javaType="org.kosa._musketeers.domain.Portfolio"> 
+			<id property="portfolioId" column="portfolio_id" /> <result property="portfolioName" 
+			column="portfolio_name" /> <result property="uploadDate" column="upload_date" 
+			/> <association property="userId" javaType="org.kosa._musketeers.domain.User"> 
+			<id property="userId" column="user_id" /> <result property="nickname" column="nickname" 
+			/> <result property="email" column="email" /> </association> </association> -->
 	</resultMap>
 
 
@@ -154,7 +148,17 @@
 		OR b.post_html LIKE CONCAT('%',
 		#{param1}, '%')
 		OR b.address LIKE CONCAT('%', #{param1}, '%')
-		OR u.nickname LIKE CONCAT('%', #{param1}, '%');
+		OR
+		u.nickname LIKE CONCAT('%', #{param1}, '%');
+	</select>
+
+	<select id="getRecruitSearchResult" parameterType="string">
+		SELECT company, content, job, link, imgLink
+		FROM recruit
+		WHERE company LIKE CONCAT('%',#{param1}, '%')
+		OR content LIKE CONCAT('%',#{param1}, '%')
+		OR job LIKE CONCAT('%', #{param1}, '%');
+
 	</select>
 
 </mapper>

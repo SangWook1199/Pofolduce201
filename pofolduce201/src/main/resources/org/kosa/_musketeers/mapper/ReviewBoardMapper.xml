@@ -49,12 +49,14 @@
 	<insert id="createPost" parameterType="map">
 		INSERT INTO
 		review_post(title, post_html, portfolio_html, user_id)
-		VALUE(#{title}, #{postHtml}, #{portfolioHtml}, #{user.userId});
+		VALUE(#{title},
+		#{postHtml}, #{portfolioHtml}, #{user.userId});
 	</insert>
 
 	<select id="getReviewPostByReviewPostId" parameterType="int"
 		resultMap="viewReviewPostResultMap">
-		SELECT review_post_id, title, post_html, portfolio_html, view_count,
+		SELECT review_post_id, title, post_html, portfolio_html,
+		view_count,
 		create_date, like_count, users.user_id, nickname
 		FROM
 		review_post JOIN users on review_post.user_id=users.user_id
@@ -132,4 +134,25 @@
 		FROM review_post
 		WHERE user_id=#{userId};
 	</select>
+
+	<select id="getReviewBoardByViewCount"
+		resultType="map">
+
+		SELECT
+		rp.review_post_id AS reviewPostId,
+		rp.title,
+		rp.post_html AS postHtml,
+		rp.portfolio_html AS portfolioHtml,
+		rp.view_count AS viewCount,
+		rp.create_date AS createDate,
+		rp.like_count AS likeCount,
+		u.user_id AS "user.userId",
+		u.nickname AS "user.nickname"
+		FROM review_post rp
+		JOIN users u ON rp.user_id = u.user_id
+		ORDER BY rp.view_count DESC
+		LIMIT 9
+	</select>
+
+
 </mapper>

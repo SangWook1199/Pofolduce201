@@ -32,15 +32,17 @@ public class RecruitController {
 
 		// 크롤링한 데이터가 없다면 크롤링을 실행합니다.
 		List<Map<String, String>> recruitList = recruitService.getRecruit(page, size);
-		if (recruitList.isEmpty()) {
-			recruitService.createRecruit(7);
+		int totalCount = recruitService.countRecruit();
+		
+		if (totalCount == 0) {
+			recruitService.createRecruit(10);
 			recruitList = recruitService.getRecruit(page, size);
 
 		}
 
 		// 크롤링 후 저장된 db의 데이터를 가져옵니다.
-		recruitList = recruitService.getRecruit(page, size);
-		int totalCount = recruitService.countRecruit();
+		//recruitList = recruitService.getRecruit(page, size);
+		
 		int totalPages = (int) Math.ceil((double) totalCount / size);
 		// 전달합니다.
 		List<Map<String, String>> recruitListToday = recruitService.getRecruit(1, 9);

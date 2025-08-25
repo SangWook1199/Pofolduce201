@@ -87,25 +87,24 @@ public class RecruitService {
 					String text = job.getText();
 					// "합격보상 100만원" 들어간 줄 통째로 제거
 					text = text.replaceAll(".*합격보상 100만원.*(\\r?\\n)?", "");
-					
+
 					String[] lines = text.split("\n");
 
 					// 안전하게 꺼내기
 					String company = (lines.length > 0) ? lines[0] : "";
-					String job1    = (lines.length > 1) ? lines[1] : "";
-					String cond    = (lines.length > 2) ? lines[2] : "";
+					String job1 = (lines.length > 1) ? lines[1] : "";
+					String cond = (lines.length > 2) ? lines[2] : "";
 
 					// 출력
-					System.out.println("회사: " + company);
-					System.out.println("직종: " + job1);
-					System.out.println("조건: " + cond);
-					System.out.println("링크: " + link);
-					System.out.println("이미지: " + imgUrl);
-					System.out.println("-----");
+//					System.out.println("회사: " + company);
+//					System.out.println("직종: " + job1);
+//					System.out.println("조건: " + cond);
+//					System.out.println("링크: " + link);
+//					System.out.println("이미지: " + imgUrl);
+//					System.out.println("-----");
 
 					// DB 저장도 안전 변수 사용
 					recruitMapper.saveRecruit(company, job1, cond, link, imgUrl);
-
 
 					collected++;
 
@@ -127,6 +126,10 @@ public class RecruitService {
 	public List<Map<String, String>> getRecruit(int page, int size) {
 
 		List<Map<String, String>> recruitList = recruitMapper.getRecruit();
+
+		// 2. company가 null 이거나 빈 문자열("")인 항목 제거
+		recruitList.removeIf(r -> r.get("company").trim().isEmpty()); 	
+		
 		int totalCount = recruitList.size();
 
 		// 페이징 (subList 사용)

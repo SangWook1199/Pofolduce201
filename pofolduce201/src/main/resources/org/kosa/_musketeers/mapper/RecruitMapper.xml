@@ -21,6 +21,7 @@
 
 	<select id="getAllRecruit">
 		select count(*) from recruit
+		WHERE company IS NOT NULL AND company != '';
 	</select>
 
 </mapper>

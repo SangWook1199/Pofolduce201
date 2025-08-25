@@ -252,4 +252,46 @@ public class UserService {
 		int studyCount = userMapper.getStudySearchResult(search).size();
 		return studyCount;
 	}
+
+	public List<Map<String, Object>> getRecruitSearchResult(String search, int page, int size) {
+		List<Map<String, Object>> list = userMapper.getRecruitSearchResult(search);
+		int totalCount = list.size();
+		
+		// 페이징 (subList 사용)
+	    int fromIndex = Math.max(0, (page - 1) * size);
+	    int toIndex = Math.min(fromIndex + size, totalCount);
+
+	    if (fromIndex > toIndex) {
+	        return new ArrayList<>(); // 빈 리스트
+	    }
+
+		return list.subList(fromIndex, toIndex);
+	}
+
+	public int countRecruitResult(String search) {
+		int recruitCount = userMapper.getRecruitSearchResult(search).size();
+
+		return recruitCount;
+	}
+	
+//	//html을 png로 변환하기
+//	public void convertHtmlToPng(String html, String outputPath) throws Exception {
+//        // 1. HTML → PDF
+//        ByteArrayOutputStream pdfStream = new ByteArrayOutputStream();
+//        PdfRendererBuilder builder = new PdfRendererBuilder();
+//        builder.useFastMode();
+//        builder.withHtmlContent(html, null);
+//        builder.toStream(pdfStream);
+//        builder.run();
+//
+//        // 2. PDF → Image(PNG)
+//        try (PDDocument document = PDDocument.load(new ByteArrayInputStream(pdfStream.toByteArray()))) {
+//            PDFRenderer renderer = new PDFRenderer(document);
+//            BufferedImage image = renderer.renderImageWithDPI(0, 150); // 첫 페이지 150DPI 렌더링
+//            ImageIO.write(image, "png", new File(outputPath));
+//        }
+//    }
+//	
+	
+	
 }

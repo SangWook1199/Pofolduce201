@@ -65,7 +65,8 @@ public class StudyBoardService {
 	public void deletePost(int studyId) {
 		studyBoardMapper.deletePost(studyId);
 	}
-
+	
+	//메인 화면에서 가져오는 스터디 게시글 입니다.
 	public List<Map<String, Object>> getStudyBoardByViewCount() {
 		List<Map<String, Object>> list = studyBoardMapper.getStudyBoardByViewCount();
 		return list;

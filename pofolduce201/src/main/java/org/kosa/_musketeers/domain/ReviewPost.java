@@ -133,8 +133,10 @@ public class ReviewPost {
 	@Override
 	public String toString() {
 		return "ReviewPost [reviewPostId=" + reviewPostId + ", title=" + title + ", postHtml=" + postHtml
-				+ ", viewCount=" + viewCount + ", createDate=" + createDate + ", likeCount=" + likeCount + ", user="
-				+ user + "]";
+				+ ", portfolioHtml=" + portfolioHtml + ", viewCount=" + viewCount + ", createDate=" + createDate
+				+ ", likeCount=" + likeCount + ", user=" + user + "]";
 	}
+
+	
 
 }

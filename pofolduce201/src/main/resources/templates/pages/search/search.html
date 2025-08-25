@@ -220,8 +220,20 @@
 								onclick="location.href='/recruit'">
 						</div>
 
+						<div id="recruit-container">
+							<div class="recruit-box" th:each="recruit : ${recruitList}">
+								<a th:href="${recruit.link}" target="_blank" style="all: unset;">
+									<img th:src="${recruit.imgLink}" class="recruit-img">
+									<div class="recruit-box-text">
+										<h3 th:text="${recruit.company}" class="recruit-text"></h3>
+										<h4 th:text="${recruit.content}" class="recruit-text"></h4>
+									</div>
+								</a>
+							</div>
+						</div>
+
 						<!-- 데이터가 없을 때 -->
-						<div class="nodata">
+						<div class="nodata" th:if="${#lists.isEmpty(recruitList)}">
 							<h3 class="non-data">검색 결과가 없습니다.</h3>
 						</div>
 					</div>
