@@ -4,7 +4,7 @@
 	layout:decorate="~{layouts/layout}">
 <head>
 <script type="text/javascript"
-	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=70c0de37da587509ef9f5d9da9f64303"></script>
+	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=70c0de37da587509ef9f5d9da9f64303&libraries=services,places"></script>
 <link th:href="@{/css/board-header.css}" rel="stylesheet">
 <link th:href="@{/css/banner.css}" rel="stylesheet">
 <link th:href="@{/css/study-css/study-board.css}" rel="stylesheet">
@@ -39,7 +39,7 @@
 			<tbody>
 				<tr class="clickable-row"
 					th:onclick="|window.location='/study/' + [[${first.studyId}]]|"
-					th:if="${first != null}" >
+					th:if="${first != null}">
 					<td><img alt="왕관" th:src="@{/svg/crown.svg}"
 						class="img-fluid banner-image"></td>
 					<th scope="row">1</th>
@@ -49,7 +49,7 @@
 					<td th:text="${first.viewCount}"></td>
 				</tr>
 				<tr th:onclick="|window.location='/study/' + [[${second.studyId}]]|"
-				th:if="${second != null}">
+					th:if="${second != null}">
 					<td><img alt="왕관" th:src="@{/svg/2nd-crown.svg}"
 						class="img-fluid banner-image"></td>
 					<th scope="row">2</th>
@@ -91,29 +91,130 @@
 			id="write-button">+</a>
 	</div>
 	<nav aria-label="Page navigation example" th:if="${totalPages > 0}">
-    <ul class="pagination justify-content-center">
-        <li class="page-item"
-            th:classappend="${currentPage == 1} ? 'disabled'"><a
-            class="page-link" th:href="@{/study(page=${currentPage - 1})}"
-            tabindex="-1" aria-disabled="true">Previous</a></li>
+		<ul class="pagination justify-content-center">
+			<li class="page-item"
+				th:classappend="${currentPage == 1} ? 'disabled'"><a
+				class="page-link" th:href="@{/study(page=${currentPage - 1})}"
+				tabindex="-1" aria-disabled="true">Previous</a></li>
 
-        <li class="page-item"
-            th:each="i : ${#numbers.sequence(1, totalPages)}"
-            th:classappend="${i == currentPage} ? 'active'"><a
-            class="page-link" th:href="@{/study(page=${i})}" th:text="${i}">1</a></li>
+			<li class="page-item"
+				th:each="i : ${#numbers.sequence(1, totalPages)}"
+				th:classappend="${i == currentPage} ? 'active'"><a
+				class="page-link" th:href="@{/study(page=${i})}" th:text="${i}">1</a></li>
 
-        <li class="page-item"
-            th:classappend="${currentPage == totalPages} ? 'disabled'"><a
-            class="page-link" th:href="@{/study(page=${currentPage + 1})}">Next</a></li>
-    </ul>
-</nav>
+			<li class="page-item"
+				th:classappend="${currentPage == totalPages} ? 'disabled'"><a
+				class="page-link" th:href="@{/study(page=${currentPage + 1})}">Next</a></li>
+		</ul>
+	</nav>
 	<script>
-		var container = document.getElementById('map');
-		var options = {
-			center : new kakao.maps.LatLng(37.583743027324, 126.999963317958),
-			level : 1
-		};
-		var map = new kakao.maps.Map(container, options);
+    // 카카오 지도 초기 설정
+// 카카오 지도 초기 설정
+    // 카카오 지도 초기 설정
+        var mapContainer = document.getElementById('map');
+        var mapOption = {
+            center: new kakao.maps.LatLng(37.583743027324, 126.999963317958),
+            level: 2                 
+        };
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+        
+        var geocoder = new kakao.maps.services.Geocoder();
+        var ps = new kakao.maps.services.Places();
+        var infoWindow = new kakao.maps.InfoWindow({zIndex:1});
+        
+        if (navigator.geolocation) {
+            var options = {
+                enableHighAccuracy: true,
+                maximumAge: 0
+            };
+
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var lat = position.coords.latitude,
+                    lon = position.coords.longitude;
+                
+                var locPosition = new kakao.maps.LatLng(lat, lon);
+                
+                // 현재 위치에만 마커를 표시하고, 지도의 중심은 변경하지 않음
+                var marker = new kakao.maps.Marker({
+    				map: map,
+   			 		position: locPosition
+				});
+                
+                var infowindow = new kakao.maps.InfoWindow({
+                    content: '<div class="map-hover">현재 위치</div>'
+                });
+                infowindow.open(map, marker);
+
+            }, function(error) {
+                console.error("위치 정보를 가져오는 데 실패했습니다.", error);
+            }, options);
+        } else {
+            console.log("Geolocation API를 지원하지 않는 브라우저입니다.");
+        }
+        
+        // ⭐ 서버 API에서 게시글 데이터 가져오기
+        fetch('/study/api/map')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('네트워크 응답이 실패했습니다.');
+                }
+                return response.json();
+            })
+            .then(posts => {
+                if (Array.isArray(posts) && posts.length > 0) {
+                    posts.forEach(function(post) {
+                        var address = post.address;
+                        var studyId = post.studyId;
+                        var title = post.title;
+                        
+                        // 주소 검색 시도
+                        geocoder.addressSearch(address, function(result, status) {
+                            if (status === kakao.maps.services.Status.OK) {
+                                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                                createMarkerWithEvents(coords, studyId, title);
+                            } else {
+                                // 주소 검색 실패 시 키워드 검색 시도
+                                ps.keywordSearch(address, function(data, status) {
+                                    if (status === kakao.maps.services.Status.OK) {
+                                        var coords = new kakao.maps.LatLng(data[0].y, data[0].x);
+                                        createMarkerWithEvents(coords, studyId, title);
+                                    } else {
+                                        console.error("키워드 검색 실패: " + address + ", 상태 코드: " + status);
+                                    }
+                                });
+                            }
+                        });
+                    });
+                } else {
+                    console.log("표시할 주소 데이터가 없습니다.");
+                }
+            })
+            .catch(error => console.error('주소 데이터를 불러오는 데 실패했습니다.', error));
+
+        // ⭐ 마커와 이벤트를 생성하는 함수
+        function createMarkerWithEvents(coords, studyId, title) {
+            var marker = new kakao.maps.Marker({
+                map: map,
+                position: coords
+            });
+
+            // 마우스오버 이벤트: 인포윈도우 표시
+            kakao.maps.event.addListener(marker, 'mouseover', function() {
+                var content = `<div class="map-hover">${title}</div>`;
+                infoWindow.setContent(content);
+                infoWindow.open(map, marker);
+            });
+
+            // 마우스아웃 이벤트: 인포윈도우 닫기
+            kakao.maps.event.addListener(marker, 'mouseout', function() {
+                infoWindow.close();
+            });
+
+            // 클릭 이벤트: 게시글로 이동
+            kakao.maps.event.addListener(marker, 'click', function() {
+                window.location.href = '/study/' + studyId;
+            });
+        }
 		document.addEventListener('DOMContentLoaded', function() {
 			// 성공 메시지 표시
 			if ('[[${successMessage}]]') {
@@ -124,6 +225,6 @@
 				alert('[[${errorMessage}]]');
 			}
 		});
-	</script>
+</script>
 </div>
 </html>

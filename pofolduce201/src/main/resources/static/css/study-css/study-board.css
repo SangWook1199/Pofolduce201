@@ -50,3 +50,10 @@
 	height: 400px;
 	border-radius: 20px;
 }
+.map-hover{
+	width:150px;
+	text-align: center;
+	background-color: #ff4473;
+	color: #ffffff;
+	padding:3%;
+}

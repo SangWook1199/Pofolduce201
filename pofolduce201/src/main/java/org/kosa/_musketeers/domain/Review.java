@@ -11,14 +11,15 @@ public class Review {
 	private String reviewContents;
 	private LocalDateTime reviewDate;
 	private int likeCount;
-	private int reviewPostId;
-	private int userId;
+	private ReviewPost reviewPost;
+	private User user;
+
 	public Review() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
-	public Review(int reviewId, int reviewLocationX, int reviewLocationY, String reviewContents, LocalDateTime reviewDate,
-			int likeCount, int reviewPostId, int userId) {
+
+	public Review(int reviewId, int reviewLocationX, int reviewLocationY, String reviewContents,
+			LocalDateTime reviewDate, int likeCount, ReviewPost reviewPost, User user) {
 		super();
 		this.reviewId = reviewId;
 		this.reviewLocationX = reviewLocationX;
@@ -26,64 +27,79 @@ public class Review {
 		this.reviewContents = reviewContents;
 		this.reviewDate = reviewDate;
 		this.likeCount = likeCount;
-		this.reviewPostId = reviewPostId;
-		this.userId = userId;
+		this.reviewPost = reviewPost;
+		this.user = user;
 	}
+
 	public int getReviewId() {
 		return reviewId;
 	}
+
 	public void setReviewId(int reviewId) {
 		this.reviewId = reviewId;
 	}
+
 	public int getReviewLocationX() {
 		return reviewLocationX;
 	}
+
 	public void setReviewLocationX(int reviewLocationX) {
 		this.reviewLocationX = reviewLocationX;
 	}
+
 	public int getReviewLocationY() {
 		return reviewLocationY;
 	}
+
 	public void setReviewLocationY(int reviewLocationY) {
 		this.reviewLocationY = reviewLocationY;
 	}
+
 	public String getReviewContents() {
 		return reviewContents;
 	}
+
 	public void setReviewContents(String reviewContents) {
 		this.reviewContents = reviewContents;
 	}
+
 	public LocalDateTime getReviewDate() {
 		return reviewDate;
 	}
+
 	public void setReviewDate(LocalDateTime reviewDate) {
 		this.reviewDate = reviewDate;
 	}
+
 	public int getLikeCount() {
 		return likeCount;
 	}
+
 	public void setLikeCount(int likeCount) {
 		this.likeCount = likeCount;
 	}
-	public int getReviewPostId() {
-		return reviewPostId;
+
+	public ReviewPost getReviewPost() {
+		return reviewPost;
 	}
-	public void setReviewPostId(int reviewPostId) {
-		this.reviewPostId = reviewPostId;
+
+	public void setReviewPost(ReviewPost reviewPost) {
+		this.reviewPost = reviewPost;
 	}
-	public int getUserId() {
-		return userId;
+
+	public User getUser() {
+		return user;
 	}
-	public void setUserId(int userId) {
-		this.userId = userId;
+
+	public void setUser(User user) {
+		this.user = user;
 	}
+
 	@Override
 	public String toString() {
 		return "Review [reviewId=" + reviewId + ", reviewLocationX=" + reviewLocationX + ", reviewLocationY="
 				+ reviewLocationY + ", reviewContents=" + reviewContents + ", reviewDate=" + reviewDate + ", likeCount="
-				+ likeCount + ", reviewPostId=" + reviewPostId + ", userId=" + userId + "]";
+				+ likeCount + ", reviewPost=" + reviewPost + ", user=" + user + "]";
 	}
-	
-	
 
 }

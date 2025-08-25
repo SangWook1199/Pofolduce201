@@ -36,7 +36,8 @@
 						</div>
 					</div>
 				</div>
-				<div class="pt-3 border-top border-1 mt">
+				<div class="pt-3 border-top border-1 mt position-relative"
+					id="portfolio-div">
 					<p th:utext="${reviewPost.portfolioHtml}"></p>
 				</div>
 				<div class="pt-3 border-top border-1 mt">
@@ -106,25 +107,11 @@
 				</div>
 			</div>
 		</div>
+		<div id="data-container" th:data-post-id="${reviewPost.reviewPostId}" th:data-session-userId="${session.userId}">
+		</div>
 	</div>
-	<script>
-		document
-				.addEventListener(
-						'DOMContentLoaded',
-						function() {
-							function toggleEdit(commentId) {
-								const editBox = document
-										.getElementById("edit-box-" + commentId);
-								if (editBox) {
-									editBox.style.display = (editBox.style.display === "none" || editBox.style.display === "") ? "block"
-											: "none";
-								}
-							}
-
-							function confirmDelete() {
-								return confirm('정말 삭제하시겠습니까?');
-							}
-						});
-	</script>
+	<th:block layout:fragment="script">
+		<script src="/js/review-post.js"></script>
+	</th:block>
 </body>
 </html>
