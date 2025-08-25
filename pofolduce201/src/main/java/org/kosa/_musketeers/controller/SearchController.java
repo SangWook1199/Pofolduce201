@@ -27,16 +27,20 @@ public class SearchController {
 	// RequestParam(해당 input의 name) 으로 검색어를 받아옵니다.
 	public String search(@RequestParam("search") String search, Model model, @RequestParam(defaultValue = "1") int reviewPage,
 			@RequestParam(defaultValue = "5") int reviewSize, @RequestParam(defaultValue = "1") int studyPage,
-			@RequestParam(defaultValue = "5") int studySize) {
+			@RequestParam(defaultValue = "5") int studySize, @RequestParam(defaultValue = "1") int recruitPage,
+			@RequestParam(defaultValue = "20") int recruitSize) {
 		
 		List<Map<String, Object>> reviewList = userService.getReviewSearchResult(search, reviewPage, reviewSize);
 		List<Map<String, Object>> studyList = userService.getStudySearchResult(search, studyPage, studySize);
-		
+		List<Map<String, Object>> recruitList = userService.getRecruitSearchResult(search, recruitPage, recruitSize);
+
 		int reviewTotalCount = userService.countReviewResult(search);
 		int reviewTotalPages = (int) Math.ceil((double) reviewTotalCount / reviewSize);
 		int studyTotalCount = userService.countStudyResult(search);
 		int studyTotalPages = (int) Math.ceil((double) studyTotalCount / studySize);
-
+		int recruitTotalCount = userService.countRecruitResult(search);
+		int recruitTotalPages = (int) Math.ceil((double) recruitTotalCount / recruitSize);
+		
 		model.addAttribute("search", search);
 		
 		model.addAttribute("reviewList", reviewList);
@@ -50,6 +54,12 @@ public class SearchController {
 		model.addAttribute("studyCurrentPage", studyPage);
 		model.addAttribute("studyTotalPages", studyTotalPages);
 		model.addAttribute("studySize", studySize);
+		
+
+		model.addAttribute("recruitList", recruitList);
+		model.addAttribute("studyCurrentPage", recruitPage);
+		model.addAttribute("recruitTotalPages", recruitTotalPages);
+		model.addAttribute("recruitSize", recruitSize);
 		
 		
 		return "/pages/search/search";
@@ -93,7 +103,21 @@ public class SearchController {
 	
 	//채용 공고 검색 결과 입니다.
 	@GetMapping("/search/recruit")
-	public String searchRecruit() {
+	public String searchRecruit(@RequestParam("search") String search, Model model,  @RequestParam(defaultValue = "1") int recruitPage,
+			@RequestParam(defaultValue = "20") int recruitSize) {
+		
+		List<Map<String, Object>> recruitList = userService.getRecruitSearchResult(search, recruitPage, recruitSize);
+		
+		int recruitTotalCount = userService.countRecruitResult(search);
+		int recruitTotalPages = (int) Math.ceil((double) recruitTotalCount / recruitSize);
+		//System.out.println(recruitList);
+		
+		model.addAttribute("search", search);
+		model.addAttribute("recruitList", recruitList);
+		model.addAttribute("studyCurrentPage", recruitPage);
+		model.addAttribute("recruitTotalPages", recruitTotalPages);
+		model.addAttribute("recruitSize", recruitSize);
+		
 		return "/pages/search/search-recruit";
 	}
 

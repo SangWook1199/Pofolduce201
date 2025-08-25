@@ -13,7 +13,7 @@
 <div layout:fragment="content">
 
 
-<div class="search-home">
+	<div class="search-home">
 
 		<div class="container-fluid px-0 ">
 			<div id="search-header">
@@ -41,9 +41,9 @@
 							th:href="@{/search/recruit(search=${search})}" id="nav-custom">채용
 								공고</a>
 							<div id="underbar-active"></div></li>
-					
+
 					</ul>
-						<div id="underbar-down"></div>
+					<div id="underbar-down"></div>
 				</div>
 
 
@@ -60,6 +60,23 @@
 								<img th:src="@{/svg/arrow.svg}" width="35" height="35"
 									onclick="location.href='/recruit'">
 							</div>
+
+							<div th:if="${not #lists.isEmpty(recruitList)}">
+								<div id="recruit-container">
+									<div class="recruit-box" th:each="recruit : ${recruitList}">
+										<a th:href="${recruit.link}" target="_blank"
+											style="all: unset;"> <img th:src="${recruit.imgLink}"
+											class="recruit-img">
+											<div class="recruit-box-text">
+												<h3 th:text="${recruit.company}" class="recruit-text"></h3>
+												<h4 th:text="${recruit.content}" class="recruit-text"></h4>
+											</div>
+										</a>
+									</div>
+								</div>
+							</div>
+
+
 
 							<!-- 데이터가 없을 때 -->
 							<div class="nodata">
