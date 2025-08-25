@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.fit.pdfdom.PDFDomTree;
@@ -101,5 +102,12 @@ public class ReviewBoardService {
 			html = "fail";
 		}
 		return html;
+	}
+
+	//메인에 조회수 기준 베스트 게시글을 총 9개까지 보여주는 서비스 입니다.
+	//홈 화면의 컨트롤러에서 불러옵니다.
+	public List<Map<String, Object>> getReviewBoardByViewCount() {
+		List<Map<String, Object>> list = reviewBoardMapper.getReviewBoardByViewCount();
+		return list;
 	}
 }
