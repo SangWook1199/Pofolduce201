@@ -51,4 +51,6 @@ public interface UserMapper {
 
 	Verification getUserCompanyDataById(int userId);
 
+	List<User> getUserListByPoint();
+
 }

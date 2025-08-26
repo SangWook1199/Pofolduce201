@@ -291,6 +291,10 @@ public class UserService {
 				userMapper.insertCompany(userId, imagePathStr, company);
 		
 	}
+	public List<User> getUserListByPoint() {
+		return userMapper.getUserListByPoint();
+	}
+	
 	
 	//유저의 회사 인증 정보를 가져옵니다.
 	public Verification getUserCompanyVerification(int userId) {
