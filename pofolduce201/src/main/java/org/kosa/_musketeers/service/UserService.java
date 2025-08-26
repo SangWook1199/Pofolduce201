@@ -296,6 +296,9 @@ public class UserService {
 				userMapper.insertCompany(userId, imagePathStr, company);
 		
 	}
+	public List<User> getUserListByPoint() {
+		return userMapper.getUserListByPoint();
+	}
 
 	//유저의 회사 인증 정보를 가져옵니다.
 	public Verification getUserCompanyVerification(int userId) {
@@ -306,26 +309,6 @@ public class UserService {
 		return userCompanyData;
 	}
 	
-
-	
-//	//html을 png로 변환하기
-//	public void convertHtmlToPng(String html, String outputPath) throws Exception {
-//        // 1. HTML → PDF
-//        ByteArrayOutputStream pdfStream = new ByteArrayOutputStream();
-//        PdfRendererBuilder builder = new PdfRendererBuilder();
-//        builder.useFastMode();
-//        builder.withHtmlContent(html, null);
-//        builder.toStream(pdfStream);
-//        builder.run();
-//
-//        // 2. PDF → Image(PNG)
-//        try (PDDocument document = PDDocument.load(new ByteArrayInputStream(pdfStream.toByteArray()))) {
-//            PDFRenderer renderer = new PDFRenderer(document);
-//            BufferedImage image = renderer.renderImageWithDPI(0, 150); // 첫 페이지 150DPI 렌더링
-//            ImageIO.write(image, "png", new File(outputPath));
-//        }
-//    }
-//	
 	// 회사 인증 요청
 	public List<User> getUsersRequestingCertification() {
 	    return userMapper.getUsersRequestingCertification();

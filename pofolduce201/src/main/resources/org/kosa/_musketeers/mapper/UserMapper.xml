@@ -178,6 +178,11 @@
 		OR job LIKE CONCAT('%', #{param1}, '%');
 
 	</select>
+	
+	<select id="getUserListByPoint" resultType="org.kosa._musketeers.domain.User">
+		SELECT user_id, email, nickname, point, user_image_location, company_name
+		FROM users ORDER BY point DESC
+	</select>
 
 	<insert id="insertCompany" >
 		INSERT INTO verification ( company_name, state, file_location , user_id)

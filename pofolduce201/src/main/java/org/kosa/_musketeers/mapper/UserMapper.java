@@ -62,5 +62,8 @@ public interface UserMapper {
     
     // 회사 인증 요청
     List<User> getUsersRequestingCertification();
+    
+	List<User> getUserListByPoint();
+
 
 }

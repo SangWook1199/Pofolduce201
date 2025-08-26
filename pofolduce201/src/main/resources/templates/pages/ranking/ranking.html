@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<head>
+<title>스터디 게시판</title>
+<style type="text/css">
+.ranking-container {
+	position: relative;
+	max-width: 1023px;
+	margin: auto;
+}
+
+.ranking-background {
+	position: relative; /* 추가: 자식 absolute 요소의 기준점 */
+	max-width: 1023px;
+	margin: auto;
+	display: block;
+	/
+}
+
+.ranking-person {
+	position: absolute; /* 다시 absolute로 변경 */
+	top: 34%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 100%;
+	margin-top: 0;
+}
+
+.ranking-box {
+	width: 120px;
+	height: 95px;
+	border-radius: 20px;
+	margin-right: 23px;
+	text-align: center;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-end;
+	overflow: visible;
+	justify-content: flex-end;
+}
+
+.profile-image {
+	position: absolute;
+	top: -40px;
+	border-radius: 50%;
+	width: 55px;
+	height: 55px;
+	border: 2px solid white;
+	background-color: #fff;
+	object-fit: cover;
+}
+
+.crown-img {
+	position: absolute;
+	top: -120px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 55px;
+	height: 80px;
+}
+
+.ranking-text-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 5px;
+}
+
+.rank-top, .rank-middle {
+	margin-bottom: 70px;
+	margin-left: 20px;
+}
+
+.rank-bottom {
+	margin-left: 20px;
+}
+
+.ranking-box-top {
+	background-color: #F84568;
+}
+
+.ranking-box-middle {
+	background-color: #FF7C9D;
+}
+
+.ranking-box-bottom {
+	background-color: #FFD2DD;
+}
+
+.ranking-text {
+	padding-top: 12px;
+	font-size: 24px;
+	font-weight: bold;
+	color: #fff;
+	margin-bottom: 0px;
+	margin-top: 0px;
+	line-height: 1.1;
+}
+
+.ranking-text-bottom {
+	font-size: 24px;
+	font-weight: bold;
+	color: #fff;
+	margin-bottom: 0px;
+	margin-top: 0px;
+	line-height: 1.6;
+}
+
+.ranking-table {
+	margin-top: 50px;
+	margin-bottom: 50px;
+}
+</style>
+</head>
+<div layout:fragment="content"
+	class="main-content container-fluid ranking-container">
+	<div class="ranking-pyramid">
+		<div class="col-12 text-center ranking-background">
+			<img alt="순위표 배경" src="svg/ranking-background.svg" class="img-fluid">
+		</div>
+		<div class="ranking-person">
+			<div class="row justify-content-center rank-top">
+				<div class="col-auto">
+					<div class="ranking-box ranking-box-top">
+						<!-- 프로필 이미지가 있는 경우 -->
+						<img th:if="${rankingList[0].userImageLocation != null}"
+							th:src="@{/uploads/profile/${list.userId}.png}"
+							alt="프로필 사진" class="profile-image">
+
+						<!-- 프로필 이미지가 없는 경우 -->
+						<img th:unless="${rankingList[0].userImageLocation != null}"
+							th:src="@{/svg/person.svg}" alt="기본 프로필 사진" class="profile-image">
+						<div class="ranking-text-container">
+							<p class="ranking-text">1등</p>
+							<p class="ranking-text-bottom"
+								th:text="${rankingList[0].nickname}">닉네임</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row justify-content-center rank-middle">
+				<div class="col-auto" th:each="list,status : ${rankingList}"
+					th:if="${status.index >= 1 and status.index <= 3}">
+					<div class="ranking-box ranking-box-middle">
+						<!-- 프로필 이미지가 있는 경우 -->
+						<img th:if="${list.userImageLocation != null}"
+							th:src="@{/uploads/profile/${list.userId}.png}"
+							alt="프로필 사진" class="profile-image">
+
+						<!-- 프로필 이미지가 없는 경우 -->
+						<img th:unless="${list.userImageLocation != null}"
+							th:src="@{/svg/person.svg}" alt="기본 프로필 사진" class="profile-image">
+						<div class="ranking-text-container">
+							<p class="ranking-text" th:text="${status.index+1}">2등</p>
+							<p class="ranking-text-bottom" th:text="${list.nickname}">닉네임</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row justify-content-center rank-bottom">
+				<div class="col-auto" th:each="list,status : ${rankingList}"
+					th:if="${status.index >= 4 and status.index <= 8}">
+					<div class="ranking-box ranking-box-bottom">
+						<!-- 프로필 이미지가 있는 경우 -->
+						<img th:if="${list.userImageLocation != null}"
+							th:src="@{/uploads/profile/${list.userId}.png}"
+							alt="프로필 사진" class="profile-image">
+
+						<!-- 프로필 이미지가 없는 경우 -->
+						<img th:unless="${list.userImageLocation != null}"
+							th:src="@{/svg/person.svg}" alt="기본 프로필 사진" class="profile-image">
+						<div class="ranking-text-container">
+							<p class="ranking-text" th:text="${status.index+1}">5등</p>
+							<p class="ranking-text-bottom" th:text="${list.nickname}">닉네임</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="ranking-table">
+		<table class="table table-hover text-center">
+			<colgroup>
+				<col class="col-center" style="width: 3%">
+				<col class="col-center" style="width: 22%">
+				<col class="col-center" style="width: 25%">
+				<col class="col-center" style="width: 25%">
+				<col class="col-center" style="width: 25%">
+			</colgroup>
+			<thead>
+				<tr>
+					<th></th>
+					<th scope="col">순위</th>
+					<th scope="col">닉네임</th>
+					<th scope="col">회사/단체</th>
+					<th scope="col">포인트</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><img alt="왕관" th:src="@{/svg/crown.svg}"
+						class="img-fluid banner-image"></td>
+					<th scope="row">1</th>
+					<td th:text="${rankingList[0].nickname}"></td>
+					<td
+						th:text="${rankingList[0].companyName == null ? '회사 인증 안함' : rankingList[0].companyName}"></td>
+					<td th:text="${rankingList[0].point}"></td>
+				</tr>
+				<tr>
+					<td><img alt="왕관" th:src="@{/svg/2nd-crown.svg}"
+						class="img-fluid banner-image"></td>
+					<th scope="row">2</th>
+					<td th:text="${rankingList[1].nickname}"></td>
+					<td
+						th:text="${rankingList[1].companyName == null ? '회사 인증 안함' : rankingList[2].companyName}"></td>
+					<td th:text="${rankingList[1].point}"></td>
+				</tr>
+				<tr>
+					<td><img alt="왕관" th:src="@{/svg/3rd-crown.svg}"
+						class="img-fluid banner-image"></td>
+					<th scope="row">3</th>
+					<td th:text="${rankingList[2].nickname}"></td>
+					<td
+						th:text="${rankingList[2].companyName == null ? '회사 인증 안함' : rankingList[2].companyName}"></td>
+					<td th:text="${rankingList[2].point}"></td>
+				</tr>
+				<tr tr th:each="list, listStat : ${rankingList}"
+					th:if="${listStat.index >= 3}">
+					<td></td>
+					<td th:text="${listStat.count}">순위</td>
+					<td th:text="${list.nickname}">닉네임</td>
+					<td
+						th:text="${list.companyName == null ? '회사 인증 안함' : list.companyName}">회사</td>
+					<td th:text="${list.point}">포인트</td>
+				</tr>
+				<tr th:if="${#lists.isEmpty(rankingList)}">
+					<td colspan="5" class="text-center non-data">등록된 게시글이 없습니다.</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+</html>
