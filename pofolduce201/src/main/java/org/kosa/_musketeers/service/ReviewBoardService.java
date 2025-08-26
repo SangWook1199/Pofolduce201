@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class ReviewBoardService {
 
 	private ReviewBoardMapper reviewBoardMapper;
@@ -67,12 +68,16 @@ public class ReviewBoardService {
 		reviewBoardMapper.createReviewPostComment(reviewPostComment);
 	}
 
-	public List<ReviewPostComment> loadReviewPostCommentList(int reviewPostId) {
-		return reviewBoardMapper.getReviewCommentListByReviewPostId(reviewPostId);
+	public List<ReviewPostComment> loadReviewPostCommentList(int reviewPostId, int start, int commentCount) {
+		return reviewBoardMapper.getReviewCommentListByReviewPostId(reviewPostId, start, commentCount);
 	}
 
 	public void deleteComment(int reviewCommentId) {
 		reviewBoardMapper.deleteReviewComment(reviewCommentId);
+	}
+	
+	public void modifyComment(int reviewCommentId, String commentContents) {
+		reviewBoardMapper.updateReviewComment(reviewCommentId, commentContents);
 	}
 	
 	public int getTotalReviewPostCountById(int userId) {
@@ -109,5 +114,14 @@ public class ReviewBoardService {
 	public List<Map<String, Object>> getReviewBoardByViewCount() {
 		List<Map<String, Object>> list = reviewBoardMapper.getReviewBoardByViewCount();
 		return list;
+	}
+
+	public int getTotalReviewCommentCount(int reviewPostId) {
+		return reviewBoardMapper.getTotalReviewCommentCount(reviewPostId);
+	}
+
+	public int plusReviewPostLike(int reviewPostId) {
+		reviewBoardMapper.updateReviewPostLike(reviewPostId);
+		return reviewBoardMapper.selectLikeCountByReviewPostId(reviewPostId);
 	}
 }

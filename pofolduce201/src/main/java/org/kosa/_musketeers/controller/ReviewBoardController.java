@@ -45,9 +45,17 @@ public class ReviewBoardController {
 	}
 	
 	@GetMapping("/review/post{reviewPostId}")
-	public String reviewViewPost(@RequestParam int reviewPostId, Model model) {
+	public String reviewViewPost(@RequestParam int reviewPostId, @RequestParam(defaultValue="1") int currentCommentPage, Model model) {
+		
+		int commentCount = 15;
+		int totalCommentPage = reviewBoardService.getTotalReviewCommentCount(reviewPostId) / commentCount + 1;
 		ReviewPost reviewPost = reviewBoardService.viewPost(reviewPostId);
-		List<ReviewPostComment> commentList = reviewBoardService.loadReviewPostCommentList(reviewPostId);
+		List<ReviewPostComment> commentList = reviewBoardService.loadReviewPostCommentList(reviewPostId, (currentCommentPage - 1) * commentCount + 1, commentCount);
+		
+		System.out.println(commentList);
+		System.out.println(reviewPost.getLikeCount());
+		model.addAttribute("totalCommentPages", totalCommentPage);
+		model.addAttribute("currentCommentPage", currentCommentPage);
 		model.addAttribute("reviewPost", reviewPost);
 		model.addAttribute("commentsList", commentList);
 		return "pages/review/review-post";
@@ -93,7 +101,7 @@ public class ReviewBoardController {
 	}
 	
 	@PostMapping("/review/comment")
-	public String createComment(int userId, int reviewPostId, String comment) {
+	public String createComment(@RequestParam int userId, @RequestParam int reviewPostId, @RequestParam String comment) {
 		System.out.println(userId);
 		System.out.println(reviewPostId);
 		System.out.println(comment);
@@ -109,8 +117,8 @@ public class ReviewBoardController {
 	}
 	
 	@PostMapping("/review/comment/{reviewCommentId}/edit")
-	public String editComment(@PathVariable int reviewCommentId, @RequestParam int reviewPostId) {
-		reviewBoardService.deleteComment(reviewCommentId);
+	public String editComment(@PathVariable int reviewCommentId, @RequestParam String commentsContents, @RequestParam int reviewPostId) {
+		reviewBoardService.modifyComment(reviewCommentId, commentsContents);
 		return "redirect:/review/post?reviewPostId=" + Integer.toString(reviewPostId);
 	}
 	
