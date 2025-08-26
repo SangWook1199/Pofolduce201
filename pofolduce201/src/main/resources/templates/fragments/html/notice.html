@@ -1,24 +1,5 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout}">
-<head>
-    <meta charset="UTF-8">
-    <title>공지사항</title>
-    <link th:href="@{/css/board-header.css}" rel="stylesheet">
-    <link th:href="@{/css/notice-css/notice-post.css}" rel="stylesheet">
-</head>
-
-<div layout:fragment="content" class="notice-content">
-    <!-- 상단 헤더 -->
-    <div th:replace="fragments/html/board-header :: board-header('공지사항')"></div>
-
-    <!-- 공지사항 배너 -->
-    <div th:replace="fragments/html/notice_banner :: banner(
-            '포폴듀스201의 공지사항 입니다.', 
-            '문의 사항은 하단의 고객센터 번호를 확인해 주세요.')">
-    </div>
-
+<!-- notice_board.html (fragment로 저장할 내용) -->
+<div th:fragment="board(posts, currentPage, totalPages, isAdmin)">
     <div class="notice-post">
         <table class="table table-hover">
             <colgroup>
@@ -46,18 +27,12 @@
             </tbody>
         </table>
 
-        <!-- 관리자일 때만 글 작성 버튼 보이기 -->
-        <div class="notice_btn" type="button" th:if="${isAdmin}">
-            <button class="plus-btn"
-                th:onclick="|window.location.href='@{/notice/notice-post-create}'|">+</button>
-        </div>
-
         <!-- 페이징 -->
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
                 <!-- 이전 페이지 -->
                 <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                    <a class="page-link" th:href="@{/(page=${currentPage - 1})}" tabindex="-1" aria-disaㅃbled="true">Previous</a>
+                    <a class="page-link" th:href="@{/(page=${currentPage - 1})}" tabindex="-1" aria-disabled="true">Previous</a>
                 </li>
 
                 <!-- 페이지 번호 반복 -->
@@ -74,4 +49,3 @@
         </nav>
     </div>
 </div>
-</html>

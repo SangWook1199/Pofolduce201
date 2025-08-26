@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>신고 게시물 내용</title>
+<link th:href="@{/css/admin.css}" rel="stylesheet" />
+</head>
+<body class="admin-page">
+	<div th:utext="${postHtml}">
+		<!-- 여기에 신고 게시물의 HTML 내용이 출력됨 -->
+	</div>
+</body>
+</html>

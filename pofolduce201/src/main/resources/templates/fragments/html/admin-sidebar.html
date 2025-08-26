@@ -1,0 +1,32 @@
+<!-- fragments/html/admin-sidebar.html -->
+<div class="col-2 sidebar" th:fragment="admin-sidebar">
+    <div class="sidebar-section">
+        <h5>유저 관리</h5>
+        <ul>
+            <li>
+                <a th:href="@{/admin}" class="sidebar-link"
+                   th:classappend="${currentPath == '/admin'} ? 'active'">
+                    유저 목록
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/user/certifications}" class="sidebar-link"
+                   th:classappend="${currentPath?.startsWith('/admin/user/certifications')} ? 'active'">
+                    회사 인증 관리
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="sidebar-section">
+        <h5>신고 관리</h5>
+        <ul>
+            <li>
+                <a th:href="@{/admin/reports}" class="sidebar-link"
+                   th:classappend="${currentPath?.startsWith('/admin/reports')} ? 'active'">
+                    신고 목록
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

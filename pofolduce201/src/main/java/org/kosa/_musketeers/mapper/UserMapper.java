@@ -3,6 +3,7 @@ package org.kosa._musketeers.mapper;
 import java.util.List;
 import java.util.Map;
 
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.kosa._musketeers.domain.User;
@@ -38,6 +39,7 @@ public interface UserMapper {
 	// user 정보 (관리자 확인용)
 	User getUserById(int userId);
 
+
 	
 	//검색
 	List<Map<String, Object>> getReviewSearchResult(@Param("search") String search);
@@ -50,5 +52,15 @@ public interface UserMapper {
 	void insertCompany(int userId, String imagePath, String company);
 
 	Verification getUserCompanyDataById(int userId);
+
+	// User 정보(전체 유저 목록 추출)
+	List<User> getAllUsers();
+	
+	// 관리자 제재 기능 추가
+    void updateSanction(@Param("userId") int userId, @Param("days") int days, @Param("status") String status);
+    void increaseSanctionCount(@Param("userId") int userId);
+    
+    // 회사 인증 요청
+    List<User> getUsersRequestingCertification();
 
 }

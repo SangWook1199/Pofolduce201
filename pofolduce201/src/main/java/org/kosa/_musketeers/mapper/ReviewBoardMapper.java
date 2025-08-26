@@ -43,4 +43,9 @@ public interface ReviewBoardMapper {
 	void updateReviewPostLike(int reviewPostId);
 	
 	int selectLikeCountByReviewPostId(int reviewPostId);
+
+	
+	//리뷰 댓글 가져오기
+	ReviewPostComment getReviewCommentById(int reviewCommentId);
+
 }

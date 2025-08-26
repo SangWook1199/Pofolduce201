@@ -149,8 +149,7 @@
 		WHERE user_id=#{userId};
 	</select>
 
-	<select id="getReviewBoardByViewCount"
-		resultType="map">
+	<select id="getReviewBoardByViewCount" resultType="map">
 
 		SELECT
 		rp.review_post_id AS reviewPostId,
@@ -160,10 +159,12 @@
 		rp.view_count AS viewCount,
 		rp.create_date AS createDate,
 		rp.like_count AS likeCount,
-		u.user_id AS "user.userId",
+		u.user_id AS
+		"user.userId",
 		u.nickname AS "user.nickname"
 		FROM review_post rp
-		JOIN users u ON rp.user_id = u.user_id
+		JOIN
+		users u ON rp.user_id = u.user_id
 		ORDER BY rp.view_count DESC
 		LIMIT 9
 	</select>
@@ -176,6 +177,15 @@
 	
 	<select id="selectLikeCountByReviewPostId" resultType="int">
 			SELECT like_count FROM review_post WHERE review_post_id=${reviewPostId}
+	</select>
+
+	<select id="getReviewCommentById" parameterType="int"
+		resultType="org.kosa._musketeers.domain.ReviewPostComment">
+		SELECT c.comments_id, c.comments_contents, c.comments_date,
+		c.review_post_id, u.user_id, u.nickname, u.email /* 등 필요한 컬럼들 */
+		FROM review_post_comment c
+		JOIN user u ON c.user_id = u.user_id
+		WHERE c.comments_id = #{commentsId}
 	</select>
 
 

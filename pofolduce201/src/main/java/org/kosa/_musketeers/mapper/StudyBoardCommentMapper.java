@@ -20,6 +20,6 @@ public interface StudyBoardCommentMapper {
 
 	int getStudyCommentUserId(int commentId);
 
-
+	StudyBoardComment getStudyCommentById(int commentId);
 
 }

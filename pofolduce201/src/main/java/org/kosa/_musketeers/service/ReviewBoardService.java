@@ -124,4 +124,10 @@ public class ReviewBoardService {
 		reviewBoardMapper.updateReviewPostLike(reviewPostId);
 		return reviewBoardMapper.selectLikeCountByReviewPostId(reviewPostId);
 	}
+	
+	// 댓글 불러오기 관리자 페이지에서 게시물을 가져올때 사용합니다.
+	public ReviewPostComment getReviewCommentById(int commentsId) {
+	    return reviewBoardMapper.getReviewCommentById(commentsId);
+
+	}
 }
