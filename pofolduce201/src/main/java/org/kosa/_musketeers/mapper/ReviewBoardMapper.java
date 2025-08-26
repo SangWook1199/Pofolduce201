@@ -28,11 +28,19 @@ public interface ReviewBoardMapper {
 	
 	void createReviewPostComment(ReviewPostComment reviewPostComment);
 
-	List<ReviewPostComment> getReviewCommentListByReviewPostId(int reviewPostId);
+	List<ReviewPostComment> getReviewCommentListByReviewPostId(int reviewPostId, int start, int count);
+	
+	void updateReviewComment(int reviewCommentId, String commentsContents);
 
 	void deleteReviewComment(int reviewCommentId);
 	
 	int getTotalReviewPostCountById(int userId);
 
 	List<Map<String, Object>> getReviewBoardByViewCount();
+
+	int getTotalReviewCommentCount(int reviewPostId);
+
+	void updateReviewPostLike(int reviewPostId);
+	
+	int selectLikeCountByReviewPostId(int reviewPostId);
 }

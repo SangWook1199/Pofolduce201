@@ -28,7 +28,7 @@
 					</div>
 					<div class="row justify-content-start">
 						<img class="col-3 col-md-2 col-xl-1 rounded-circle"
-							src="https://marketplace.canva.com/FUJzw/MAEVntFUJzw/1/tl/canva-human-face.-MAEVntFUJzw.png" />
+							th:src="${reviewPost.user.userImageLocation}" />
 						<div class="col-9 col-md-10 col-xl-11 row align-items-center">
 							<a class="fs-4 text-decoration-none text-dark" th:href="@{/}"
 								th:text="${reviewPost.user.nickname}"></a>
@@ -46,8 +46,7 @@
 
 				<div
 					class="d-flex justify-content-center mt-3 border-bottom border-1">
-					<button class="btn btn-primary text-align-center m-5">LIKE
-						👍</button>
+					<button class="btn btn-primary text-align-center m-5" id="like-button" th:text="|👍 ${reviewPost.likeCount}|" th:onclick="|pressLike(${reviewPost.reviewPostId})|">👍 1234</button>
 				</div>
 				<div class="d-flex justify-content-end m-3">
 					<button class="btn btn-primary" type="button"
@@ -55,6 +54,7 @@
 				</div>
 				<div class="p-3">
 					<h4 class="h4">댓글 목록</h4>
+					<!-- 댓글 작성 -->
 					<form action="/review/comment" method="post">
 						<div class="row">
 							<div class="col-10">
@@ -67,10 +67,11 @@
 							<button class="col-2 btn btn-primary" type="submit">등록</button>
 						</div>
 					</form>
+					<!-- 댓글 목록 -->
 					<div class="row mt-3 border-top pt-3"
 						th:each="comments : ${commentsList}">
 						<img class="col-3 col-md-2 col-xl-1 rounded-circle"
-							src="https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg">
+							th:src="${reviewPost.user.userImageLocation}">
 						<div class="col-10">
 							<div class="fw-bold" th:text="${comments.userId.nickname}"></div>
 							<div class="col-10 mt-2" th:text="${comments.commentsContents}"
@@ -90,25 +91,49 @@
 									class="btn btn-primary ms-2" type="submit">삭제</button>
 							</form>
 							<button class="btn btn-primary ms-1">신고</button>
-							<!-- 숨겨진 수정창 -->
-							<div th:id="|edit-box-${comments.commentsId}|"
-								style="display: none;">
-								<form
-									th:action="@{/review/comment/{reviewCommentId}/edit(reviewCommentId=${comments.commentsId})}"
-									method="post">
-									<textarea class="form-control" name="comment-content"
-										id="comment-content" th:text="${comments.commentsContents}"></textarea>
-									<button class="btn btn-primary btn-sm mt-2" type="submit">수정
-										완료</button>
-								</form>
-							</div>
+						</div>
+						<!-- 숨겨진 수정창 -->
+						<div th:id="|edit-box-${comments.commentsId}|"
+							style="display: none;">
+							<form
+								th:action="@{/review/comment/{reviewCommentId}/edit(reviewCommentId=${comments.commentsId})}"
+								method="post">
+								<input type="hidden" name="reviewPostId"
+									th:value="${comments.reviewPostId}">
+								<textarea class="form-control" name="commentsContents"
+									id="comment-content" th:text="${comments.commentsContents}"></textarea>
+								<button class="btn btn-primary btn-sm mt-2" type="submit">수정
+									완료</button>
+							</form>
 						</div>
 					</div>
+											<nav aria-label="Page navigation example">
+							<ul class="pagination justify-content-center m-3">
+								<!-- 이전 버튼 -->
+								<li class="page-item"
+									th:classappend="${currentCommentPage == 1} ? 'disabled'"><a
+									class="page-link"
+									th:href="@{/review(page=${currentCommentPage - 1})}">Previous</a></li>
+
+								<!-- 페이지 번호 반복 -->
+								<li class="page-item"
+									th:each="i : ${#numbers.sequence(1, totalCommentPages)}"
+									th:classappend="${i == currentCommentPage} ? 'active'"><a
+									class="page-link" th:href="@{/review/post(reviewPostId=${reviewPost.reviewPostId}, currentCommentPage=${i})}"
+									th:text="${i}"></a></li>
+
+								<!-- 다음 버튼 -->
+								<li class="page-item"
+									th:classappend="${currentCommentPage == totalCommentPages} ? 'disabled'"><a
+								class="page-link"
+								th:href="@{/review(page=${currentCommentPage + 1})}">Next</a></li>
+							</ul>
+						</nav>
 				</div>
 			</div>
 		</div>
-		<div id="data-container" th:data-post-id="${reviewPost.reviewPostId}" th:data-session-userId="${session.userId}">
-		</div>
+		<div id="data-container" th:data-post-id="${reviewPost.reviewPostId}"
+			th:data-session-userId="${session.userId}"></div>
 	</div>
 	<th:block layout:fragment="script">
 		<script src="/js/review-post.js"></script>

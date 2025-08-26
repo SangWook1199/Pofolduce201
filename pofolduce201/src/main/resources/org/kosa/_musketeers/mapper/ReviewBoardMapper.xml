@@ -57,7 +57,7 @@
 		resultMap="viewReviewPostResultMap">
 		SELECT review_post_id, title, post_html, portfolio_html,
 		view_count,
-		create_date, like_count, users.user_id, nickname
+		create_date, like_count, users.user_id, nickname, user_image_location
 		FROM
 		review_post JOIN users on review_post.user_id=users.user_id
 		WHERE
@@ -100,19 +100,27 @@
 		VALUES(#{commentsContents}, #{userId.userId},
 		#{reviewPostId})
 	</insert>
-
+	
+	<select id="getTotalReviewCommentCount" resultType="int">
+		SELECT count(1)
+		FROM review_post_comments
+		WHERE review_post_id=#{reviewPostId}
+	</select>
+	
 	<select id="getReviewCommentListByReviewPostId"
 		parameterType="int"
 		resultType="org.kosa._musketeers.domain.ReviewPostComment"
 		resultMap="getReviewCommentListByReviewPostIdResultMap">
 		SELECT comments_id, comments_contents, comments_date,
 		review_post_id,
-		users.user_id, users.nickname
+		users.user_id, users.nickname, users.user_image_location
 		FROM review_post_comments
 		JOIN users ON
 		review_post_comments.user_id=users.user_id
 		WHERE
-		review_post_id=#{review_post_id}
+		review_post_id=#{reviewPostId}
+		ORDER BY comments_date DESC
+		LIMIT #{count} OFFSET #{start}
 	</select>
 
 	<resultMap
@@ -121,6 +129,12 @@
 		<result column="user_id" property="userId.userId" />
 		<result column="nickname" property="userId.nickname" />
 	</resultMap>
+	
+	<update id="updateReviewComment">
+		UPDATE review_post_comments
+		SET comments_contents=#{commentsContents}
+		WHERE comments_id=#{reviewCommentId}
+	</update>
 
 	<delete id="deleteReviewComment" parameterType="int">
 		DELETE FROM
@@ -152,6 +166,16 @@
 		JOIN users u ON rp.user_id = u.user_id
 		ORDER BY rp.view_count DESC
 		LIMIT 9
+	</select>
+	
+	<update id="updateReviewPostLike">
+		UPDATE review_post
+		SET like_count=like_count+1
+		WHERE review_post_id=#{reviewPostId}
+	</update>
+	
+	<select id="selectLikeCountByReviewPostId" resultType="int">
+			SELECT like_count FROM review_post WHERE review_post_id=${reviewPostId}
 	</select>
 
 
