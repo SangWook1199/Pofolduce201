@@ -1,13 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="org.kosa._musketeers.mapper.ReportMapper">
+
+	<!-- 신고 등록 -->
 	<insert id="createReport"
 		parameterType="org.kosa._musketeers.domain.Report"
 		useGeneratedKeys="true" keyProperty="reportId">
-		INSERT INTO report (location,
-		report_contents, state, user_id, reported_id)
-		VALUES (#{location},
-		#{reportContents}, #{state},
-		#{userId.userId},#{reportedId.userId})
+		INSERT INTO report (
+		location,
+		report_contents,
+		state,
+		user_id,
+		reported_id
+		)
+		VALUES (
+		#{location},
+		#{reportContents},
+		#{state},
+		#{userId.userId},
+		#{reportedId.userId}
+		)
 	</insert>
+
+	<!-- 신고 조회 resultMap -->
+	<resultMap id="reportResultMap"
+		type="org.kosa._musketeers.domain.Report" autoMapping="false">
+		<id property="reportId" column="report_id" />
+		<result property="location" column="location" />
+		<result property="reportContents" column="report_contents" />
+		<result property="state" column="state" />
+		<result property="date" column="date"
+			javaType="java.time.LocalDateTime" />
+
+		<!-- 신고자 정보 -->
+		<association property="userId"
+			javaType="org.kosa._musketeers.domain.User">
+			<id property="userId" column="user_id" />
+			<result property="nickname" column="user_nickname" />
+		</association>
+
+		<!-- 신고 대상 정보 -->
+		<association property="reportedId"
+			javaType="org.kosa._musketeers.domain.User">
+			<id property="userId" column="reported_id" />
+			<result property="nickname" column="reported_nickname" />
+		</association>
+	</resultMap>
+
+	<!-- 전체 신고 조회 -->
+	<select id="getAllReports" resultMap="reportResultMap">
+		SELECT
+		r.report_id,
+		r.location,
+		r.report_contents,
+		r.state,
+		r.date,
+		r.user_id,
+		r.reported_id,
+		u.nickname AS user_nickname,
+		ru.nickname AS reported_nickname
+		FROM report r
+		LEFT JOIN users u ON r.user_id = u.user_id
+		LEFT JOIN users ru ON r.reported_id = ru.user_id
+		ORDER BY r.date DESC
+	</select>
+
+	<!-- 특정 신고 상세 조회 -->
+	<select id="getReportById" resultMap="reportResultMap">
+		SELECT
+		r.report_id,
+		r.location,
+		r.report_contents,
+		r.state,
+		r.date,
+		r.user_id,
+		r.reported_id,
+		u.nickname AS user_nickname,
+		ru.nickname AS reported_nickname
+		FROM report r
+		LEFT JOIN users u ON r.user_id = u.user_id
+		LEFT JOIN users ru ON r.reported_id = ru.user_id
+		WHERE r.report_id = #{reportId}
+	</select>
+
+	<!-- 신고 상태 업데이트 -->
+	<update id="updateReportState">
+		UPDATE report
+		SET state = #{state}
+		WHERE report_id = #{reportId}
+	</update>
+
 </mapper>

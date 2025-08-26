@@ -47,5 +47,10 @@ public class StudyBoardCommentService {
 	public int getStudyCommentUserId(int commentId) {
 		return studyBoardCommentMapper.getStudyCommentUserId(commentId);
 	}
+	
+	// 댓글 불러오기
+	public StudyBoardComment getCommentById(int commentId) {
+	    return studyBoardCommentMapper.getStudyCommentById(commentId);
+	}
 
 }

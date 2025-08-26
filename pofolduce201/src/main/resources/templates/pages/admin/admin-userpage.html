@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>유저페이지</title>
+<link th:href="@{/css/board-header.css}" rel="stylesheet">
+<link th:href="@{/css/page-css/userpage.css}" rel="stylesheet">
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="container-fluid px-0">
+			<div class="row">
+				<div class="col-10 p-4">
+					<div class="mypage">
+						<div class="mypage-main">
+
+							<!-- 유저 정보 헤더 -->
+							<div
+								th:replace="fragments/html/board-header :: board-header('유저정보')"></div>
+
+							<!-- 유저 프로필 -->
+							<div class="mypage-main-container p-4 mb-4">
+								<div class="box">
+									<div id="person-svg" class="mx-auto">
+										<img th:src="@{/svg/person.svg}" width="130" height="130">
+									</div>
+								</div>
+							</div>
+
+							<!-- 유저 정보 상세 -->
+							<div class="mypage-main-container p-4 mb-8">
+								<div class="mypage-main-info row">
+									<!-- 닉네임 -->
+									<div class="row mb-3">
+										<div class="col-md-4 text-center">
+											<h2 class="p-3 id-box">닉네임</h2>
+										</div>
+										<div class="col-md-8 text-center">
+											<h2 th:text="${userData.nickname}" class="id-index">닉네임</h2>
+										</div>
+									</div>
+
+									<!-- 이메일 -->
+									<div class="row mb-3">
+										<div class="col-md-4 text-center">
+											<h2 class="p-3 id-box">이메일</h2>
+										</div>
+										<div class="col-md-8 text-center">
+											<h2 th:text="${userData.email}" class="id-index">이메일</h2>
+										</div>
+									</div>
+
+									<!-- 유저 타입 -->
+									<div class="row mb-3">
+										<div class="col-md-4 text-center">
+											<h2 class="p-3 id-box">유저타입</h2>
+										</div>
+										<div class="col-md-8 text-center">
+											<h2 th:text="${userData.userType}" class="id-index">유저</h2>
+										</div>
+									</div>
+
+									<!-- 회사 인증 -->
+									<div class="row mb-3">
+										<div class="col-md-4 text-center">
+											<h2 class="p-3 id-box">회사 인증</h2>
+										</div>
+										<div class="col-md-8 text-center">
+											<h2
+												th:text="${userData.companyCertification == 'yes' ? '인증 완료' : '인증 안함'}"
+												class="id-index"></h2>
+										</div>
+									</div>
+
+									<!-- 회사 이름 -->
+									<div class="row mb-3">
+										<div class="col-md-4 text-center">
+											<h2 class="p-3 id-box">회사 이름</h2>
+										</div>
+										<div class="col-md-8 text-center">
+											<h2
+												th:text="${userData.companyName != null ? userData.companyName : '없음'}"
+												class="id-index"></h2>
+										</div>
+									</div>
+
+									<!-- 등급 -->
+									<div class="row mb-3">
+										<div class="col-md-4 text-center">
+											<h2 class="p-3 id-box">등급</h2>
+										</div>
+										<div class="col-md-8 text-center">
+											<div class="id-index"
+												th:text="${userData.point >= 10000 ? '아이돌' :
+                                                       (userData.point >= 2000 ? '데뷔조' :
+                                                       (userData.point >= 1000 ? '연습생 A' :
+                                                       (userData.point >= 500 ? '연습생 B' :
+                                                       (userData.point >= 100 ? '연습생 C' : '연습생 D'))))}">
+											</div>
+										</div>
+									</div>
+
+									<!-- 제재 횟수 -->
+									<div class="row mb-3">
+										<div class="col-md-4 text-center">
+											<h2 class="p-3 id-box">제재 횟수</h2>
+										</div>
+										<div class="col-md-8 text-center">
+											<h2 th:text="${userData.sanctionCount}" class="id-index"></h2>
+										</div>
+									</div>
+
+									<!-- 현재 상태 -->
+									<div class="row mb-3">
+										<div class="col-md-4 text-center">
+											<h2 class="p-3 id-box">현재 상태</h2>
+										</div>
+										<div class="col-md-8 text-center">
+											<h2
+												th:text="${userData.sanctionType != null ? userData.sanctionType : '정상'}"
+												class="id-index"></h2>
+										</div>
+									</div>
+
+									<!-- 가입일 -->
+									<div class="row mb-3">
+										<div class="col-md-4 text-center">
+											<h2 class="p-3 id-box">가입일</h2>
+										</div>
+										<div class="col-md-8 text-center">
+											<h2
+												th:text="${userData.date != null ? #temporals.format(userData.date, 'yyyy‑MM‑dd') : '날짜 없음'}"
+												class="id-index"></h2>
+										</div>
+									</div>
+
+									<!-- 제재 버튼 -->
+									<div class="row mb-3">
+										<div class="col-12 d-flex justify-content-end">
+											<button class="btn btn-danger"
+												th:attr="data-user-id=${userData.userId}, data-bs-toggle='modal', data-bs-target='#sanctionModal'">
+												제재</button>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- 대표 이력서 -->
+							<div
+								th:replace="fragments/html/board-header :: board-header('대표 이력서')"></div>
+							<div class="repPortfolio">
+								<th:block th:if="${portfolio != null}">
+									<div class="embed-responsive embed-responsive-4by3 mb-3">
+										<embed class="pdf-viewer embed-responsive-item"
+											th:src="@{'/uploads/portfolio/' + ${portfolio.portfolioId} + '.pdf'}"
+											type="application/pdf" width="100%" height="1030px" />
+									</div>
+								</th:block>
+								<th:block th:unless="${portfolio != null}">
+									<h2>대표 이력서가 없습니다.</h2>
+								</th:block>
+							</div>
+
+							<!-- 모달은 여기, layout fragment 내부에서 마침표 직전 -->
+							<div class="modal fade" id="sanctionModal" tabindex="-1"
+								aria-labelledby="sanctionModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="sanctionModalLabel">유저 제재</h5>
+											<button type="button" class="btn-close"
+												data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="modal-body">
+											<input type="hidden" id="sanctionUserId">
+											<div class="mb-3">
+												<button type="button" class="btn btn-outline-primary"
+													onclick="setDays(1)">1일</button>
+												<button type="button" class="btn btn-outline-primary"
+													onclick="setDays(3)">3일</button>
+												<button type="button" class="btn btn-outline-primary"
+													onclick="setDays(7)">7일</button>
+												<button type="button" class="btn btn-outline-primary"
+													onclick="setDays(30)">30일</button>
+											</div>
+											<div class="mb-3">
+												<label for="customDays" class="form-label">직접 입력 (일)</label>
+												<input type="number" id="customDays" class="form-control"
+													min="1" placeholder="제재할 일수 입력">
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary"
+												data-bs-dismiss="modal">취소</button>
+											<button type="button" class="btn btn-danger"
+												onclick="submitSanction()">제재하기</button>
+										</div>
+									</div>
+								</div>
+							</div><!-- 모달 끝 -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Bootstrap JS (모달 필수) -->
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+	<!-- 사용자 JS -->
+	<script th:src="@{/js/admin-mypage.js}"></script>
+
+</body>
+</html>

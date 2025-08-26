@@ -1,5 +1,7 @@
 package org.kosa._musketeers.service;
 
+import java.util.List;
+
 import org.kosa._musketeers.domain.Report;
 import org.kosa._musketeers.mapper.ReportMapper;
 import org.springframework.stereotype.Service;
@@ -19,5 +21,16 @@ public class ReportService {
 		reportMapper.createReport(report);
 	}
 	
+	public List<Report> getAllReports() {
+	    return reportMapper.getAllReports();
+	}
 	
+	public Report getReportById(int reportId) {
+	    return reportMapper.getReportById(reportId);
+	}
+	
+	// 신고 상태 변경
+	public void updateReportState(int reportId, String state) {
+	    reportMapper.updateReportState(reportId, state);
+	}
 }

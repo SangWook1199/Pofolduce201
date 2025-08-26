@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+
+<head>
+<meta charset="UTF-8">
+<title>관리자 페이지</title>
+<link th:href="@{/css/board-header.css}" rel="stylesheet">
+<link rel="stylesheet" th:href="@{/css/admin.css}" />
+</head>
+
+<body>
+	<div layout:fragment="content">
+		<div class="admin-page container-fluid px-0">
+			<div class="row">
+
+				<!-- 사이드 메뉴 -->
+				<div th:replace="fragments/html/admin-sidebar :: admin-sidebar"></div>
+
+				<!-- 메인 컨텐츠 -->
+				<div class="col-10 p-4">
+					<h3>신고 관리</h3>
+					<div class="card mt-3">
+
+						<!-- 헤더 -->
+						<div
+							th:replace="fragments/html/board-header :: board-header('신고 관리 > 신고 게시물')"></div>
+
+						<!-- 신고 테이블 -->
+						<div class="card-body p-0">
+							<table class="table table-hover mb-0">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>신고 대상</th>
+										<th>신고 사유</th>
+										<th>신고자</th>
+										<th>날짜</th>
+										<th>상태</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="report, stat : ${reportList}"
+										th:if="${report.state == '처리 완료' or report.state == '처리 전'}"
+										th:attr="data-report-id=${report.reportId}" class="report-row"
+										style="cursor: pointer;">
+										<td th:text="${stat.index + 1}">1</td>
+										<td th:text="${report.reportedId.nickname}">신고대상닉네임</td>
+										<td th:text="${report.reportContents}">신고사유</td>
+										<td th:text="${report.userId.nickname}">신고자닉네임</td>
+										<td th:text="${#temporals.format(report.date, 'yyyy-MM-dd')}">2025-08-21</td>
+										<td th:text="${report.state}">처리 전</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<!-- 페이지네이션 -->
+						<div class="card-footer text-center">
+							<nav class="mb-3">
+								<ul class="pagination justify-content-center mb-0">
+									<li class="page-item"><a class="page-link" href="#">Prev</a></li>
+									<li class="page-item"><a class="page-link" href="#">1</a></li>
+									<li class="page-item"><a class="page-link" href="#">2</a></li>
+									<li class="page-item"><a class="page-link" href="#">3</a></li>
+									<li class="page-item"><a class="page-link" href="#">4</a></li>
+									<li class="page-item"><a class="page-link" href="#">Next</a></li>
+								</ul>
+							</nav>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<!-- 스크립트 -->
+	<div layout:fragment="script">
+		<script>
+		document.addEventListener('DOMContentLoaded', () => {
+		    const rows = document.querySelectorAll('.report-row');
+
+		    rows.forEach(row => {
+		        row.addEventListener('click', () => {
+		            const reportId = row.getAttribute('data-report-id');
+		            if (reportId) {
+		                // 팝업창으로 열기
+		                window.open(
+		                    `/admin/reports/${reportId}`,
+		                    'reportDetail',
+		                    'width=900,height=700,scrollbars=yes,resizable=yes'
+		                );
+		            }
+		        });
+		    });
+		});
+		</script>
+	</div>
+
+</body>
+</html>

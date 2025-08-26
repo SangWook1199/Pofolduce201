@@ -141,6 +141,11 @@ public class UserService {
 		User user = getUserById(userId);
 		return user != null && "관리자".equals(user.getUserType());
 	}
+	
+	// 유저 전체 목록을 가져오는 메서드
+	public List<User> getAllUsers() {
+	    return userMapper.getAllUsers();
+	}
 
 	// 대표 포트폴리오를 설정하는 메서드입니다.
 	public void setRepPortfolio(int userId, int portfolioId) {
@@ -294,8 +299,7 @@ public class UserService {
 	public List<User> getUserListByPoint() {
 		return userMapper.getUserListByPoint();
 	}
-	
-	
+
 	//유저의 회사 인증 정보를 가져옵니다.
 	public Verification getUserCompanyVerification(int userId) {
 		
@@ -305,6 +309,9 @@ public class UserService {
 		return userCompanyData;
 	}
 	
+	// 회사 인증 요청
+	public List<User> getUsersRequestingCertification() {
+	    return userMapper.getUsersRequestingCertification();
+	}
 
-	
 }

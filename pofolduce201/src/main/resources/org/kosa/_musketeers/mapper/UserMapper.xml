@@ -131,9 +131,8 @@
 	<select id="getUserById" parameterType="int"
 		resultType="org.kosa._musketeers.domain.User">
 		SELECT user_id, email, nickname, password, user_type,
-		company_name, company_certification, point, user_image_location
-		FROM
-		users
+		company_name, company_certification, point, date, user_image_location
+		FROM users
 		WHERE user_id = #{userId}
 	</select>
 
@@ -185,7 +184,6 @@
 		FROM users ORDER BY point DESC
 	</select>
 
-
 	<insert id="insertCompany" >
 		INSERT INTO verification ( company_name, state, file_location , user_id)
 		VALUES(#{company}, '대기', #{imagePath}, #{userId})
@@ -204,5 +202,28 @@
 	</select>
 
 
+	<!-- 유저 목록 보기위한 모든 유저 정보 보여주기 -->
+	<select id="getAllUsers"
+		resultType="org.kosa._musketeers.domain.User">
+		SELECT * FROM users
+
+	</select>
+	<!-- -->
+	<update id="applySanction">
+		UPDATE users
+		SET sanction_type = #{sanctionType},
+		sanction_count = sanction_count + 1,
+		sanction_end_date =
+		DATE_ADD(NOW(), INTERVAL #{days} DAY)
+		WHERE user_id = #{userId}
+	</update>
+
+	<!-- 회사 인증 요청 -->
+	<select id="getUsersRequestingCertification"
+		resultType="org.kosa._musketeers.domain.User">
+		SELECT *
+		FROM users
+		WHERE company_certification = 'no'
+	</select>
 
 </mapper>
