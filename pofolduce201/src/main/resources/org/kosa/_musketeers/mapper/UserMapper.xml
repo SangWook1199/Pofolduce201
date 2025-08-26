@@ -42,6 +42,22 @@
 	</resultMap>
 
 
+<resultMap id="CompanyMap"
+		type="org.kosa._musketeers.domain.Verification">
+		<id property="verificationId" column="verification_id" />
+		<result property="companyName" column="company_name" />
+		<result property="state" column="state" />
+		<result property="date" column="date" />
+		<result property="fileLocation" column="file_location" />
+		<association property="user"
+			javaType="org.kosa._musketeers.domain.User">
+			<id property="userId" column="user_id" />
+		</association>
+		</resultMap>
+
+
+
+
 
 	<select id="getUserIdByEmailPwd" parameterType="map"
 		resultType="org.kosa._musketeers.domain.User">
@@ -154,12 +170,34 @@
 	</select>
 
 	<select id="getRecruitSearchResult" parameterType="string">
-		SELECT company, content, job, link, imgLink
+		SELECT
+		company, content, job, link, imgLink
 		FROM recruit
-		WHERE company LIKE CONCAT('%',#{param1}, '%')
+		WHERE company LIKE
+		CONCAT('%',#{param1}, '%')
 		OR content LIKE CONCAT('%',#{param1}, '%')
 		OR job LIKE CONCAT('%', #{param1}, '%');
 
 	</select>
+
+
+	<insert id="insertCompany" >
+		INSERT INTO verification ( company_name, state, file_location , user_id)
+		VALUES(#{company}, '대기', #{imagePath}, #{userId})
+		ON DUPLICATE KEY UPDATE
+		company_name = VALUES(company_name),
+		state = VALUES(state),
+		file_location= VALUES(file_location),
+		date = NOW()
+	</insert>
+	
+	<select id="getUserCompanyDataById" resultMap="CompanyMap">
+		SELECT verification_id,company_name, state, date,
+		file_location, user_id
+		FROM verification 
+        where user_id= #{userId}
+	</select>
+
+
 
 </mapper>

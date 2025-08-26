@@ -9,6 +9,7 @@ import org.kosa._musketeers.domain.MyPagePost;
 import org.kosa._musketeers.domain.Portfolio;
 import org.kosa._musketeers.domain.Review;
 import org.kosa._musketeers.domain.User;
+import org.kosa._musketeers.domain.Verification;
 import org.kosa._musketeers.service.MyBoardService;
 import org.kosa._musketeers.service.UserService;
 import org.slf4j.Logger;
@@ -97,10 +98,16 @@ public class UserController {
 		// 사용자 프로필 이미지 파일
 		File profileFile = new File(uploadDir + "/" + userData.getUserId() + ".png");
 		boolean hasProfileImage = profileFile.exists();
+		
+		//유저의 회사 정보를 가져옵니다.
+		
+		Verification userCompanyData = userService.getUserCompanyVerification(userId);
 
 		// 전달
 		model.addAttribute("hasProfileImage", hasProfileImage);
 		model.addAttribute("userData", userData);
+		model.addAttribute("userCompanyData", userCompanyData);
+		System.out.println(userCompanyData);
 
 		return "/pages/mypage/mypage-main";
 
@@ -343,6 +350,26 @@ public class UserController {
 		return "redirect:/mypage";
 
 	}
+	
+	//
+	@PostMapping("/mypage/company")
+	public String insertCompany(HttpServletRequest request, @RequestParam("file") MultipartFile file,@RequestParam("company") String company)
+			throws IOException {
+		// 세션에서 userId 가져오기
+		HttpSession session = request.getSession(false);
+		if (session == null || session.getAttribute("userId") == null) {
+			// 로그인 안 된 상태면 로그인 페이지로
+			return "redirect:/login";
+		}
+
+		int userId = (int) session.getAttribute("userId");
+
+		userService.insertCompany(file, userId, company);
+
+		return "redirect:/mypage";
+
+	}
+	
 
 	// 다른 유저 페이지
 	@GetMapping("/userpage/{userId}")

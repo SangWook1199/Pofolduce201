@@ -18,6 +18,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.kosa._musketeers.domain.Portfolio;
 import org.kosa._musketeers.domain.User;
+import org.kosa._musketeers.domain.Verification;
 import org.kosa._musketeers.mapper.PortfolioMapper;
 import org.kosa._musketeers.mapper.UserMapper;
 import org.springframework.stereotype.Service;
@@ -253,6 +254,7 @@ public class UserService {
 		return studyCount;
 	}
 
+	//채용 공고 검색 결과 서비스 입니다.
 	public List<Map<String, Object>> getRecruitSearchResult(String search, int page, int size) {
 		List<Map<String, Object>> list = userMapper.getRecruitSearchResult(search);
 		int totalCount = list.size();
@@ -273,25 +275,32 @@ public class UserService {
 
 		return recruitCount;
 	}
+
+	//회사 인증서비스 입니다.
+	public void insertCompany(MultipartFile file, int userId, String company) throws IOException {
+		
+		// 1. 업로드 디렉터리 경로 설정
+				Path uploadDir = Paths.get("src/main/resources/static/uploads/company/");
+				Files.createDirectories(uploadDir);
+
+				// 2. 업로드하기
+				Path imagePath = uploadDir.resolve(userId + ".png");
+				Files.copy(file.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+				String imagePathStr = imagePath.toString();
+				// 3. db에 경로 저장하기
+				userMapper.insertCompany(userId, imagePathStr, company);
+		
+	}
 	
-//	//html을 png로 변환하기
-//	public void convertHtmlToPng(String html, String outputPath) throws Exception {
-//        // 1. HTML → PDF
-//        ByteArrayOutputStream pdfStream = new ByteArrayOutputStream();
-//        PdfRendererBuilder builder = new PdfRendererBuilder();
-//        builder.useFastMode();
-//        builder.withHtmlContent(html, null);
-//        builder.toStream(pdfStream);
-//        builder.run();
-//
-//        // 2. PDF → Image(PNG)
-//        try (PDDocument document = PDDocument.load(new ByteArrayInputStream(pdfStream.toByteArray()))) {
-//            PDFRenderer renderer = new PDFRenderer(document);
-//            BufferedImage image = renderer.renderImageWithDPI(0, 150); // 첫 페이지 150DPI 렌더링
-//            ImageIO.write(image, "png", new File(outputPath));
-//        }
-//    }
-//	
+	//유저의 회사 인증 정보를 가져옵니다.
+	public Verification getUserCompanyVerification(int userId) {
+		
+		Verification userCompanyData = userMapper.getUserCompanyDataById(userId);
+		
+		
+		return userCompanyData;
+	}
 	
+
 	
 }
