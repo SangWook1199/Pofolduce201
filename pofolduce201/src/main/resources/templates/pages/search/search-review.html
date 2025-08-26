@@ -77,7 +77,7 @@
 						</thead>
 						<tbody>
 							<tr th:each="review, iterStat : ${reviewList}"
-								th:onclick="|location.href='/review/' + ${review.reviewPostId}|">
+								th:onclick="|location.href='/review/post?reviewPostId=' + ${review.reviewPostId}|">
 								<th scope="row"
 									th:text="${(reviewCurrentPage - 1) * reviewSize + iterStat.index + 1}">1</th>
 								<td th:text="${review.user.nickname}">

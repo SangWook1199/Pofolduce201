@@ -100,7 +100,6 @@ public class MyBoardService {
 					sc.getStudyId() // Study 전용 없음
 			));
 		}
-
 		// 최신순으로 정렬한다.
 		result.sort(Comparator.comparing(MyPageComment::getCommentsDate).reversed());
 

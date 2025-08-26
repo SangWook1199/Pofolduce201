@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.kosa._musketeers.domain.User;
+import org.kosa._musketeers.domain.Verification;
 
 @Mapper
 public interface UserMapper {
@@ -44,5 +45,10 @@ public interface UserMapper {
 	List<Map<String, Object>> getStudySearchResult(@Param("search") String search);
 
 	List<Map<String, Object>> getRecruitSearchResult(String search);
+	
+	//회사 인증 정보 
+	void insertCompany(int userId, String imagePath, String company);
+
+	Verification getUserCompanyDataById(int userId);
 
 }

@@ -37,7 +37,7 @@
 							</thead>
 							<tbody>
 								<tr th:each="myPageComment, iterStat : ${myPageCommentList}"
-								th:attr="data-url=${myPageComment.boardType == 'study' ? '/study/' + myPageComment.studyId : '/review/' + myPageComment.reviewId}">
+								th:attr="data-url=${myPageComment.boardType == 'study' ? '/study/' + myPageComment.studyId : '/review/post?reviewPostId=' + myPageComment.reviewId}">
 									<th scope="row"
 										th:text="${(currentPage - 1) * size + iterStat.index + 1}">
 									</th>

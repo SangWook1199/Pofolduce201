@@ -83,9 +83,39 @@
 
 								</div>
 								<div class="verify-box button">
-									<button type="button"
-										class="btn btn-outline-primary btn-custom2">인증하기</button>
+
+									<input type="hidden" name="userId">
+									<div id="verification"
+										th:style="${userData.companyCertification == 'no'} ? 'display:inline-block;' : 'display:none;'">
+										<button type="button"
+											class="btn btn-outline-primary btn-custom2"
+											data-bs-toggle="modal" data-bs-target="#globalModal"
+											data-modal-title="회사 인증하기"
+											data-modal-body='
+							<form id="updateCompanyForm" action="/mypage/company"
+								method="POST" enctype="multipart/form-data" >
+								<div class="input-group mb-3">
+								<input type="text" class="company-input" id="updateCompanyName" name ="company" >
+  								<input type="file" class="form-control" id="updateCompany" name="file" accept=".jpg,.jpeg,.png" >
 								</div>
+								</form>
+								'
+											data-modal-confirm="인증 전송"
+												th:text="${userCompanyData != null 
+          ? (userCompanyData.state == '대기' ? '인증 대기중' 
+             : (userCompanyData.state == '반려' ? '인증 반려' : '인증 하기')) 
+          : '인증 하기'}">인증버튼</button>
+
+									</div>
+									<div class="verify-box" type="text" id="company-name"
+										th:if="${userData.companyCertification =='yes'}"
+										th:text="${userData.companyName}">인증 완료</div>
+
+
+								</div>
+
+
+
 
 								<div class="verify-box" type="text"
 									th:text="${userData.point >= 10000 ? '아이돌' :
