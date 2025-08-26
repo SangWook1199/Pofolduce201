@@ -25,7 +25,7 @@
 
 
 <select id="findMyReviewPost" parameterType="int" resultType="org.kosa._musketeers.domain.ReviewBoard">
-	select review_post_id, title, post_html, portfolio_html, view_count, create_date, like_count, user_id
+	select review_post_id, title, post_html,  view_count, create_date, like_count, user_id
 from review_post
 where user_id=#{userId};
 </select>
