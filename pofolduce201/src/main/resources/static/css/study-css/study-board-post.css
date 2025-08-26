@@ -19,6 +19,7 @@
 	width: 45px;
 	height: 45px;
 	border-radius: 50%;
+	border:1px solid #ff4473;
 }
 
 .title-area p {
@@ -111,6 +112,14 @@
 	resize: none;
 	height: 100px;
 	border-radius: 20px;
+}
+
+.comment-profile{
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+	border:1px solid #ff4473;
+	margin-right:8px;	
 }
 
 .comment-userName {

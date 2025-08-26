@@ -3,119 +3,8 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/layout}">
 <head>
+<link th:href="@{/css/ranking.css}" rel="stylesheet">
 <title>스터디 게시판</title>
-<style type="text/css">
-.ranking-container {
-	position: relative;
-	max-width: 1023px;
-	margin: auto;
-}
-
-.ranking-background {
-	position: relative; /* 추가: 자식 absolute 요소의 기준점 */
-	max-width: 1023px;
-	margin: auto;
-	display: block;
-	/
-}
-
-.ranking-person {
-	position: absolute; /* 다시 absolute로 변경 */
-	top: 34%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	width: 100%;
-	margin-top: 0;
-}
-
-.ranking-box {
-	width: 120px;
-	height: 95px;
-	border-radius: 20px;
-	margin-right: 23px;
-	text-align: center;
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: flex-end;
-	overflow: visible;
-	justify-content: flex-end;
-}
-
-.profile-image {
-	position: absolute;
-	top: -40px;
-	border-radius: 50%;
-	width: 55px;
-	height: 55px;
-	border: 2px solid white;
-	background-color: #fff;
-	object-fit: cover;
-}
-
-.crown-img {
-	position: absolute;
-	top: -120px;
-	left: 50%;
-	transform: translateX(-50%);
-	width: 55px;
-	height: 80px;
-}
-
-.ranking-text-container {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	margin-bottom: 5px;
-}
-
-.rank-top, .rank-middle {
-	margin-bottom: 70px;
-	margin-left: 20px;
-}
-
-.rank-bottom {
-	margin-left: 20px;
-}
-
-.ranking-box-top {
-	background-color: #F84568;
-}
-
-.ranking-box-middle {
-	background-color: #FF7C9D;
-}
-
-.ranking-box-bottom {
-	background-color: #FFD2DD;
-}
-
-.ranking-text {
-	padding-top: 12px;
-	font-size: 24px;
-	font-weight: bold;
-	color: #fff;
-	margin-bottom: 0px;
-	margin-top: 0px;
-	line-height: 1.1;
-}
-
-.ranking-text-bottom {
-	font-size: 24px;
-	font-weight: bold;
-	color: #fff;
-	margin-bottom: 0px;
-	margin-top: 0px;
-	line-height: 1.6;
-}
-
-.ranking-table {
-	margin-top: 50px;
-	margin-bottom: 50px;
-}
-</style>
 </head>
 <div layout:fragment="content"
 	class="main-content container-fluid ranking-container">
@@ -127,9 +16,10 @@
 			<div class="row justify-content-center rank-top">
 				<div class="col-auto">
 					<div class="ranking-box ranking-box-top">
+						<img src="/svg/crown.svg" alt="왕관 사진" class="crown-img">
 						<!-- 프로필 이미지가 있는 경우 -->
 						<img th:if="${rankingList[0].userImageLocation != null}"
-							th:src="@{/uploads/profile/${list.userId}.png}"
+							th:src="@{/uploads/profile/{id}.png(id=${rankingList[0].userId})}"
 							alt="프로필 사진" class="profile-image">
 
 						<!-- 프로필 이미지가 없는 경우 -->
@@ -149,7 +39,7 @@
 					<div class="ranking-box ranking-box-middle">
 						<!-- 프로필 이미지가 있는 경우 -->
 						<img th:if="${list.userImageLocation != null}"
-							th:src="@{/uploads/profile/${list.userId}.png}"
+							th:src="@{/uploads/profile/{id}.png(id=${list.userId})}"
 							alt="프로필 사진" class="profile-image">
 
 						<!-- 프로필 이미지가 없는 경우 -->
@@ -168,7 +58,7 @@
 					<div class="ranking-box ranking-box-bottom">
 						<!-- 프로필 이미지가 있는 경우 -->
 						<img th:if="${list.userImageLocation != null}"
-							th:src="@{/uploads/profile/${list.userId}.png}"
+							th:src="@{/uploads/profile/{id}.png(id=${list.userId})}"
 							alt="프로필 사진" class="profile-image">
 
 						<!-- 프로필 이미지가 없는 경우 -->
@@ -202,7 +92,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
+				<tr th:if="${rankingList.size() > 0}">
 					<td><img alt="왕관" th:src="@{/svg/crown.svg}"
 						class="img-fluid banner-image"></td>
 					<th scope="row">1</th>
@@ -211,7 +101,7 @@
 						th:text="${rankingList[0].companyName == null ? '회사 인증 안함' : rankingList[0].companyName}"></td>
 					<td th:text="${rankingList[0].point}"></td>
 				</tr>
-				<tr>
+				<tr th:if="${rankingList.size() > 1}">
 					<td><img alt="왕관" th:src="@{/svg/2nd-crown.svg}"
 						class="img-fluid banner-image"></td>
 					<th scope="row">2</th>
@@ -220,7 +110,7 @@
 						th:text="${rankingList[1].companyName == null ? '회사 인증 안함' : rankingList[2].companyName}"></td>
 					<td th:text="${rankingList[1].point}"></td>
 				</tr>
-				<tr>
+				<tr th:if="${rankingList.size() > 2}">
 					<td><img alt="왕관" th:src="@{/svg/3rd-crown.svg}"
 						class="img-fluid banner-image"></td>
 					<th scope="row">3</th>
@@ -229,17 +119,14 @@
 						th:text="${rankingList[2].companyName == null ? '회사 인증 안함' : rankingList[2].companyName}"></td>
 					<td th:text="${rankingList[2].point}"></td>
 				</tr>
-				<tr tr th:each="list, listStat : ${rankingList}"
+				<tr th:each="list, listStat : ${rankingList}"
 					th:if="${listStat.index >= 3}">
 					<td></td>
-					<td th:text="${listStat.count}">순위</td>
+					<td th:text="${listStat.index+1}">순위</td>
 					<td th:text="${list.nickname}">닉네임</td>
 					<td
 						th:text="${list.companyName == null ? '회사 인증 안함' : list.companyName}">회사</td>
 					<td th:text="${list.point}">포인트</td>
-				</tr>
-				<tr th:if="${#lists.isEmpty(rankingList)}">
-					<td colspan="5" class="text-center non-data">등록된 게시글이 없습니다.</td>
 				</tr>
 			</tbody>
 		</table>

@@ -108,7 +108,7 @@ public class StudyBoardController {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		model.addAttribute("postDateFormatted", post.getPostDate().format(formatter));
 		model.addAttribute("post", post);
-
+		System.out.println(post);
 		int pageSize = 5; // 한 페이지 댓글 수
 		List<StudyBoardComment> comments = studyBoardCommentService.getCommentsByStudyIdWithPage(studyId, page,
 				pageSize);

@@ -109,12 +109,12 @@
 	</nav>
 	<script>
     // 카카오 지도 초기 설정
-// 카카오 지도 초기 설정
-    // 카카오 지도 초기 설정
         var mapContainer = document.getElementById('map');
         var mapOption = {
-            center: new kakao.maps.LatLng(37.583743027324, 126.999963317958),
-            level: 2                 
+            center: new kakao.maps.LatLng(37.583743027310, 126.999963317959),
+            level: 1,
+            draggable: true,
+            scrollwheel: true 
         };
         var map = new kakao.maps.Map(mapContainer, mapOption);
         
@@ -125,16 +125,21 @@
         if (navigator.geolocation) {
             var options = {
                 enableHighAccuracy: true,
-                maximumAge: 0
+                maximumAge: 0,
+                timeout: 10000 
             };
 
             navigator.geolocation.getCurrentPosition(function(position) {
                 var lat = position.coords.latitude,
                     lon = position.coords.longitude;
+                var accuracy = position.coords.accuracy;
+                
+                console.log("현재 위치 정확도:", accuracy, "m");
                 
                 var locPosition = new kakao.maps.LatLng(lat, lon);
                 
-                // 현재 위치에만 마커를 표시하고, 지도의 중심은 변경하지 않음
+                map.setCenter(locPosition);
+                
                 var marker = new kakao.maps.Marker({
     				map: map,
    			 		position: locPosition
