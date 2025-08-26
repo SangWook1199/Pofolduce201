@@ -209,21 +209,26 @@ document.querySelector("#portfolio-div").addEventListener('mousedown',
 document.querySelector("#portfolio-div").addEventListener('mouseup',
 	createReviewForm);
 
+async function pressLike(reviewPostId){
 	
+	let likeCount = 0; 
+	try{
+		const response = await fetch(`/review-post/${reviewPostId}/like`,{
+			method: 'PATCH',
+		})
+		likeCount = await response.text();
+		if(!response.ok){
+			throw new Error(`HTTP error status: ${response.status}`);
+		}
+	} catch(error){
+		console.log("fetch error: error");
+	}
+	document.getElementById('like-button').innerText= '👍 ' + likeCount;
+}
+		
 //댓글 수정
-document
-	.addEventListener(
-		'DOMContentLoaded',
-		function() {
-			function toggleEdit(commentId) {
-				const editBox = document
-					.getElementById("edit-box-" + commentId);
-				if (editBox) {
-					editBox.style.display = (editBox.style.display === "none" || editBox.style.display === "") ? "block"
-						: "none";
-				}
-			}
-			function confirmDelete() {
-				return confirm('정말 삭제하시겠습니까?');
-			}
-		});
+function toggleEdit(commentsId){
+	const editBox = document.getElementById(`edit-box-${commentsId}`);
+	editBox.setAttribute('style', 'display: block');
+	editBox.setAttribute('class', 'm-2');
+}
