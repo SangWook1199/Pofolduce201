@@ -158,6 +158,7 @@ public class UserController {
 		model.addAttribute("currentPage", page);
 		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("size", size);
+		System.out.println(myPageCommentList);
 
 		return "/pages/mypage/mypage-mycomment";
 
@@ -181,6 +182,7 @@ public class UserController {
 		int totalPages = (int) Math.ceil((double) totalCount / size);
 
 		model.addAttribute("myPageReviewList", myPageReviewList);
+		System.out.println(myPageReviewList);
 		model.addAttribute("currentPage", page);
 		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("size", size);

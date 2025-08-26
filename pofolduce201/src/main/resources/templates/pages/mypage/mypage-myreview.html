@@ -35,7 +35,7 @@
 							</thead>
 							<tbody>
 								<tr th:each="myPageReviewList, iterStat : ${myPageReviewList}"
-									th:attr="data-url=${'/review/post?reviewPostId=' + myPageReviewList.reviewId}">
+									th:attr="data-url=${'/review/post?reviewPostId=' + myPageReviewList.reviewPost.reviewPostId}">
 									<!-- (현재 페이지 - 1) * 페이지당 크기 + 현재 인덱스 + 1 -->
 									<th scope="row"
 										th:text="${(currentPage - 1) * size + iterStat.index + 1}">
