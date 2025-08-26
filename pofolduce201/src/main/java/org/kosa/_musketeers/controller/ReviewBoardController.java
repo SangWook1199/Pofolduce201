@@ -83,7 +83,7 @@ public class ReviewBoardController {
 
 		ReviewPost reviewPost = reviewBoardService.getReviewPostById(reviewPostId);
 		model.addAttribute("reviewPost", reviewPost);
-		return "pages/review/review-edit";
+		return "pages/review/reviewpost-edit";
 	}
 	
 	@PostMapping("/review/edit/save")

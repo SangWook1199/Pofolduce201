@@ -22,12 +22,9 @@
 			<form th:action="@{/review/edit/save}" method="post">
 			    <input type="hidden" name="reviewPostId" th:value="${reviewPost.reviewPostId}">
 				<div class="m-1 row p-3 border rounded">
-					<div class="col-10">
+					<div class="col">
 						<input type="text" class="form-control col-6 text-center"
 							id="title" name="title" placeholder="제목을 입력하세요" th:value="${reviewPost.title}" required>
-					</div>
-					<div class="col-2 d-flex justify-content-center ">
-						<button class="btn btn-primary">이력서 불러오기</button>
 					</div>
 				</div>
 				<div class="my-2">
