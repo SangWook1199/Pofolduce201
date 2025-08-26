@@ -12,6 +12,7 @@
 			javaType="org.kosa._musketeers.domain.User">
 			<id property="userId" column="user_id" />
 			<result property="nickname" column="nickname" />
+			<result property="userImageLocation" column="user_image_location" />
 		</association>
 	</resultMap>
 
@@ -26,9 +27,8 @@
 
 	<select id="getStudyComments" resultMap="commentMap">
 		SELECT c.comments_id,
-		c.comments_contents, c.comments_date,
-		u.user_id, u.nickname, u.email,
-		c.study_id
+		c.comments_contents, c.comments_date, c.study_id,
+		u.user_id, u.nickname, u.email, u.user_image_location
 		FROM study_post_comments c
 		JOIN users u ON c.user_id =
 		u.user_id

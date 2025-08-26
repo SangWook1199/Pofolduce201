@@ -1,0 +1,112 @@
+@charset "UTF-8";
+
+.ranking-container {
+	position: relative;
+	max-width: 1023px;
+	margin: auto;
+}
+
+.ranking-background {
+	position: relative; /* 추가: 자식 absolute 요소의 기준점 */
+	max-width: 1023px;
+	margin: auto;
+	display: block;
+	/
+}
+
+.ranking-person {
+	position: absolute; /* 다시 absolute로 변경 */
+	top: 34%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 100%;
+	margin-top: 0;
+}
+
+.ranking-box {
+	width: 120px;
+	height: 95px;
+	border-radius: 20px;
+	margin-right: 23px;
+	text-align: center;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-end;
+	overflow: visible;
+	justify-content: flex-end;
+}
+
+.profile-image {
+	position: absolute;
+	top: -40px;
+	border-radius: 50%;
+	width: 55px;
+	height: 55px;
+	border: 2px solid white;
+	background-color: #fff;
+	object-fit: cover;
+}
+
+.crown-img {
+	position: absolute;
+	top: -120px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 55px;
+	height: 80px;
+}
+
+.ranking-text-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 5px;
+}
+
+.rank-top, .rank-middle {
+	margin-bottom: 70px;
+	margin-left: 20px;
+}
+
+.rank-bottom {
+	margin-left: 20px;
+}
+
+.ranking-box-top {
+	background-color: #F84568;
+}
+
+.ranking-box-middle {
+	background-color: #FF7C9D;
+}
+
+.ranking-box-bottom {
+	background-color: #FFD2DD;
+}
+
+.ranking-text {
+	padding-top: 12px;
+	font-size: 24px;
+	font-weight: bold;
+	color: #fff;
+	margin-bottom: 0px;
+	margin-top: 0px;
+	line-height: 1.1;
+}
+
+.ranking-text-bottom {
+	font-size: 24px;
+	font-weight: bold;
+	color: #fff;
+	margin-bottom: 0px;
+	margin-top: 0px;
+	line-height: 1.6;
+}
+
+.ranking-table {
+	margin-top: 50px;
+	margin-bottom: 50px;
+}

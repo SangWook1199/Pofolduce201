@@ -15,6 +15,7 @@
 			<id property="userId" column="user_id" />
 			<result property="nickname" column="nickname" />
 			<result property="email" column="email" />
+			<result property="userImageLocation" column="user_image_location" />
 		</association>
 	</resultMap>
 
@@ -70,7 +71,7 @@
 		SELECT b.study_id, b.title,
 		b.view_count, b.post_html,
 		b.post_date, b.like_count, b.address, b.user_id, u.user_id,
-		u.nickname, u.email
+		u.nickname, u.email, u.user_image_location
 		FROM study_post b
 		JOIN users u ON b.user_id =
 		u.user_id
