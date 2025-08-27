@@ -41,8 +41,9 @@ public class UserController {
 		this.userService = userService;
 		this.myBoardService = myBoardService;
 	}
-
-	@GetMapping("/login")
+    
+    // 로그인 페이지 URL 수정
+    @GetMapping("/login")
 	public String login() {
 		return "pages/login/login";
 	}
@@ -52,14 +53,14 @@ public class UserController {
 			RedirectAttributes redirectAttributes) {
 
 		logger.info("email:" + email + " password" + password);
-		User user = userService.login(email, password);
+		User user = userService.login(email, password); // 변경된 service의 login() 호출
 		String page = "redirect:/login";
 		if (user != null) {
 			HttpSession httpSession = request.getSession();
 			httpSession.setAttribute("userId", user.getUserId());
 			page = "redirect:/";
 		} else {
-			redirectAttributes.addFlashAttribute("loginFailMessage", "아이디 or 비밀번호가 잘못입력되었습니다");
+			redirectAttributes.addFlashAttribute("loginFailMessage", "아이디 또는 비밀번호가 잘못 입력되었습니다.");
 		}
 
 		return page;

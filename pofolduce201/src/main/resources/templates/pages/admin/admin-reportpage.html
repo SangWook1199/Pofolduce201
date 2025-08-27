@@ -13,45 +13,46 @@
 	<div class="report-card">
 		<h4 class="mb-4">신고 목록 상세</h4>
 
-		<!-- 신고 게시물 내용 iframe -->
 		<label class="fw-bold mb-1">신고 게시물:</label>
 		<iframe class="report-iframe"
 			th:src="@{/admin/reports/{reportId}/content(reportId=${report.reportId})}"
 			frameborder="0" style="width: 100%; height: 400px;"> </iframe>
 
-		<!-- 신고 사유 -->
 		<label class="fw-bold mt-4 mb-1">신고 사유:</label>
-		<div class="report-reason" th:text="${report.reportContents}">
-			<!-- 신고 사유 출력 -->
-		</div>
+		<div class="report-reason" th:text="${report.reportContents}"></div>
 
-		<!-- 제재 드롭다운 -->
 		<div class="d-flex align-items-center gap-2 mt-4">
-			<div class="dropdown">
-				<button class="btn btn-danger dropdown-toggle" type="button"
-					id="sanctionDropdown" data-bs-toggle="dropdown"
-					aria-expanded="false">제재하기</button>
-				<ul class="dropdown-menu" aria-labelledby="sanctionDropdown">
-					<li><a class="dropdown-item" href="#"
-						onclick="submitSanction(1)">1일 제재</a></li>
-					<li><a class="dropdown-item" href="#"
-						onclick="submitSanction(3)">3일 제재</a></li>
-					<li><a class="dropdown-item" href="#"
-						onclick="submitSanction(7)">7일 제재</a></li>
-					<li><a class="dropdown-item" href="#"
-						onclick="submitSanction(30)">30일 제재</a></li>
-				</ul>
-			</div>
+			<th:block th:if="${reportedUser.sanctionType == '정지'}">
+				<span class="text-danger fw-bold">이미 제재된 유저입니다. (제재 상태:
+					[[${reportedUser.sanctionType}]])</span>
+			</th:block>
+
+			<th:block th:unless="${reportedUser.sanctionType == '정지'}">
+				<div class="dropdown">
+					<button class="btn btn-primary dropdown-toggle" type="button"
+						id="sanctionDropdown" data-bs-toggle="dropdown"
+						aria-expanded="false">제재하기</button>
+					<ul class="dropdown-menu" aria-labelledby="sanctionDropdown">
+						<li><a class="dropdown-item" href="#"
+							onclick="submitSanction(1)">1일 제재</a></li>
+						<li><a class="dropdown-item" href="#"
+							onclick="submitSanction(3)">3일 제재</a></li>
+						<li><a class="dropdown-item" href="#"
+							onclick="submitSanction(7)">7일 제재</a></li>
+						<li><a class="dropdown-item" href="#"
+							onclick="submitSanction(30)">30일 제재</a></li>
+					</ul>
+				</div>
+			</th:block>
 		</div>
 	</div>
 
-	<!-- 스크립트 -->
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 	<script th:inline="javascript">
     function submitSanction(days) {
       const reportId = /*[[${report.reportId}]]*/ 0;
-      const userId = /*[[${report.reportedId.userId}]]*/ 0;
+      const userId = /*[[${reportedUser.userId}]]*/ 0; // reportedUser 객체에서 userId 가져옴
 
       if (!reportId || !userId) {
         alert("제재 정보를 불러올 수 없습니다.");
@@ -71,14 +72,18 @@
       })
       .then(msg => {
         alert(msg);
-        location.reload(); // 성공 시 페이지 새로고침
+        // 부모 창이 존재하는지 확인하고 새로고침
+        if (window.opener) {
+            window.opener.location.reload();
+        }
+        window.close();
       })
       .catch(err => {
         console.error(err);
         alert("제재 중 오류가 발생했습니다.");
       });
     }
-  </script>
+    </script>
 
 </body>
 </html>

@@ -139,9 +139,11 @@
 									<!-- 제재 버튼 -->
 									<div class="row mb-3">
 										<div class="col-12 d-flex justify-content-end">
-											<button class="btn btn-danger"
-												th:attr="data-user-id=${userData.userId}, data-bs-toggle='modal', data-bs-target='#sanctionModal'">
-												제재</button>
+											<th:block th:unless="${isSelfPage}">
+												<button class="btn btn-primary"
+													th:attr="data-user-id=${userData.userId}, data-bs-toggle='modal', data-bs-target='#sanctionModal'">
+													제재</button>
+											</th:block>
 										</div>
 									</div>
 								</div>
@@ -175,16 +177,18 @@
 										</div>
 										<div class="modal-body">
 											<input type="hidden" id="sanctionUserId">
-											<div class="mb-3">
-												<button type="button" class="btn btn-outline-primary"
-													onclick="setDays(1)">1일</button>
-												<button type="button" class="btn btn-outline-primary"
-													onclick="setDays(3)">3일</button>
-												<button type="button" class="btn btn-outline-primary"
-													onclick="setDays(7)">7일</button>
-												<button type="button" class="btn btn-outline-primary"
-													onclick="setDays(30)">30일</button>
-											</div>
+											<!--<div class="mb-3">
+												
+										        <button type="button" class="btn btn-outline-primary"
+										            onclick="setDays(1)">1일</button>
+										        <button type="button" class="btn btn-outline-primary"
+										            onclick="setDays(3)">3일</button>
+										        <button type="button" class="btn btn-outline-primary"
+										            onclick="setDays(7)">7일</button>
+										        <button type="button" class="btn btn-outline-primary"
+										            onclick="setDays(30)">30일</button>
+										        
+											</div>-->
 											<div class="mb-3">
 												<label for="customDays" class="form-label">직접 입력 (일)</label>
 												<input type="number" id="customDays" class="form-control"
@@ -194,12 +198,13 @@
 										<div class="modal-footer">
 											<button type="button" class="btn btn-secondary"
 												data-bs-dismiss="modal">취소</button>
-											<button type="button" class="btn btn-danger"
-												onclick="submitSanction()">제재하기</button>
+											<button type="button" class="btn btn-primary"
+												id="submit-sanction-btn">제재하기</button>
 										</div>
 									</div>
 								</div>
-							</div><!-- 모달 끝 -->
+							</div>
+							<!-- 모달 끝 -->
 						</div>
 					</div>
 				</div>

@@ -11,7 +11,9 @@ import org.kosa._musketeers.domain.Verification;
 @Mapper
 public interface UserMapper {
 
-	User getUserIdByEmailPwd(@Param("email") String email, @Param("password") String password);
+	// 기존: User getUserIdByEmailPwd(@Param("email") String email, @Param("password") String password);
+    // 이 메서드를 삭제하거나 주석 처리하고 아래 메서드를 추가합니다.
+    User getUserByEmail(@Param("email") String email, String password);
 
 	User getUserInformation(int userId);
 
