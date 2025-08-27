@@ -1,9 +1,9 @@
 @charset "UTF-8";
 
 .main-content {
-	width: 1000px;
+	width: 1023px;
 	margin: auto;
-	margin-top: 40px;
+	margin-top: 5%;
 }
 
 .title-area {

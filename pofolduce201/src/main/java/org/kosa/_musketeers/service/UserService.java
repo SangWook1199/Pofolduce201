@@ -248,4 +248,15 @@ public class UserService {
 	public List<User> getUsersRequestingCertification() {
 		return userMapper.getUsersRequestingCertification();
 	}
+
+	/**
+	 * 유저의 회사 인증 상태와 회사 이름을 업데이트합니다.
+	 * @param userId               업데이트할 유저 ID
+	 * @param companyCertification 업데이트할 인증 상태 ('yes' 또는 'no')
+	 * @param companyName          업데이트할 회사 이름 (인증 안함일 경우 null)
+	 */
+	@Transactional
+	public void updateUserCompanyInfo(int userId, String companyCertification, String companyName) {
+		userMapper.updateUserCompanyInfo(userId, companyCertification, companyName);
+	}
 }

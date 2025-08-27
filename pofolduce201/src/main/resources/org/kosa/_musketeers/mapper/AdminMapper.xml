@@ -16,7 +16,8 @@
 		resultType="org.kosa._musketeers.domain.User">
 		SELECT user_id, email, nickname, password, user_type,
 		company_certification, company_name, point,
-		sanction_count, sanction_type, sanction_period,
+		sanction_count,
+		sanction_type, sanction_period,
 		date, user_image_location
 		FROM users
 		WHERE user_id = #{userId}
@@ -25,7 +26,8 @@
 	<!-- 제재 기간 및 상태 설정 -->
 	<update id="updateSanction" parameterType="map">
 		UPDATE users
-		SET sanction_period = #{sanctionPeriod},
+		SET
+		sanction_period = #{sanctionPeriod},
 		sanction_type = #{sanctionType}
 		WHERE user_id = #{userId}
 	</update>
@@ -44,7 +46,8 @@
 		u.user_id,
 		u.nickname
 		FROM verification v
-		JOIN users u ON v.user_id = u.user_id
+		JOIN users u ON v.user_id =
+		u.user_id
 		ORDER BY v.date DESC
 	</select>
 
@@ -65,7 +68,8 @@
 
 	<!-- 회사 인증 상태 업데이트 -->
 	<update id="updateVerificationStatus" parameterType="map">
-		UPDATE verification
+		UPDATE
+		verification
 		SET state = #{state}
 		WHERE user_id = #{userId}
 	</update>
@@ -74,16 +78,20 @@
 	<update id="updateUserCompanyInfo" parameterType="map">
 		UPDATE users
 		SET company_certification = #{companyCertification},
-		company_name = #{companyName}
+		company_name =
+		#{companyName}
 		WHERE user_id = #{userId}
 	</update>
 
 	<!-- 특정 유저의 Verification 조회 -->
-	<select id="getVerificationByUserId" parameterType="int"
-		resultMap="VerificationMap">
+	<select id="getVerificationByUserId" resultMap="VerificationMap" parameterType="int">
 		SELECT
-		v.verification_id, v.company_name, v.state, v.date, v.file_location,
-		u.user_id,
+		v.verification_id,
+		v.company_name,
+		v.date,
+		v.state,
+		v.file_location,
+		v.user_id,
 		u.nickname
 		FROM verification v
 		JOIN users u ON v.user_id = u.user_id

@@ -29,6 +29,8 @@ public interface NoticeBoardMapper {
 
     // 조회수 순 정렬 조회
     List<NoticeBoard> getPostsOrderByViewCount();
+
+	void addViewCount(int noticeId);
     
     
 }
