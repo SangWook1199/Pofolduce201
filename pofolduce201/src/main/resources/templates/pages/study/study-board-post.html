@@ -23,11 +23,11 @@
 			<div
 				th:if="${session.userId != null and session.userId == post.userId.userId}">
 				<a th:href="@{/study/{studyId}/update(studyId=${post.studyId})}"
-					class="btn btn-sm btn-primary">수정</a>
+					class="btn btn-sm btn-outline-primary">수정</a>
 				<form
 					th:action="@{/study/{studyId}/delete(studyId=${post.studyId})}"
 					method="post" class="d-inline">
-					<button type="submit" class="btn btn-sm btn-primary"
+					<button type="submit" class="btn btn-sm btn-outline-primary"
 						onclick="return confirmDelete();">삭제</button>
 				</form>
 			</div>
@@ -84,7 +84,7 @@
 	<!-- 댓글 -->
 	<div class="comment-area">
 		<div class="text-end">
-			<a class="btn btn-primary" href="/study" id="list-button">목록보기</a>
+			<a class="btn btn-outline-primary" href="/study" id="list-button">목록보기</a>
 		</div>
 		<div>
 			<p class="comment-title d-inline-block">댓글 목록</p>

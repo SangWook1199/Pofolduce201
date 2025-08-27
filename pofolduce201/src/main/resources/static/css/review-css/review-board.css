@@ -1,4 +1,13 @@
 @charset "UTF-8";
+
+.main-content {
+	width: 1000px;
+	margin: auto;
+	margin-top: 5%;
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
+
 /* 페이지네이션 전체 글자 색 */
 .pagination .page-link {
 	color: #6c757d; /* 기본 글자색 */
@@ -19,18 +28,22 @@
 	border-color: #e9ecef;
 	margin-bottom: 40px;
 }
-.clickable-row:hover{
-	cursor:pointer;
+
+.clickable-row:hover {
+	cursor: pointer;
 }
-.border-bottom-line{
-	border-bottom:3px solid #dee2e6;
+
+.border-bottom-line {
+	border-bottom: 3px solid #dee2e6;
 }
-.review-table{
-	margin-top:20px;
+
+.review-table {
+	margin-top: 20px;
 }
-.non-data{
-	color : #CACACA;
-	margin : 10%;
+
+.non-data {
+	color: #CACACA;
+	margin: 10%;
 	font-size: 24px;
-	font-weight:500;
+	font-weight: 500;
 }

@@ -35,13 +35,12 @@
 				</div>
 			</div>
 		</div>
-		<!-- 텍스트(에디터) 추후에 이미지업로드 추가 -->
 		<div class="card card-body post-content">
 			<textarea class="post-editor" id="editor" name="postHtml" th:utext="${post.postHtml}"></textarea>
 		</div>
 		<!-- 버튼 -->
 		<div class="d-flex justify-content-between mb-3 post-button">
-			<a class="btn btn-primary" th:href="@{/study/{studyId}(studyId=${post.studyId})}" id="list-button">취소하기</a>
+			<a class="btn btn-outline-primary" th:href="@{/study/{studyId}(studyId=${post.studyId})}" id="list-button">취소하기</a>
 			<button type="submit" class="btn btn-primary">수정하기</button>
 		</div>
 		<script>
