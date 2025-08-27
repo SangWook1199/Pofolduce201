@@ -221,25 +221,41 @@ public class AdminUserController {
 	}
 
 	// 회사 인증 상태 업데이트시
+	// AdminUserController.java
+
 	@PostMapping("/user/certifications/{userId}/status")
 	@ResponseBody
 	public ResponseEntity<String> updateVerificationStatus(@PathVariable int userId,
 			@RequestParam("status") String status) {
-		try {
-			// 1. 인증 상태 업데이트
-			adminService.updateVerificationStatus(userId, status);
+		// 1. 인증 상태 업데이트 (verification 테이블)
+		adminService.updateVerificationStatus(userId, status);
 
-			// 2. 상태가 "완료"면 유저 테이블도 업데이트
-			if ("완료".equals(status)) {
-				Verification verification = adminService.getVerificationByUserId(userId);
-				adminService.updateUserCompanyInfo(userId, "yes", verification.getCompanyName());
+		System.out.println("인증 상태 업데이트 요청: userId=" + userId + ", status=" + status);
+
+		// 2. 만약 상태가 '완료'라면, 유저 정보도 업데이트
+		if ("완료".equals(status)) {
+			// Verification 정보를 다시 가져와서 회사 이름을 얻음
+			Verification verification = userService.getUserCompanyVerification(userId);
+
+			//verification 객체 확인
+			System.out.println("가져온 Verification 객체: " + verification);
+
+			if (verification != null) {
+				String companyName = verification.getCompanyName();
+
+				// companyName 변수 값 확인
+				System.out.println("가져온 회사 이름: " + companyName);
+
+				// User 테이블의 companyCertification과 companyName을 업데이트
+				userService.updateUserCompanyInfo(userId, "yes", companyName);
 			}
-
-			return ResponseEntity.ok("상태 변경 성공");
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("상태 변경 실패");
 		}
+		// 3. 만약 상태가 '반려'라면, 유저 정보 초기화
+		else if ("반려".equals(status)) {
+			userService.updateUserCompanyInfo(userId, "no", null);
+		}
+
+		return ResponseEntity.ok("상태 변경 성공");
 	}
 
 	// 팝업 페이지 열기
@@ -253,10 +269,16 @@ public class AdminUserController {
 	@GetMapping("/user/certification/{userId}/json")
 	@ResponseBody
 	public Map<String, Object> getCertificationJson(@PathVariable int userId) {
+		// 1. Verification 정보 가져오기
 		Verification verification = userService.getUserCompanyVerification(userId);
 
+		// 2. userId로 User 정보(닉네임) 가져오기
+		User user = userService.getUserById(userId);
+
 		Map<String, Object> result = new HashMap<>();
-		result.put("nickname", verification.getUser().getNickname());
+
+		// 3. 닉네임, 회사명, 상태 등 필요한 정보 담기
+		result.put("nickname", user.getNickname()); // 수정된 부분
 		result.put("company", verification.getCompanyName());
 		result.put("date", verification.getDate().toString());
 		result.put("state", verification.getState());

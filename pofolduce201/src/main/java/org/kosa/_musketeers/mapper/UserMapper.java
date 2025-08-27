@@ -61,4 +61,8 @@ public interface UserMapper {
 
 	List<User> getUserListByPoint();
 
+	// 새로 추가된 메소드
+	void updateUserCompanyInfo(@Param("userId") int userId, @Param("companyCertification") String companyCertification,
+			@Param("companyName") String companyName);
+
 }
