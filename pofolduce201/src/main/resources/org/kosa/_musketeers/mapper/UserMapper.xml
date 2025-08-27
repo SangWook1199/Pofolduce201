@@ -256,9 +256,9 @@
 
 	<select id="getUserCompanyDataById" parameterType="int"
 		resultMap="CompanyMap">
-		SELECT verification_id,
-		company_name,
-		state,
+		SELECT
+		verification_id,
+		company_name, state,
 		date,
 		file_location,
 		user_id
@@ -287,5 +287,16 @@
 		FROM users
 		WHERE company_certification = 'no'
 	</select>
+
+	<update id="updateUserCompanyInfo">
+		UPDATE users
+		SET
+		company_certification =
+		#{companyCertification},
+		company_name = #{companyName}
+		WHERE
+		user_id =
+		#{userId}
+	</update>
 
 </mapper>

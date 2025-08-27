@@ -23,39 +23,69 @@
 		<button id="approve-btn">확인</button>
 	</div>
 
+	<div class="certification-status-message"
+		style="display: none; margin-top: 20px; font-weight: bold;"></div>
+
 	<script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get("userId");
+	$(function() {
+	    const urlParams = new URLSearchParams(window.location.search);
+	    const userId = urlParams.get("userId");
 
-    // 인증 상세 정보 가져오기
-    $.get(`/admin/user/certification/${userId}/json`, function(data) {
-        $('#certification-info').html(`
-            <tr><td>요청자</td><td>${data.nickname}</td></tr>
-            <tr><td>단체</td><td>${data.company}</td></tr>
-            <tr><td>날짜</td><td>${data.date}</td></tr>
-            <tr><td>상태</td><td>${data.state}</td></tr>
-        `);
-        $('#certification-image').attr('src', data.imageUrl);
-    });
+	    // UI를 업데이트하는 함수
+	    function updateUI(data) {
+	        // 인증 정보를 테이블에 표시
+	        $('#certification-info').html(`
+	            <tr><td>요청자</td><td>${data.nickname}</td></tr>
+	            <tr><td>단체</td><td>${data.company}</td></tr>
+	            <tr><td>날짜</td><td>${data.date}</td></tr>
+	            <tr><td>상태</td><td id="status-cell">${data.state}</td></tr>
+	        `);
+	        $('#certification-image').attr('src', data.imageUrl);
 
-    // 승인 버튼 클릭 이벤트
-    $('#approve-btn').click(function() {
-        $.post(`/admin/user/certification/${userId}/status`, { status: '완료' }, function() {
-            alert("인증이 승인되었습니다.");
-            window.opener.location.reload(); // 부모창 새로고침
-            window.close(); // 팝업 닫기
-        });
-    });
+	        // 상태 값에 따라 UI 변경
+	        const status = data.state;
+	        if (status === '완료') {
+	            // 상태가 '완료'면 버튼 숨기고 메시지 표시
+	            $('.certification-btns').hide();
+	            $('.certification-status-message')
+	                .text("인증이 승인된 유저입니다.")
+	                .css("color", "green")
+	                .show();
+	        } else if (status === '반려') {
+	            // 상태가 '반려'면 버튼 숨기고 메시지 표시
+	            $('.certification-btns').hide();
+	            $('.certification-status-message')
+	                .text("인증이 반려된 유저입니다.")
+	                .css("color", "red")
+	                .show();
+	        } else {
+	            // 그 외의 경우 (예: '대기 중'), 버튼 표시
+	            $('.certification-btns').show();
+	            $('.certification-status-message').hide();
+	        }
+	    }
 
-    // 반려 버튼 클릭 이벤트
-    $('#reject-btn').click(function() {
-        $.post(`/admin/user/certification/${userId}/status`, { status: '반려' }, function() {
-            alert("인증이 반려되었습니다.");
-            window.opener.location.reload(); // 부모창 새로고침
-            window.close(); // 팝업 닫기
-        });
-    });
+	    // 1. 페이지 로드 시, 서버에서 인증 정보를 가져와서 UI를 업데이트합니다.
+	    $.get(`/admin/user/certification/${userId}/json`, updateUI);
+
+	    // 2. '확인' 버튼 클릭 이벤트
+	    $('#approve-btn').click(function () {
+	    	$.post(`/admin/user/certifications/${userId}/status`, { status: '완료' }, function(response) {
+	            // 요청 성공 후, 최신 데이터를 다시 가져와서 UI를 업데이트합니다.
+	            $.get(`/admin/user/certification/${userId}/json`, updateUI);
+	        });
+	    });
+
+	    // 3. '반려' 버튼 클릭 이벤트
+	    $('#reject-btn').click(function () {
+	    	$.post(`/admin/user/certifications/${userId}/status`, { status: '반려' }, function(response) {
+	            // 요청 성공 후, 최신 데이터를 다시 가져와서 UI를 업데이트합니다.
+	            $.get(`/admin/user/certification/${userId}/json`, updateUI);
+	        });
+	    });
+	});
 	</script>
+
 
 </body>
 </html>
