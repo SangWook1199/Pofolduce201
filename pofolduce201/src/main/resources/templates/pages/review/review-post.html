@@ -4,6 +4,7 @@
 	layout:decorate="~{layouts/layout}">
 <head>
 <meta charset="UTF-8" />
+<link rel="stylesheet" href="/css/popover.css" />
 <title>Insert title here</title>
 </head>
 <body>
@@ -25,8 +26,8 @@
 								th:src="@{/svg/report-button.svg}">
 						</button>
 						<div
-							th:replace="fragments/html/report-modal :: reportModalFragment('reportPostModal', ${reviewPost.studyId}, ${reviewPost.user.userId})"></div>
-					</div>s
+							th:replace="fragments/html/review-post-report-modal :: reviewPostReportModalFragment('reportPostModal', ${reviewPost.reviewPostId}, ${reviewPost.user.userId})"></div>
+					</div>
 					<div th:if="${session.userId == reviewPost.user.userId}"
 						class="col-3 d-flex justify-content-center">
 						<a class="btn btn-primary m-2"
@@ -42,8 +43,10 @@
 							th:src="${reviewPost.user.userImageLocation != null ? reviewPost.user.userImageLocation.split('static')[1] : '/svg/person.svg'}"
 							alt="user image" style="width: 50px" />
 						<div class="col-9 col-md-10 col-xl-11 row align-items-center">
-							<a class="fs-4 text-decoration-none text-dark" th:href="@{/}"
-								th:text="${reviewPost.user.nickname}"></a>
+							<p th:text="${reviewPost.user.nickname}"
+								class="mb-0 fw-bold nickname all-userName"
+								th:attr="data-userid=${reviewPost.user.userId}"
+								data-bs-toggle="popover" title="사용자 정보">김세정</p>
 							<p th:text="${reviewPost.createDate}"></p>
 						</div>
 					</div>
@@ -91,7 +94,11 @@
 							th:src="${comments.userId.userImageLocation != null ? comments.userId.userImageLocation.split('static')[1] : '/svg/person.svg'}"
 							alt="user image" style="width: 50px" />
 						<div class="col-10">
-							<div class="fw-bold" th:text="${comments.userId.nickname}"></div>
+							<p th:text="${reviewPost.user.nickname}"
+								class="mb-0 fw-bold nickname all-userName"
+								th:attr="data-userid=${reviewPost.user.userId}"
+								data-bs-toggle="popover" title="사용자 정보">김세정</p>
+							<p th:text="${reviewPost.createDate}"></p>
 							<div class="col-10 mt-2" th:text="${comments.commentsContents}"
 								th:id="'comments-contents-' + ${comments.commentsId}"></div>
 						</div>
@@ -108,8 +115,17 @@
 								<button th:if="${session.userId == comments.userId.userId}"
 									class="btn btn-primary ms-2" type="submit">삭제</button>
 							</form>
-							<button th:if="${session.userId != comments.userId.userId}"
-								class="btn btn-primary ms-1">신고</button>
+							<div
+								th:if="${session.userId != null and session.userId != reviewPost.user.userId}"
+								class="ms-auto">
+								<button type="button" class="btn p-0 border-0 bg-transparent"
+									data-bs-toggle="modal" data-bs-target="#reportPostModal">
+									<img alt="신고 버튼" class="report-img"
+										th:src="@{/svg/report-button.svg}">
+								</button>
+								<div
+									th:replace="fragments/html/review-post-report-modal :: reviewPostReportModalFragment('reportPostModal', ${reviewPost.reviewPostId}, ${reviewPost.user.userId})"></div>
+							</div>
 						</div>
 						<!-- 숨겨진 수정창 -->
 						<div th:id="|edit-box-${comments.commentsId}|"
@@ -157,6 +173,7 @@
 	</div>
 	<th:block layout:fragment="script">
 		<script src="/js/review-post.js"></script>
+		<script src="/js/popover.js"></script>
 	</th:block>
 </body>
 </html>

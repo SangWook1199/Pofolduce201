@@ -33,7 +33,6 @@ import jakarta.servlet.http.HttpSession;
 public class UserController {
 
 	private final MyBoardService myBoardService;
-
 	private final UserService userService;
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -87,8 +86,12 @@ public class UserController {
 		}
 
 		int userId = (int) session.getAttribute("userId");
-
 		User userData = userService.getUserInformation(userId);
+
+		// 관리자인 경우에는 관리자 페이지로 이동
+		if ("관리자".equals(userData.getUserType())) {
+			return "redirect:/admin-home";
+		}
 
 		// 프로필 사진이 서버에 있는 지 확인합니다. 없으면 기본 프로필을 띄웁니다.
 		String fileLocation = userData.getUserImageLocation();
@@ -98,9 +101,9 @@ public class UserController {
 		// 사용자 프로필 이미지 파일
 		File profileFile = new File(uploadDir + "/" + userData.getUserId() + ".png");
 		boolean hasProfileImage = profileFile.exists();
-		
-		//유저의 회사 정보를 가져옵니다.
-		
+
+		// 유저의 회사 정보를 가져옵니다.
+
 		Verification userCompanyData = userService.getUserCompanyVerification(userId);
 
 		// 전달
@@ -111,6 +114,24 @@ public class UserController {
 
 		return "/pages/mypage/mypage-main";
 
+	}
+
+	// 관리자 페이지로 이동
+	@GetMapping("/admin-home")
+	public String adminHome(HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
+		if (session == null || session.getAttribute("userId") == null) {
+			return "redirect:/login";
+		}
+
+		int userId = (int) session.getAttribute("userId");
+		User user = userService.getUserInformation(userId);
+
+		if (!"관리자".equals(user.getUserType())) {
+			return "redirect:/"; // 권한 없음
+		}
+
+		return "/pages/admin/admin-home";
 	}
 
 	// 내 게시글 조회
@@ -228,7 +249,7 @@ public class UserController {
 		}
 		int userId = (int) session.getAttribute("userId");
 
-		boolean update = userService.updateUserInfomation(userId, nickname, email);
+		boolean update = userService.updateUserInformation(userId, nickname, email);
 
 		if (!update) {
 			return "닉네임 또는 이메일이 중복입니다.";
@@ -353,11 +374,11 @@ public class UserController {
 				redirectAttributes.addFlashAttribute("errorMessage", "대표 이력서는 삭제할 수 없습니다.");
 				return "redirect:/mypage/myportfolio/" + portfolioId;
 			}
-			
+
 			// 대표 이력서가 아니라면 삭제
 			userService.deletePortfolio(portfolioId);
 			redirectAttributes.addFlashAttribute("successMessage", "이력서가 삭제되었습니다.");
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return "redirect:/mypage/myportfolio";
@@ -381,11 +402,12 @@ public class UserController {
 		return "redirect:/mypage";
 
 	}
+
 	
 	//회사 인증 정보 보내기
 	@PostMapping("/mypage/company")
-	public String insertCompany(HttpServletRequest request, @RequestParam("file") MultipartFile file,@RequestParam("company") String company)
-			throws IOException {
+	public String insertCompany(HttpServletRequest request, @RequestParam("file") MultipartFile file,
+			@RequestParam("company") String company) throws IOException {
 		// 세션에서 userId 가져오기
 		HttpSession session = request.getSession(false);
 		if (session == null || session.getAttribute("userId") == null) {
@@ -401,7 +423,6 @@ public class UserController {
 
 	}	
 	
-
 	// 다른 유저 페이지
 	@GetMapping("/userpage/{userId}")
 	public String userPage(@PathVariable int userId, Model model) {
@@ -412,10 +433,10 @@ public class UserController {
 			if (repPortId != null) {
 				portfolio = userService.getPortfolio(repPortId);
 			}
-			
+
 			model.addAttribute("portfolio", portfolio);
 			model.addAttribute("userData", userData);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return "pages/mypage/userpage";

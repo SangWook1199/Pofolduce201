@@ -20,6 +20,14 @@ function toggleCustomInput() {
 	document.getElementById("customInputBox").classList.toggle("d-none");
 }
 
+// 공통: 팝업 닫고 부모창 새로고침
+function closePopupAndRefreshParent() {
+	if (window.opener && !window.opener.closed) {
+		window.opener.location.reload();
+	}
+	window.close();
+}
+
 function submitSanction() {
 	const userId = document.getElementById("sanctionUserId").value;
 	const custom = document.getElementById("customDays").value;
@@ -38,8 +46,27 @@ function submitSanction() {
 		.then(res => {
 			if (!res.ok) throw new Error("제재 실패");
 			alert("제재 완료!");
-			window.opener.location.reload(); // 부모창 리스트 새로고침
-			window.close(); // 팝업 닫기
+			closePopupAndRefreshParent();  // 여기로 바꿈
+		})
+		.catch(err => alert(err));
+}
+
+// 회사 인증 팝업 화면 띄우기
+function openCertificationPopup(userId) {
+	window.open('/admin/user/certificationpage?userId=' + userId, 'certificationPopup', 'width=800,height=600');
+}
+
+// 회사 인증 상태 업데이트 함수 (팝업 내에서 호출)
+function updateCertificationStatus(userId, status) {
+	fetch(`/admin/user/certification/${userId}/status`, {
+		method: "POST",
+		headers: { "Content-Type": "application/x-www-form-urlencoded" },
+		body: new URLSearchParams({ status: status })
+	})
+		.then(res => {
+			if (!res.ok) throw new Error("상태 변경 실패");
+			alert("상태 변경 성공");
+			closePopupAndRefreshParent();
 		})
 		.catch(err => alert(err));
 }

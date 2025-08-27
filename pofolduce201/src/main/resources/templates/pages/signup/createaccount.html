@@ -26,6 +26,11 @@
 
 			<!-- 오른쪽에 회원가입 폼 배치 -->
 			<div class="col-md-8">
+
+				<!-- 에러 메시지 출력 -->
+				<div th:if="${errorMessage}" class="alert alert-danger" role="alert"
+					th:text="${errorMessage}"></div>
+
 				<form action="/signup" method="post">
 					<div class="form-floating mb-3">
 						<input type="email" class="form-control" id="floatingInput"
