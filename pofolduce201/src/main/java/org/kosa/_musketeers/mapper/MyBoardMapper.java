@@ -24,4 +24,6 @@ public interface MyBoardMapper {
 
 	int countMyReview(int userId);
 
+	List<Review> findMyReviewGet(int userId);
+
 }

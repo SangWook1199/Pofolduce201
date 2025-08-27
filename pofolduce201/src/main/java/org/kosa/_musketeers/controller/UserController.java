@@ -203,7 +203,7 @@ public class UserController {
 		int totalPages = (int) Math.ceil((double) totalCount / size);
 
 		model.addAttribute("myPageReviewList", myPageReviewList);
-		System.out.println(myPageReviewList);
+		//System.out.println(myPageReviewList);
 		model.addAttribute("currentPage", page);
 		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("size", size);
@@ -211,6 +211,33 @@ public class UserController {
 		return "/pages/mypage/mypage-myreview";
 
 	}
+	
+	// 받은 첨삭 조회
+		@GetMapping("/mypage/myreviewget")
+		public String getReview(@RequestParam(defaultValue = "1") int page,
+				@RequestParam(defaultValue = "10") int size, HttpServletRequest request, Model model) {
+
+			// 세션에서 userId 가져오기
+			HttpSession session = request.getSession(false);
+			if (session == null || session.getAttribute("userId") == null) {
+				// 로그인 안 된 상태면 로그인 페이지로
+				return "redirect:/login";
+			}
+
+			int userId = (int) session.getAttribute("userId");
+			List<Review> ReviewList = myBoardService.findMyReviewGet(userId, page, size);
+			int totalCount = myBoardService.countMyReview(userId);
+			int totalPages = (int) Math.ceil((double) totalCount / size);
+
+			model.addAttribute("ReviewList", ReviewList);
+			System.out.println(ReviewList);
+			model.addAttribute("currentPage", page);
+			model.addAttribute("totalPages", totalPages);
+			model.addAttribute("size", size);
+
+			return "/pages/mypage/mypage-myreviewget";
+
+		}
 
 	// 내 정보 수정 (닉네임, 이메일)
 	@PostMapping("/mypage/update")
@@ -289,6 +316,8 @@ public class UserController {
 		int userId = (int) session.getAttribute("userId");
 
 		userService.deleteAccount(userId);
+		HttpSession httpSession = request.getSession();
+		httpSession.removeAttribute("userId");
 
 		return "redirect:/login";
 
@@ -374,7 +403,8 @@ public class UserController {
 
 	}
 
-	//
+	
+	//회사 인증 정보 보내기
 	@PostMapping("/mypage/company")
 	public String insertCompany(HttpServletRequest request, @RequestParam("file") MultipartFile file,
 			@RequestParam("company") String company) throws IOException {
@@ -391,8 +421,8 @@ public class UserController {
 
 		return "redirect:/mypage";
 
-	}
-
+	}	
+	
 	// 다른 유저 페이지
 	@GetMapping("/userpage/{userId}")
 	public String userPage(@PathVariable int userId, Model model) {

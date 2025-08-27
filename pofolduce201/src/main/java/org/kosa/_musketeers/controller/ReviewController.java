@@ -35,6 +35,7 @@ public class ReviewController {
 	
 	@GetMapping("/review/{reviewPostId}")
 	public List<Review> getReview(@PathVariable int reviewPostId) {
+		System.out.println("reviewPostId:" + reviewPostId);
 		return reviewService.findReviewsByReviewPostId(reviewPostId);
 	}
 	

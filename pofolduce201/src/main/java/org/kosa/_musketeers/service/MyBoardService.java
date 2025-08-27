@@ -152,4 +152,24 @@ public class MyBoardService {
 		return reviewCount;
 	}
 
+	//내가 받은 첨삭을 조회하는 메소드 입니다.
+	public List<Review> findMyReviewGet(int userId, int page, int size) {
+		List<Review> result = new ArrayList<>();
+
+		result = myBoardMapper.findMyReviewGet(userId);
+
+		// 전체 첨삭 개수
+		int totalCount = result.size();
+
+		// 페이징 (subList 사용)
+		int fromIndex = Math.max(0, (page - 1) * size);
+		int toIndex = Math.min(fromIndex + size, totalCount);
+
+		if (fromIndex > toIndex) {
+			return new ArrayList<>(); // 빈 리스트
+		}
+
+		return result.subList(fromIndex, toIndex);
+	}
+
 }

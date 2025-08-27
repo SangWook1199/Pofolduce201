@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+.footer .container{
+	margin-top : 10%;
+}
+
 .footer {
 	background-color: #f9f9f9;
 	color: #333;
