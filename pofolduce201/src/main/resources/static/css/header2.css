@@ -24,19 +24,20 @@ body {
 
 }
 
-.nav-links a {
-	color: black;
-	text-decoration: none;
-	font-size: 30px;
-	padding: 0.5rem 0.75rem;
-}
-
-.nav-links a:hover {
-	color: #ff4473;
-	border-radius: 4px;
-}
-
 .custom-border{
 	border-top : 1px solid #FF4473;
 	border-bottom : 1px solid #FF4473;
+}
+
+.header-text{
+	color:#000000;
+}
+
+.header-text:hover{
+	cursor:pointer;
+	color: #FF4473;
+}
+
+.nav-item.active .header-text{
+	color: #ff4473 !important;
 }
