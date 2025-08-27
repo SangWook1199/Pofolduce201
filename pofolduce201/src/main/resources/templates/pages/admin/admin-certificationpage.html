@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>회사 인증 상세</title>
+<link rel="stylesheet" href="/css/admin.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="certification-page-body">
+
+	<h2>회사 인증 상세</h2>
+
+	<table id="certification-info" class="certification-page-table">
+		<!-- 인증 정보가 여기에 들어감 -->
+	</table>
+
+	<div class="certification-image-box">
+		<img id="certification-image" src="" alt="인증 이미지">
+	</div>
+
+	<div class="certification-btns">
+		<button id="reject-btn">반려</button>
+		<button id="approve-btn">확인</button>
+	</div>
+
+	<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get("userId");
+
+    // 인증 상세 정보 가져오기
+    $.get(`/admin/user/certification/${userId}/json`, function(data) {
+        $('#certification-info').html(`
+            <tr><td>요청자</td><td>${data.nickname}</td></tr>
+            <tr><td>단체</td><td>${data.company}</td></tr>
+            <tr><td>날짜</td><td>${data.date}</td></tr>
+            <tr><td>상태</td><td>${data.state}</td></tr>
+        `);
+        $('#certification-image').attr('src', data.imageUrl);
+    });
+
+    // 승인 버튼 클릭 이벤트
+    $('#approve-btn').click(function() {
+        $.post(`/admin/user/certification/${userId}/status`, { status: '완료' }, function() {
+            alert("인증이 승인되었습니다.");
+            window.opener.location.reload(); // 부모창 새로고침
+            window.close(); // 팝업 닫기
+        });
+    });
+
+    // 반려 버튼 클릭 이벤트
+    $('#reject-btn').click(function() {
+        $.post(`/admin/user/certification/${userId}/status`, { status: '반려' }, function() {
+            alert("인증이 반려되었습니다.");
+            window.opener.location.reload(); // 부모창 새로고침
+            window.close(); // 팝업 닫기
+        });
+    });
+	</script>
+
+</body>
+</html>

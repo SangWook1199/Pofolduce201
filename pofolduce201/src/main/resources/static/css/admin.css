@@ -176,7 +176,7 @@
 }
 
 /* =============================
-   신고 상세 페이지 (admin-reportpage.html)
+   신고 상세 페이지
    ============================= */
 .report-card {
 	background-color: #fff;
@@ -213,4 +213,57 @@
 .report-sanction .dropdown-menu .dropdown-item:hover {
 	background-color: #ffe6f0;
 	color: #ff4081;
+}
+
+/* ================================
+   회사 인증 상세 페이지
+   ================================ */
+.certification-page-body {
+	font-family: 'Noto Sans KR', sans-serif;
+	padding: 20px;
+}
+
+.certification-page-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 15px;
+}
+
+.certification-page-table td {
+	padding: 10px;
+	border-bottom: 1px solid #ddd;
+}
+
+.certification-image-box {
+	text-align: center;
+	margin: 20px 0;
+}
+
+.certification-image-box img {
+	max-width: 400px;
+	border: 1px solid #aaa;
+	display: inline-block;
+}
+
+.certification-btns {
+	text-align: center;
+}
+
+.certification-btns button {
+	padding: 10px 20px;
+	margin: 5px;
+	font-size: 16px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.certification-btns #reject-btn {
+	background-color: #f44336;
+	color: white;
+}
+
+.certification-btns #approve-btn {
+	background-color: #4CAF50;
+	color: white;
 }

@@ -152,7 +152,6 @@
 	</select>
 
 	<select id="getReviewBoardByViewCount" resultType="map">
-
 		SELECT
 		rp.review_post_id AS reviewPostId,
 		rp.title,
