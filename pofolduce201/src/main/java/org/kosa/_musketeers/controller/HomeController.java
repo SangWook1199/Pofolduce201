@@ -55,10 +55,10 @@ public class HomeController {
 		// 오늘의 채용 공고를 가져옵니다.
 		// 메인 화면을 로딩할 때 데이터가 없다면 크롤링을 시작합니다.
 		// 데이터가 있다면 db에서 데이터를 가져옵니다.
-		List<Map<String, String>> recruitList = recruitService.getRecruit(2,4);
+		List<Map<String, String>> recruitList = recruitService.getRecruit(1,4);
 		if (recruitList.isEmpty()) {
 			recruitService.createRecruit(10);
-			recruitList = recruitService.getRecruit(2,4);
+			recruitList = recruitService.getRecruit(1,4);
 
 		}
 

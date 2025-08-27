@@ -70,11 +70,10 @@ public class RecruitService {
 		Set<String> collectedLinks = new HashSet<>();
 
 		int scrollCount = count; // 스크롤 몇 번 내릴지
-
 		for (int i = 0; i < scrollCount; i++) {
 			// 현재 페이지에서 공고 가져오기
 			List<WebElement> jobList = driver.findElements(By.xpath("//a[contains(@href, '/job/')]"));
-			System.out.println(jobList.size());
+			
 			int collected = 0;
 			for (WebElement job : jobList) {
 				WebElement imgElement = job.findElement(By.tagName("img"));
@@ -115,7 +114,7 @@ public class RecruitService {
 			js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 			Thread.sleep(500); // 로딩 대기
 		}
-
+		
 		driver.quit();
 
 		// 데이터 저장
