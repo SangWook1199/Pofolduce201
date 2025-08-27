@@ -45,6 +45,10 @@ public class NoticeBoardController {
 
         int totalPosts = noticeBoardService.countPosts();
         int totalPages = (int) Math.ceil((double) totalPosts / pageSize);
+        
+        if (totalPages == 0) {
+            totalPages = 1;
+        }
 
         int startPage = ((page - 1) / 5) * 5 + 1;
         int endPage = Math.min(startPage + 4, totalPages);
@@ -72,6 +76,9 @@ public class NoticeBoardController {
         }
 
         NoticeBoard post = noticeBoardService.getPostById(noticeId);
+        
+        noticeBoardService.addViewCount(noticeId);
+        System.out.println(post);
         model.addAttribute("post", post);
         model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("currentUri", request.getRequestURI());
