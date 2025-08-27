@@ -84,8 +84,15 @@
 									id="best-box">
 									<div class="justify-content-center gap-4 box" id="review-box">
 										<div th:each="review : ${chunk}">
+										
+										
+										<div class="iframe-wrapper"
+												style="position: relative; cursor: pointer;"
+												th:onclick="|location.href='/review/post?reviewPostId=' + ${review.reviewPostId}|">
+										
 											<iframe th:attr="srcdoc=${review.portfolioHtml}"
-												class="portfolio-img" scrolling="no"></iframe>
+												class="portfolio-img" scrolling="no" style="pointer-events: none;"></iframe> </div>
+												
 										</div>
 									</div>
 								</div>
