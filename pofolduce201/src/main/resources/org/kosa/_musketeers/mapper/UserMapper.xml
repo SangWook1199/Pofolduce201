@@ -231,6 +231,7 @@
 		user_image_location,
 		company_name
 		FROM users
+		WHERE user_type = '유저'
 		ORDER BY point DESC
 	</select>
 
