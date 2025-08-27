@@ -4,21 +4,155 @@
 	layout:decorate="~{layouts/layout}">
 <head>
 <meta charset="UTF-8" />
+<link th:href="@{/css/board-header.css}" rel="stylesheet">
 <link rel="stylesheet" href="/css/popover.css" />
-<title>Insert title here</title>
+<link rel="stylesheet" href="/css/review-css/review-post.css" />
+<title>첨삭게시글</title>
 </head>
 <body>
-	<div layout:fragment="content">
-		<div class="row justify-content-center mt-5">
-			<div class="col-9">
+	<div layout:fragment="content" class="container-fluid main-content">
+
+		<div
+			th:replace="fragments/html/board-header :: board-header('첨삭 게시판 > 게시글 보기')"></div>
+
+		<div class="title-area mb-3">
+			<div
+				class="d-flex justify-content-between align-items-center mb-4 review-post-title">
+				<h3 class="board-title mb-0" th:text="${reviewPost.title}">제목</h3>
+				<div th:if="${session.userId == reviewPost.user.userId}"
+					class="col-3 d-flex justify-content-center gap-2">
+					<a class="btn btn-sm btn-outline-primary"
+						th:href="@{/review/post/{reviewPostId}/edit(reviewPostId=${reviewPost.reviewPostId})}">수정</a>
+					<form
+						th:action="@{/review/post/{reviewPostId}/delete(reviewPostId=${reviewPost.reviewPostId})}"
+						method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');"
+						class="d-inline">
+						<button class="btn btn-sm btn-outline-primary" type="submit">삭제</button>
+					</form>
+				</div>
+			</div>
+			<div class="d-flex align-items-center gap-3">
+				<img
+					th:src="${reviewPost.user.userImageLocation != null ? reviewPost.user.userImageLocation.split('static')[1] : '/svg/person.svg'}"
+					alt="user image" class="profile" />
+				<div class="d-flex flex-column">
+					<p th:text="${reviewPost.user.nickname}"
+						class="mb-0 fw-bold nickname all-userName"
+						th:attr="data-userid=${reviewPost.user.userId}"
+						data-bs-toggle="popover" title="사용자 정보">김세정</p>
+					<p
+						th:text="${#temporals.format(reviewPost.createDate,'yyyy-MM-dd HH:mm')}"
+						class="mb-0 text-muted small"></p>
+				</div>
 				<div
-					th:replace="fragments/html/board-header :: board-header('첨삭 게시판')"></div>
-				<div class="row border-top border-3 p-3 align-items-center">
-					<div class="col-9">
-						<h3 class="h3" th:text="${reviewPost.title}"></h3>
+					th:if="${session.userId != null and session.userId != reviewPost.user.userId}"
+					class="ms-auto">
+					<button type="button" class="btn p-0 border-0 bg-transparent"
+						data-bs-toggle="modal" data-bs-target="#reportPostModal">
+						<img alt="신고 버튼" class="report-img"
+							th:src="@{/svg/report-button.svg}">
+					</button>
+					<div
+						th:replace="fragments/html/review-post-report-modal :: reviewPostReportModalFragment('reportPostModal', ${reviewPost.reviewPostId}, ${reviewPost.user.userId})"></div>
+				</div>
+			</div>
+		</div>
+		<!-- 포트폴리오 div -->
+		<div class="content-area">
+			<div class="pt-3 border-top border-1 mt position-relative"
+				id="portfolio-div">
+				<p th:utext="${reviewPost.portfolioHtml}"></p>
+			</div>
+			<!-- 본문 div -->
+			<div class="pt-3 border-top border-1 mt">
+				<p th:utext="${reviewPost.postHtml}"></p>
+			</div>
+
+			<div class="text-center">
+				<button class="btn btn-primary like-button" id="likeBtn"
+					th:onclick="|pressLike(${reviewPost.reviewPostId})|">
+					좋아요 <img id="likeImg" th:src="@{/svg/like-off.svg}" alt="좋아요"
+						class="img-fluid" style="width: 24px; height: 24px;"> <span
+						id="likeCount" th:text="${reviewPost.likeCount}"></span>
+				</button>
+			</div>
+		</div>
+
+
+		<div class="d-flex justify-content-end m-3">
+			<button class="btn btn-outline-primary" type="button"
+				onclick="location.href='/review-post'">목록보기</button>
+		</div>
+		<div class="comment-area">
+			<div>
+				<p class="comment-title d-inline-block">댓글 목록</p>
+			</div>
+			<!-- 댓글 작성 -->
+			<div class="row">
+				<form action="/review/comment" method="post">
+					<div class="row">
+						<input type="hidden" th:value="${session.userId}" name="userId" />
+						<input type="hidden" th:value="${reviewPost.reviewPostId}"
+							name="reviewPostId" />
+						<div class="col-10 mb-3 comment-content">
+							<textarea class="form-control comment-content"
+								placeholder="댓글을 입력하세요" name="comment" rows="4" required></textarea>
+						</div>
+						<button class="col-2 btn btn-primary comment-button" type="submit">등록</button>
+					</div>
+				</form>
+			</div>
+			<!-- 댓글 목록 -->
+			<div class="comment-list" th:each="comments : ${commentsList}">
+				<div class="d-flex align-items-center mb-3">
+					<!-- 댓글 유저 이미지 -->
+					<img class="comment-profile"
+						th:src="${comments.userId.userImageLocation != null ? comments.userId.userImageLocation.split('static')[1] : '/svg/person.svg'}"
+						alt="user image" />
+					<!-- 댓글 유저 닉네임(팝오버 적용) -->
+
+					<strong th:text="${comments.userId.nickname}"
+						class="mb-0 fw-bold nickname all-userName"
+						th:attr="data-userid=${comments.userId.userId}"
+						data-bs-toggle="popover" data-bs-trigger="focus" title="사용자 정보"
+						tabindex="0">작성자</strong> <span class="small ms-2"
+						th:text="${#temporals.format(comments.commentsDate, 'yyyy-MM-dd HH:mm')}">작성일</span>
+				</div>
+				<p class="mb-2" th:text="${comments.commentsContents}"
+					th:id="'comments-contents-' + ${comments.commentsId}"></p>
+
+				<div class="text-end">
+					<div class="d-flex justify-content-end align-items-center gap-2">
+						<button class="btn btn-sm btn-primary"
+							th:if="${session.userId == comments.userId.userId}"
+							th:onclick="|toggleEdit(${comments.commentsId})|">수정</button>
+						<form
+							th:action="@{/review/comment/{reviewCommentId}/delete(reviewCommentId=${comments.commentsId})}"
+							method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');"
+							class="d-inline">
+							<input type="hidden" th:value="${reviewPost.reviewPostId}"
+								name="reviewPostId">
+							<button th:if="${session.userId == comments.userId.userId}"
+								class="btn btn-sm btn-primary" type="submit">삭제</button>
+						</form>
+					</div>
+					<!-- 숨겨진 수정창 -->
+					<div th:id="|edit-box-${comments.commentsId}|"
+						class="hidden-update mt-2">
+						<form
+							th:action="@{/review/comment/{reviewCommentId}/edit(reviewCommentId=${comments.commentsId})}"
+							method="post">
+							<input type="hidden" name="reviewPostId"
+								th:value="${comments.reviewPostId}">
+							<textarea class="form-control comment-content"
+								name="commentsContents" id="comment-content"
+								th:text="${comments.commentsContents}"></textarea>
+							<button class="btn btn-primary btn-sm mt-2" type="submit">수정
+								완료</button>
+						</form>
 					</div>
 					<div
-						th:if="${session.userId != null and session.userId != reviewPost.user.userId}"
+						th:if="${session.userId != null and session.userId != comments.userId.userId}"
 						class="ms-auto">
 						<button type="button" class="btn p-0 border-0 bg-transparent"
 							data-bs-toggle="modal" data-bs-target="#reportPostModal">
@@ -28,147 +162,34 @@
 						<div
 							th:replace="fragments/html/review-post-report-modal :: reviewPostReportModalFragment('reportPostModal', ${reviewPost.reviewPostId}, ${reviewPost.user.userId})"></div>
 					</div>
-					<div th:if="${session.userId == reviewPost.user.userId}"
-						class="col-3 d-flex justify-content-center">
-						<a class="btn btn-primary m-2"
-							th:href="@{/review/post/{reviewPostId}/edit(reviewPostId=${reviewPost.reviewPostId})}">수정하기</a>
-						<form
-							th:action="@{/review/post/{reviewPostId}/delete(reviewPostId=${reviewPost.reviewPostId})}"
-							method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');">
-							<button class="btn btn-primary m-2" type="submit">삭제하기</button>
-						</form>
-					</div>
-					<div class="row justify-content-around">
-						<img class="col-1 rounded-circle p-0 m-1"
-							th:src="${reviewPost.user.userImageLocation != null ? reviewPost.user.userImageLocation.split('static')[1] : '/svg/person.svg'}"
-							alt="user image" style="width: 50px" />
-						<div class="col-9 col-md-10 col-xl-11 row align-items-center">
-							<p th:text="${reviewPost.user.nickname}"
-								class="mb-0 fw-bold nickname all-userName"
-								th:attr="data-userid=${reviewPost.user.userId}"
-								data-bs-toggle="popover" title="사용자 정보">김세정</p>
-							<p th:text="${reviewPost.createDate}"></p>
-						</div>
-					</div>
-				</div>
-				<!-- 포트폴리오 div -->
-				<div class="pt-3 border-top border-1 mt position-relative"
-					id="portfolio-div">
-					<p th:utext="${reviewPost.portfolioHtml}"></p>
-				</div>
-				<!-- 본문 div -->
-				<div class="pt-3 border-top border-1 mt">
-					<p th:utext="${reviewPost.postHtml}"></p>
-				</div>
-
-				<div
-					class="d-flex justify-content-center mt-3 border-bottom border-1">
-					<button class="btn btn-primary text-align-center m-5"
-						id="like-button" th:text="|👍 ${reviewPost.likeCount}|"
-						th:onclick="|pressLike(${reviewPost.reviewPostId})|">👍
-						1234</button>
-				</div>
-				<div class="d-flex justify-content-end m-3">
-					<button class="btn btn-primary" type="button"
-						onclick="location.href='/review-post'">목록보기</button>
-				</div>
-				<div class="p-3">
-					<h4 class="h4">댓글 목록</h4>
-					<!-- 댓글 작성 -->
-					<form action="/review/comment" method="post">
-						<div class="row">
-							<div class="col-10">
-								<input type="hidden" th:value="${session.userId}" name="userId" />
-								<input type="hidden" th:value="${reviewPost.reviewPostId}"
-									name="reviewPostId" />
-								<textarea class="form-control" placeholder="댓글을 입력하세요"
-									name="comment"></textarea>
-							</div>
-							<button class="col-2 btn btn-primary" type="submit">등록</button>
-						</div>
-					</form>
-					<!-- 댓글 목록 -->
-					<div class="row mt-3 border-top pt-3"
-						th:each="comments : ${commentsList}">
-						<!-- 댓글 유저 이미지 -->
-						<img class="rounded-circle p-0"
-							th:src="${comments.userId.userImageLocation != null ? comments.userId.userImageLocation.split('static')[1] : '/svg/person.svg'}"
-							alt="user image" style="width: 50px" />
-						<!-- 댓글 유저 닉네임(팝오버 적용) -->
-						<div class="col-10">
-							<p th:text="${comments.userId.nickname}"
-								class="mb-0 fw-bold nickname all-userName"
-								th:attr="data-userid=${reviewPost.user.userId}"
-								data-bs-toggle="popover" title="사용자 정보">김세정</p>
-							<p th:text="${reviewPost.createDate}"></p>
-							<div class="col-10 mt-2" th:text="${comments.commentsContents}"
-								th:id="'comments-contents-' + ${comments.commentsId}"></div>
-						</div>
-
-						<div class="d-flex justify-content-end">
-							<button class="btn btn-primary ms-1"
-								th:if="${session.userId == comments.userId.userId}"
-								th:onclick="|toggleEdit(${comments.commentsId})|">수정</button>
-							<form
-								th:action="@{/review/comment/{reviewCommentId}/delete(reviewCommentId=${comments.commentsId})}"
-								method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');">
-								<input type="hidden" th:value="${reviewPost.reviewPostId}"
-									name="reviewPostId">
-								<button th:if="${session.userId == comments.userId.userId}"
-									class="btn btn-primary ms-2" type="submit">삭제</button>
-							</form>
-							<div
-								th:if="${session.userId != null and session.userId != reviewPost.user.userId}"
-								class="ms-auto">
-								<button type="button" class="btn p-0 border-0 bg-transparent"
-									data-bs-toggle="modal" data-bs-target="#reportPostModal">
-									<img alt="신고 버튼" class="report-img"
-										th:src="@{/svg/report-button.svg}">
-								</button>
-								<div
-									th:replace="fragments/html/review-post-report-modal :: reviewPostReportModalFragment('reportPostModal', ${reviewPost.reviewPostId}, ${reviewPost.user.userId})"></div>
-							</div>
-						</div>
-						<!-- 숨겨진 수정창 -->
-						<div th:id="|edit-box-${comments.commentsId}|"
-							style="display: none;">
-							<form
-								th:action="@{/review/comment/{reviewCommentId}/edit(reviewCommentId=${comments.commentsId})}"
-								method="post">
-								<input type="hidden" name="reviewPostId"
-									th:value="${comments.reviewPostId}">
-								<textarea class="form-control" name="commentsContents"
-									id="comment-content" th:text="${comments.commentsContents}"></textarea>
-								<button class="btn btn-primary btn-sm mt-2" type="submit">수정
-									완료</button>
-							</form>
-						</div>
-					</div>
-					<nav aria-label="Page navigation example">
-						<ul class="pagination justify-content-center m-3">
-							<!-- 이전 버튼 -->
-							<li class="page-item"
-								th:classappend="${currentCommentPage == 1} ? 'disabled'"><a
-								class="page-link"
-								th:href="@{/review(page=${currentCommentPage - 1})}">Previous</a></li>
-
-							<!-- 페이지 번호 반복 -->
-							<li class="page-item"
-								th:each="i : ${#numbers.sequence(1, totalCommentPages)}"
-								th:classappend="${i == currentCommentPage} ? 'active'"><a
-								class="page-link"
-								th:href="@{/review/post(reviewPostId=${reviewPost.reviewPostId}, currentCommentPage=${i})}"
-								th:text="${i}"></a></li>
-
-							<!-- 다음 버튼 -->
-							<li class="page-item"
-								th:classappend="${currentCommentPage == totalCommentPages} ? 'disabled'"><a
-								class="page-link"
-								th:href="@{/review(page=${currentCommentPage + 1})}">Next</a></li>
-						</ul>
-					</nav>
 				</div>
 			</div>
+			<div th:if="${not #lists.isEmpty(comments)}">
+				<hr class="comment-line">
+			</div>
+			<nav aria-label="Page navigation example">
+				<ul class="pagination justify-content-center m-3">
+					<!-- 이전 버튼 -->
+					<li class="page-item"
+						th:classappend="${currentCommentPage == 1} ? 'disabled'"><a
+						class="page-link"
+						th:href="@{/review/post(reviewPostId=${reviewPost.reviewPostId}, currentCommentPage=${currentCommentPage - 1})}">Previous</a></li>
+
+					<!-- 페이지 번호 반복 -->
+					<li class="page-item"
+						th:each="i : ${#numbers.sequence(1, totalCommentPages)}"
+						th:classappend="${i == currentCommentPage} ? 'active'"><a
+						class="page-link"
+						th:href="@{/review/post(reviewPostId=${reviewPost.reviewPostId}, currentCommentPage=${i})}"
+						th:text="${i}"></a></li>
+
+					<!-- 다음 버튼 -->
+					<li class="page-item"
+						th:classappend="${currentCommentPage == totalCommentPages} ? 'disabled'"><a
+						class="page-link"
+						th:href="@{/review(page=${currentCommentPage + 1})}">Next</a></li>
+				</ul>
+			</nav>
 		</div>
 		<div id="data-container" th:data-post-id="${reviewPost.reviewPostId}"
 			th:data-session-userId="${session.userId}"></div>

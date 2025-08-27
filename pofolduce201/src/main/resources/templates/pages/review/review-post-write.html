@@ -7,15 +7,9 @@
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
 	rel="stylesheet">
+<link th:href="@{/css/review-css/review-post-write.css}" rel="stylesheet">
+<link th:href="@{/css/board-header.css}" rel="stylesheet">
 <title>첨삭게시판 글쓰기</title>
-<style>
-	.ck.ck-editor__editable{
-		min-height: 500px;
-	}
-	input::placeholder {
-    	text-align: center;
-	}
-</style>
 </head>
 <div layout:fragment="content">
 	<div class="row justify-content-center m-5">
@@ -40,7 +34,7 @@
 						rows="10"></textarea>
 				</div>
 				<div class="d-flex justify-content-between">
-					<a th:href="@{/review-post}" class="btn btn-secondary">목록보기</a>
+					<a th:href="@{/review-post}" class="btn btn-outline-primary">목록보기</a>
 					<button type="submit" class="btn btn-primary">게시하기</button>
 				</div>
 			</form>
