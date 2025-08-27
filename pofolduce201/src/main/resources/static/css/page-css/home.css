@@ -5,6 +5,7 @@
 	max-width: 1000px;
 	margin: 0 auto; /* 전체 컨테이너가 가운데로 오게 할 수 있음*/
 	margin-top: 5%;
+	
 }
 
 #main-board-header {
@@ -32,13 +33,6 @@
 #review-box{
 	display:flex;
 }
-
-
-
-
-
-
-
 
 
 
@@ -141,7 +135,8 @@
 }
 
 #recruit{
-	margin-top : 3%;
+	margin-top : 6%;
+	
 }
 
 .recruit-box {

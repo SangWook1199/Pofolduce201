@@ -24,7 +24,7 @@
 						<div class="row row-cols-md-3 row-cols-2 g-4">
 							<div th:if="${#lists.isEmpty(portfolios)}"
 								class="col-12 text-center mt-5">
-								<p class="text-muted">등록된 포트폴리오가 없습니다.</p>
+								<h3 class="non-data">등록된 포트폴리오가 없습니다.</h3>
 							</div>
 
 							<th:block th:unless="${#lists.isEmpty(portfolios)}">
