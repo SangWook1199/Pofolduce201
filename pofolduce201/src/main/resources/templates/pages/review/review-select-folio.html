@@ -13,8 +13,11 @@
 	<div class="mypage-main">
 		<div class="mypage-main-side">
 			<div class="mypage-main-container">
-				<h1 id="mypage-title2">내 이력서</h1>
-				<div class="row row-cols-3 g-4">
+				<h1 class="m-2" id="mypage-title2">내 이력서</h1>
+				<div class="m-2" th:if="${#lists.size(myPortfolioList) == 0}">
+					<p>이력서가 존재하지 않습니다. 내 정보에서 이력서를 업로드하세요.</p>
+				</div>
+				<div class="row row-cols-3 g-4 m-2 border" th:if="${#lists.size(myPortfolioList) != 0}">
 					<div class="col" th:each="portfolio : ${myPortfolioList}">
 						<div class="card h-100 text-center">
 							<!-- 썸네일 -->

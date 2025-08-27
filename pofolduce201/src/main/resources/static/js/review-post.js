@@ -117,7 +117,7 @@ function appendReviews(reviews) {
 		    <div class="row review-div justify-content-center"
 				 id="review-div-${review.reviewId}"
 		         style="position: absolute; z-index: 9999; left: ${review.reviewLocationX}px; top: ${review.reviewLocationY}px; transform:translate(-50%, 0);">
-				 <img class="col-3 rounded-circle" src="${review.user.userImageLocation.split('static')[1]}" style="width:50px"/>
+				 <img class="col-3 rounded-circle" src="${review.user.userImageLocation!=null?review.user.userImageLocation.split('static')[1] : '/svg/person.svg'}" style="width:50px"/>
 				 <div class="row">
 				 <div class="col card p-2 text-center bg-light review m-0">
 					<div class="row m-1 justify-content-center">
@@ -195,7 +195,7 @@ function cancelUpdate(reviewId){
 document.addEventListener('DOMContentLoaded', async function() {
 
 	sessionUserId = document.getElementById('data-container').dataset.sessionUserid;
-	reviewPostId = document.getElementById('data-container').dataset.sessionUserId;
+	reviewPostId = document.getElementById('data-container').dataset.postId;
 
 	const reviews = await loadReviews(document
 		.getElementById('data-container').dataset.postId);
@@ -224,6 +224,7 @@ async function pressLike(reviewPostId){
 		console.log("fetch error: error");
 	}
 	document.getElementById('like-button').innerText= '👍 ' + likeCount;
+	document.getElementById('like-button').disabled;
 }
 		
 //댓글 수정
