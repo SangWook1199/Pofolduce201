@@ -113,7 +113,10 @@
 	height: 100px;
 	border-radius: 20px;
 }
-
+.comment-button{
+	height:100px;
+	border-radius:20px;
+}
 .comment-profile{
 	width: 35px;
 	height: 35px;
