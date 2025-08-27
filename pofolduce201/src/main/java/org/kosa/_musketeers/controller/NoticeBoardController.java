@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Controller
 public class NoticeBoardController {
 
@@ -25,7 +27,7 @@ public class NoticeBoardController {
     @GetMapping("/notice-board")
     public String noticeBoard(@RequestParam(defaultValue = "1") int page,
                               @SessionAttribute(required=false) Integer userId,
-                              Model model) {
+                              Model model, HttpServletRequest request) {
 
         boolean isAdmin = false;
 
@@ -51,7 +53,7 @@ public class NoticeBoardController {
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
         model.addAttribute("totalPages", totalPages);
-
+        model.addAttribute("currentUri", request.getRequestURI());
         return "pages/notice/notice-board";
     }
 
@@ -59,7 +61,7 @@ public class NoticeBoardController {
     @GetMapping("/notice/{noticeId}")
     public String noticeBoardPost(@PathVariable int noticeId,
                                   @SessionAttribute(required=false) Integer userId,
-                                  Model model) {
+                                  Model model, HttpServletRequest request) {
 
         boolean isAdmin = false;
         if (userId != null) {
@@ -72,7 +74,7 @@ public class NoticeBoardController {
         NoticeBoard post = noticeBoardService.getPostById(noticeId);
         model.addAttribute("post", post);
         model.addAttribute("isAdmin", isAdmin);
-
+        model.addAttribute("currentUri", request.getRequestURI());
         return "pages/notice/notice-board-post";
     }
 

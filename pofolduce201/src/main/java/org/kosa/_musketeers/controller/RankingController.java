@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Controller
 public class RankingController {
 	private final UserService userService;
@@ -18,7 +20,7 @@ public class RankingController {
 	}
 	
 	@GetMapping("/ranking")
-	public String ranking(Model model) {
+	public String ranking(HttpServletRequest request, Model model) {
 		List<User> rankingList;
         try {
             rankingList = userService.getUserListByPoint();
@@ -35,6 +37,7 @@ public class RankingController {
         }
 
         model.addAttribute("rankingList", rankingList);
+        model.addAttribute("currentUri", request.getRequestURI());
 		return "pages/ranking/ranking";
 	}
 }

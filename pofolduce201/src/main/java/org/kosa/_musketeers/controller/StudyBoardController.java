@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Controller
 public class StudyBoardController {
 	private final StudyBoardService studyBoardService;
@@ -37,7 +39,7 @@ public class StudyBoardController {
 	// 스터디 게시판 페이지
 	@GetMapping("/study")
 	public String studyBoard(@SessionAttribute(name = "userId", required = false) Integer userId,
-			@RequestParam(defaultValue = "1") int page, Model model) {
+			@RequestParam(defaultValue = "1") int page, Model model, HttpServletRequest request) {
 		if (userId == null) {
 			return "redirect:/not-logined?msg=login_required";
 		}
@@ -70,6 +72,7 @@ public class StudyBoardController {
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("endPage", endPage);
 		model.addAttribute("totalPages", totalPages);
+		model.addAttribute("currentUri", request.getRequestURI());
 
 		return "pages/study/study-board";
 	}
@@ -96,7 +99,7 @@ public class StudyBoardController {
 	@GetMapping("/study/{studyId}")
 	public String studyBoardPost(@PathVariable int studyId, @RequestParam(defaultValue = "1") int page, Model model,
 			@SessionAttribute(name = "userId", required = false) Integer userId,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes, HttpServletRequest request) {
 		if (userId == null) {
 			return "redirect:/not-logined?msg=login_required";
 		}
@@ -123,8 +126,8 @@ public class StudyBoardController {
 		studyBoardService.addViewCount(studyId);
 		model.addAttribute("currentPage", page);
 		model.addAttribute("totalPages", totalPages);
-
 		model.addAttribute("userId", userId);
+		model.addAttribute("currentUri", request.getRequestURI());
 
 		return "pages/study/study-board-post";
 	}

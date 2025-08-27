@@ -15,7 +15,7 @@
 		th:replace="fragments/html/board-header :: board-header('스터디 게시판')"></div>
 	<div id="map" class="map-container"></div>
 	<div
-		th:replace="fragments/html/banner :: banner('이력서 및 자기소개서, 포트폴리오를 첨삭받을 수 있는 게시판 입니다.', '관련 없는 게시글 및 광고성 정보, 욕설이 포함된 게시글은 예고 없이 삭제될 수 있습니다.','첨삭 시 반드시 매너를 지켜주세요!')"></div>
+		th:replace="fragments/html/banner :: banner('면접 및 취업 관련 스터디를 자유롭게 모아보세요!', '관련 없는 게시글 및 광고성 정보, 욕설이 포함된 게시글은 예고 없이 삭제될 수 있습니다.','스터디 모집 글을 올리실 때는 개인 정보 노출에 주의해 주세요!')"></div>
 	<div class="study-table mt-3">
 		<table class="table table-hover text-center">
 			<colgroup>
@@ -48,7 +48,8 @@
 					<td th:text="${first.likeCount}"></td>
 					<td th:text="${first.viewCount}"></td>
 				</tr>
-				<tr th:onclick="|window.location='/study/' + [[${second.studyId}]]|"
+				<tr class="clickable-row"
+					th:onclick="|window.location='/study/' + [[${second.studyId}]]|"
 					th:if="${second != null}">
 					<td><img alt="왕관" th:src="@{/svg/2nd-crown.svg}"
 						class="img-fluid banner-image"></td>
@@ -58,7 +59,7 @@
 					<td th:text="${second.likeCount}"></td>
 					<td th:text="${second.viewCount}"></td>
 				</tr>
-				<tr class="table-border-bottom"
+				<tr class="table-border-bottom clickable-row"
 					th:onclick="|window.location='/study/' + [[${third.studyId}]]|"
 					th:if="${third!= null}">
 					<td><img alt="왕관" th:src="@{/svg/3rd-crown.svg}"
@@ -70,7 +71,7 @@
 					<td th:text="${third.viewCount}"></td>
 				</tr>
 
-				<tr th:each="list:${dateList}"
+				<tr class="clickable-row" th:each="list:${dateList}"
 					th:onclick="|window.location='/study/' + [[${list.studyId}]]|"
 					th:unless="${#lists.isEmpty(dateList)}">
 					<td></td>
@@ -87,7 +88,7 @@
 		</table>
 	</div>
 	<div class="col text-end">
-		<a class="btn btn-primary rounded-circle" href="/study/write"
+		<a class="btn btn-primary" href="/study/write"
 			id="write-button">+</a>
 	</div>
 	<nav aria-label="Page navigation example" th:if="${totalPages > 0}">
