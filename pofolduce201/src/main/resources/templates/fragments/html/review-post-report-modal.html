@@ -1,0 +1,36 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="reviewPostReportModalFragment (modalId, reviewPostId, reportedId)">
+	<div class="modal fade" th:id="${modalId}" tabindex="-1"
+		aria-labelledby="reportModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<h5 class="modal-title" id="reportModalLabel">신고하기</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+
+				<form th:action="@{/review/post{reviewPostId}/report(reviewPostId=${reviewPost.reviewPostId})}"
+					method="post">
+					<div class="modal-body">
+						<div class="d-flex align-items-center mb-3">
+							<input type="hidden" th:value="|/review/post{reviewPostId}(reviewPostId=${reviewPost.reviewPostId})|"
+								name="location" /> <input type="hidden"
+								th:value="${reportedId}" name="reportedId" />
+							<textarea class="report-content" name="reportContents" rows="5"
+								cols="60" placeholder="신고 사유를 입력해 주세요."></textarea>
+						</div>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-bs-dismiss="modal">취소</button>
+						<button type="submit" class="btn btn-primary">확인</button>
+					</div>
+				</form>
+
+			</div>
+		</div>
+	</div>
+</div>

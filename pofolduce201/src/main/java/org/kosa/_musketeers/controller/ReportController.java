@@ -19,7 +19,7 @@ public class ReportController {
 	}
 
 	@PostMapping("/study/{studyId}/report")
-	public String reportStudyComment(@RequestParam String location, @RequestParam("reportContents") String contents,
+	public String reportStudyBoard(@RequestParam String location, @RequestParam("reportContents") String contents,
 			@RequestParam int reportedId, @PathVariable int studyId, @SessionAttribute(name="userId",required=false) int userId) {
 		Report report = new Report();
 
@@ -36,5 +36,25 @@ public class ReportController {
 		reportService.createReport(report);
 
 		return "redirect:/study/" + studyId;
+	}
+	
+	@PostMapping("/review/post{reviewPostId}/report")
+	public String reportReviewBoard(@RequestParam String location, @RequestParam("reportContents") String contents,
+			@RequestParam int reportedId, @PathVariable int reviewPostId, @SessionAttribute(name="userId",required=false) int userId) {
+		Report report = new Report();
+
+		User user = new User();
+		user.setUserId(userId);
+		User reportedUser = new User();
+		report.setUserId(user);
+
+		report.setLocation(location);
+		report.setReportContents(contents);
+		report.setState("처리 전");
+		reportedUser.setUserId(reportedId);
+		report.setReportedId(reportedUser);
+		reportService.createReport(report);
+
+		return "redirect:/review/post?reviewPostId=" + reviewPostId;
 	}
 }
