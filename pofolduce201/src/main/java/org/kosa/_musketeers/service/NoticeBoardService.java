@@ -50,4 +50,8 @@ public class NoticeBoardService {
     public void deletePost(int noticeId) {
         noticeBoardMapper.deletePost(noticeId);
     }
+    // 조회수 증가
+	public void addViewCount(int noticeId) {
+		noticeBoardMapper.addViewCount(noticeId);
+	}
 }
