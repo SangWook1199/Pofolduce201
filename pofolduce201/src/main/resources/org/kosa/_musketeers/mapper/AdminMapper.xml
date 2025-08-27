@@ -17,14 +17,13 @@
 		SELECT user_id, email, nickname, password, user_type,
 		company_certification, company_name, point,
 		sanction_count, sanction_type, sanction_period,
-		date,  <!-- 시간 포함한 DATETIME 그대로 -->
-		user_image_location
+		date, user_image_location
 		FROM users
 		WHERE user_id = #{userId}
 	</select>
 
-	<!-- 제재 기간 설정 -->
-	<update id="updateSanction">
+	<!-- 제재 기간 및 상태 설정 -->
+	<update id="updateSanction" parameterType="map">
 		UPDATE users
 		SET sanction_period = #{sanctionPeriod},
 		sanction_type = #{sanctionType}
@@ -37,5 +36,60 @@
 		SET sanction_count = sanction_count + 1
 		WHERE user_id = #{userId}
 	</update>
+
+	<!-- 회사 인증 리스트 조회 -->
+	<select id="getAllVerifications" resultMap="VerificationMap">
+		SELECT
+		v.verification_id, v.company_name, v.state, v.date, v.file_location,
+		u.user_id,
+		u.nickname
+		FROM verification v
+		JOIN users u ON v.user_id = u.user_id
+		ORDER BY v.date DESC
+	</select>
+
+	<!-- Verification 결과 매핑 -->
+	<resultMap id="VerificationMap"
+		type="org.kosa._musketeers.domain.Verification">
+		<id property="verificationId" column="verification_id" />
+		<result property="companyName" column="company_name" />
+		<result property="state" column="state" />
+		<result property="date" column="date" />
+		<result property="fileLocation" column="file_location" />
+		<association property="user"
+			javaType="org.kosa._musketeers.domain.User">
+			<id property="userId" column="user_id" />
+			<result property="nickname" column="nickname" />
+		</association>
+	</resultMap>
+
+	<!-- 회사 인증 상태 업데이트 -->
+	<update id="updateVerificationStatus" parameterType="map">
+		UPDATE verification
+		SET state = #{state}
+		WHERE user_id = #{userId}
+	</update>
+
+	<!-- 유저 회사 인증 정보 업데이트 -->
+	<update id="updateUserCompanyInfo" parameterType="map">
+		UPDATE users
+		SET company_certification = #{companyCertification},
+		company_name = #{companyName}
+		WHERE user_id = #{userId}
+	</update>
+
+	<!-- 특정 유저의 Verification 조회 -->
+	<select id="getVerificationByUserId" parameterType="int"
+		resultMap="VerificationMap">
+		SELECT
+		v.verification_id, v.company_name, v.state, v.date, v.file_location,
+		u.user_id,
+		u.nickname
+		FROM verification v
+		JOIN users u ON v.user_id = u.user_id
+		WHERE v.user_id = #{userId}
+		ORDER BY v.date DESC
+		LIMIT 1
+	</select>
 
 </mapper>

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="org.kosa._musketeers.mapper.UserMapper">
+
 	<resultMap id="studyBoardMap"
 		type="org.kosa._musketeers.domain.StudyBoard">
 		<id property="studyId" column="study_id" />
@@ -33,16 +37,9 @@
 			<result property="nickname" column="nickname" />
 			<result property="email" column="email" />
 		</association>
-		<!-- <association property="portfolio" javaType="org.kosa._musketeers.domain.Portfolio"> 
-			<id property="portfolioId" column="portfolio_id" /> <result property="portfolioName" 
-			column="portfolio_name" /> <result property="uploadDate" column="upload_date" 
-			/> <association property="userId" javaType="org.kosa._musketeers.domain.User"> 
-			<id property="userId" column="user_id" /> <result property="nickname" column="nickname" 
-			/> <result property="email" column="email" /> </association> </association> -->
 	</resultMap>
 
-
-<resultMap id="CompanyMap"
+	<resultMap id="CompanyMap"
 		type="org.kosa._musketeers.domain.Verification">
 		<id property="verificationId" column="verification_id" />
 		<result property="companyName" column="company_name" />
@@ -53,57 +50,79 @@
 			javaType="org.kosa._musketeers.domain.User">
 			<id property="userId" column="user_id" />
 		</association>
-		</resultMap>
-
-
-
-
+	</resultMap>
 
 	<select id="getUserIdByEmailPwd" parameterType="map"
 		resultType="org.kosa._musketeers.domain.User">
 		SELECT user_id
 		FROM users
-		WHERE email=#{email} and
-		password=#{password}
+		WHERE email = #{email}
+		AND password
+		= #{password}
 	</select>
 
-	<select id="getUserInformation" parameterType="int">
+	<select id="getUserInformation" parameterType="int"
+		resultType="org.kosa._musketeers.domain.User">
 		SELECT user_id,
 		email,
-		nickname, company_name, company_certification, point,
+		nickname,
+		user_type,
+		company_name,
+		company_certification,
+		point,
 		user_image_location
 		FROM users
-		WHERE user_id=#{userId}
+		WHERE user_id
+		= #{userId}
 	</select>
-
 
 	<delete id="deleteAccount" parameterType="int">
-		delete FROM users
-		where
-		user_id=#{userId};
+		DELETE FROM users
+		WHERE
+		user_id = #{userId}
 	</delete>
 
-	<select id="getUserNickNameById">
-		select user_id from users
-		where nickname=#{nickname}
+	<select id="getUserNickNameById" parameterType="string"
+		resultType="int">
+		SELECT user_id FROM users
+		WHERE nickname = #{nickname}
 	</select>
-	<select id="getUserEmailById">
-		select user_id from users
-		where email=#{email}
+
+	<select id="getUserEmailById" parameterType="string"
+		resultType="int">
+		SELECT user_id FROM users
+		WHERE email = #{email}
 	</select>
-	<update id="updateUserInformation">
-		update users set email =#{email},
-		nickname=#{nickname}
-		where user_id=#{userId};
+
+	<update id="updateUserInformation" parameterType="map">
+		UPDATE users
+		SET email = #{email},
+		nickname = #{nickname}
+		WHERE user_id = #{userId}
 	</update>
+
 	<select id="findUserByEmail" parameterType="string"
 		resultType="org.kosa._musketeers.domain.User">
-		SELECT user_id, email, nickname, password, company_name,
-		company_certification, point, user_image_location
+		SELECT user_id,
+		email,
+		nickname,
+		password,
+		company_name,
+		company_certification,
+		point,
+		user_image_location
 		FROM users
-		WHERE email
-		= #{email}
+		WHERE email =
+		#{email}
 	</select>
+
+	<select id="findUserByNickname" parameterType="string"
+		resultType="org.kosa._musketeers.domain.User">
+		SELECT *
+		FROM users
+		WHERE nickname = #{nickname}
+	</select>
+
 	<insert id="insertUser"
 		parameterType="org.kosa._musketeers.domain.User">
 		INSERT INTO users (email, nickname, password)
@@ -111,114 +130,157 @@
 		(#{email}, #{nickname}, #{password})
 	</insert>
 
-
-	<update id="updateProfile">
-		UPDATE users set
-		user_image_location=#{imagePath}
-		where user_id=#{userId}
+	<update id="updateProfile" parameterType="map">
+		UPDATE users
+		SET
+		user_image_location = #{imagePath}
+		WHERE user_id = #{userId}
 	</update>
 
-
-
-	<select id="getTotalPortfolioCountById" resultType="int">
-		SELECT
-		COUNT(*)
+	<select id="getTotalPortfolioCountById" parameterType="int"
+		resultType="int">
+		SELECT COUNT(*)
 		FROM portfolio
-		WHERE user_id=#{userId};
+		WHERE user_id = #{userId}
 	</select>
-
 
 	<select id="getUserById" parameterType="int"
 		resultType="org.kosa._musketeers.domain.User">
-		SELECT user_id, email, nickname, password, user_type,
-		company_name, company_certification, point, date, user_image_location
-		FROM users
+		SELECT user_id,
+		email,
+		nickname,
+		password,
+		user_type,
+		company_name,
+		company_certification,
+		point,
+		date,
+		user_image_location
+		FROM
+		users
 		WHERE user_id = #{userId}
 	</select>
 
 	<select id="getReviewSearchResult" parameterType="string"
 		resultMap="reviewBoardMap">
-		SELECT b.review_post_id, b.title, b.view_count, b.post_html,
+		SELECT b.review_post_id,
+		b.title,
+		b.view_count,
+		b.post_html,
 		b.create_date,
-		b.like_count, b.portfolio_html, u.user_id, u.nickname,
-		u.email FROM
-		review_post b
+		b.like_count,
+		b.portfolio_html,
+		u.user_id,
+		u.nickname,
+		u.email
+		FROM review_post b
 		JOIN users u ON b.user_id = u.user_id
 		WHERE
-		b.title LIKE
+		b.title LIKE CONCAT('%', #{param1}, '%')
+		OR b.post_html LIKE
 		CONCAT('%', #{param1}, '%')
-		OR b.post_html LIKE CONCAT('%',
-		#{param1},
-		'%')OR u.nickname LIKE CONCAT('%', #{param1}, '%');
+		OR u.nickname LIKE CONCAT('%', #{param1},
+		'%')
 	</select>
 
 	<select id="getStudySearchResult" parameterType="string"
 		resultMap="studyBoardMap">
-		SELECT b.study_id, b.title, b.view_count, b.post_html,
+		SELECT b.study_id,
+		b.title,
+		b.view_count,
+		b.post_html,
 		b.post_date,
-		b.like_count, b.address, u.user_id, u.nickname, u.email
-		FROM study_post b
+		b.like_count,
+		b.address,
+		u.user_id,
+		u.nickname,
+		u.email
+		FROM
+		study_post b
 		JOIN users u ON b.user_id = u.user_id
-		WHERE b.title
-		LIKE CONCAT('%', #{param1}, '%')
-		OR b.post_html LIKE CONCAT('%',
-		#{param1}, '%')
+		WHERE b.title LIKE
+		CONCAT('%', #{param1}, '%')
+		OR b.post_html LIKE CONCAT('%', #{param1},
+		'%')
 		OR b.address LIKE CONCAT('%', #{param1}, '%')
-		OR
-		u.nickname LIKE CONCAT('%', #{param1}, '%');
+		OR u.nickname LIKE
+		CONCAT('%', #{param1}, '%')
 	</select>
 
-	<select id="getRecruitSearchResult" parameterType="string">
-		SELECT
-		company, content, job, link, imgLink
+	<select id="getRecruitSearchResult" parameterType="string"
+		resultType="map">
+		SELECT company,
+		content,
+		job,
+		link,
+		imgLink
 		FROM recruit
-		WHERE company LIKE
-		CONCAT('%',#{param1}, '%')
-		OR content LIKE CONCAT('%',#{param1}, '%')
-		OR job LIKE CONCAT('%', #{param1}, '%');
-
-	</select>
-	
-	<select id="getUserListByPoint" resultType="org.kosa._musketeers.domain.User">
-		SELECT user_id, email, nickname, point, user_image_location, company_name
-		FROM users ORDER BY point DESC
+		WHERE
+		company LIKE CONCAT('%', #{param1}, '%')
+		OR content LIKE CONCAT('%',
+		#{param1}, '%')
+		OR job LIKE CONCAT('%', #{param1}, '%')
 	</select>
 
-	<insert id="insertCompany" >
-		INSERT INTO verification ( company_name, state, file_location , user_id)
-		VALUES(#{company}, '대기', #{imagePath}, #{userId})
+	<select id="getUserListByPoint"
+		resultType="org.kosa._musketeers.domain.User">
+		SELECT user_id,
+		email,
+		nickname,
+		point,
+		user_image_location,
+		company_name
+		FROM users
+		ORDER BY point DESC
+	</select>
+
+	<insert id="insertCompany" parameterType="map">
+		INSERT INTO
+		verification (
+		company_name,
+		state,
+		file_location,
+		user_id)
+		VALUES (
+		#{company},
+		'대기',
+		#{imagePath},
+		#{userId}
+		)
 		ON DUPLICATE KEY UPDATE
 		company_name = VALUES(company_name),
 		state = VALUES(state),
-		file_location= VALUES(file_location),
+		file_location = VALUES(file_location),
 		date = NOW()
 	</insert>
-	
-	<select id="getUserCompanyDataById" resultMap="CompanyMap">
-		SELECT verification_id,company_name, state, date,
-		file_location, user_id
-		FROM verification 
-        where user_id= #{userId}
+
+	<select id="getUserCompanyDataById" parameterType="int"
+		resultMap="CompanyMap">
+		SELECT verification_id,
+		company_name,
+		state,
+		date,
+		file_location,
+		user_id
+		FROM verification
+		WHERE user_id = #{userId}
 	</select>
 
-
-	<!-- 유저 목록 보기위한 모든 유저 정보 보여주기 -->
 	<select id="getAllUsers"
 		resultType="org.kosa._musketeers.domain.User">
 		SELECT * FROM users
-
 	</select>
-	<!-- -->
-	<update id="applySanction">
+
+	<update id="updateSanction" parameterType="map">
 		UPDATE users
-		SET sanction_type = #{sanctionType},
+		SET
+		sanction_type = #{status},
 		sanction_count = sanction_count + 1,
-		sanction_end_date =
-		DATE_ADD(NOW(), INTERVAL #{days} DAY)
-		WHERE user_id = #{userId}
+		sanction_end_date = DATE_ADD(NOW(), INTERVAL #{days} DAY)
+		WHERE user_id
+		= #{userId}
 	</update>
 
-	<!-- 회사 인증 요청 -->
 	<select id="getUsersRequestingCertification"
 		resultType="org.kosa._musketeers.domain.User">
 		SELECT *

@@ -48,6 +48,7 @@ public class AdminUserController {
 	public String userDetail(@PathVariable int userId, Model model, HttpServletRequest request) {
 		User user = userService.getUserById(userId);
 		model.addAttribute("userData", user);
+		System.out.println(user);
 		model.addAttribute("currentPath", request.getRequestURI());
 		return "pages/admin/admin-userpage";
 	}
@@ -213,9 +214,55 @@ public class AdminUserController {
 	// 회사 인증
 	@GetMapping("/user/certifications")
 	public String certificationPage(Model model, HttpServletRequest request) {
-		List<User> certificationList = userService.getUsersRequestingCertification();
-		model.addAttribute("userList", certificationList);
+		List<Verification> verificationList = adminService.getAllVerifications();
+		model.addAttribute("verificationList", verificationList);
 		model.addAttribute("currentPath", request.getRequestURI());
 		return "pages/admin/admin-certification";
 	}
+
+	// 회사 인증 상태 업데이트시
+	@PostMapping("/user/certifications/{userId}/status")
+	@ResponseBody
+	public ResponseEntity<String> updateVerificationStatus(@PathVariable int userId,
+			@RequestParam("status") String status) {
+		try {
+			// 1. 인증 상태 업데이트
+			adminService.updateVerificationStatus(userId, status);
+
+			// 2. 상태가 "완료"면 유저 테이블도 업데이트
+			if ("완료".equals(status)) {
+				Verification verification = adminService.getVerificationByUserId(userId);
+				adminService.updateUserCompanyInfo(userId, "yes", verification.getCompanyName());
+			}
+
+			return ResponseEntity.ok("상태 변경 성공");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("상태 변경 실패");
+		}
+	}
+
+	// 팝업 페이지 열기
+	@GetMapping("/user/certificationpage")
+	public String certificationDetailPopup(@RequestParam("userId") int userId, Model model) {
+		model.addAttribute("userId", userId);
+		return "pages/admin/admin-certificationpage";
+	}
+
+	// 인증 상세 JSON 제공
+	@GetMapping("/user/certification/{userId}/json")
+	@ResponseBody
+	public Map<String, Object> getCertificationJson(@PathVariable int userId) {
+		Verification verification = userService.getUserCompanyVerification(userId);
+
+		Map<String, Object> result = new HashMap<>();
+		result.put("nickname", verification.getUser().getNickname());
+		result.put("company", verification.getCompanyName());
+		result.put("date", verification.getDate().toString());
+		result.put("state", verification.getState());
+		result.put("imageUrl", "/uploads/company/" + userId + ".png");
+
+		return result;
+	}
+
 }
