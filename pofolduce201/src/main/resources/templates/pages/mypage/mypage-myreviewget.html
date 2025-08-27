@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<head>
+
+<link th:href="@{/css/board-header.css}" rel="stylesheet">
+<link rel="stylesheet" th:href="@{/css/page-css/mypage-menu.css}" />
+<link rel="stylesheet" th:href="@{/css/page-css/mypage-mypost.css}" />
+<title>마이페이지</title>
+</head>
+
+<div layout:fragment="content">
+
+	<div class="mypage-mypost">
+		<div class="mypage-main">
+			<div
+				th:replace="fragments/html/board-header :: board-header('마이페이지')"></div>
+			<div class="mypage-main-side">
+				<div th:replace="fragments/html/mypage-menu :: mypage-menu"></div>
+				<div>
+
+					<div class="mypage-main-container">
+						<h1 id="mypage-title2">내 정보 > 내가 받은 첨삭 목록</h1>
+
+
+						<table class="table table-hover"
+							th:if="${not #lists.isEmpty(ReviewList)}">
+							<thead>
+								<tr>
+									<th scope="col">#</th>
+										<th scope="col">게시글 제목</th>
+											<th scope="col">첨삭 내용</th>
+									<th scope="col">작성자</th>
+
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="review, iterStat : ${ReviewList}"
+									th:attr="data-url=${'/review/post?reviewPostId=' + review.reviewPost.reviewPostId}">
+									<!-- (현재 페이지 - 1) * 페이지당 크기 + 현재 인덱스 + 1 -->
+									<th scope="row"
+										th:text="${(currentPage - 1) * size + iterStat.index + 1}">
+									</th>
+									<td th:text="${review.reviewPost.title}"></td>
+									<td th:text="${review.reviewContents}"></td>
+									<td th:text="${review.user.nickname}"></td>
+								</tr>
+							</tbody>
+						</table>
+
+						<!-- 데이터가 없을 때 -->
+						<div th:if="${#lists.isEmpty(ReviewList)}">
+							<h3 class="non-data">받은 첨삭이 없습니다.</h3>
+						</div>
+
+						<nav th:if="${not #lists.isEmpty(ReviewList)}"
+							aria-label="Page navigation example">
+							<ul class="pagination justify-content-center">
+
+								<!-- 이전 페이지 -->
+								<li class="page-item"
+									th:classappend="${currentPage == 1} ? 'disabled'"><a
+									class="page-link"
+									th:href="@{/mypage/myreview(page=${currentPage - 1}, size=${size})}"
+									tabindex="-1" aria-disabled="true">Previous</a></li>
+
+								<!-- 페이지 번호 반복 -->
+								<li class="page-item"
+									th:each="i : ${#numbers.sequence(1, totalPages)}"
+									th:classappend="${i == currentPage} ? 'active'"><a
+									class="page-link"
+									th:href="@{/mypage/myreview(page=${i}, size=${size})}"
+									th:text="${i}">1</a></li>
+
+								<!-- 다음 페이지 -->
+								<li class="page-item"
+									th:classappend="${currentPage == totalPages} ? 'disabled'">
+									<a class="page-link"
+									th:href="@{/mypage/myreview(page=${currentPage + 1}, size=${size})}">Next</a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+
+
+
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+<div layout:fragment="script">
+	<script th:src="@{/js/mypage.js}"></script>
+</div>
+</html>

@@ -2,55 +2,108 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.kosa._musketeers.mapper.MyBoardMapper">
 
-<resultMap id="ReviewMap"
+	<resultMap id="ReviewMap"
 		type="org.kosa._musketeers.domain.Review">
 		<id property="reviewId" column="review_id" />
 		<result property="reviewLocationX" column="REVIEW_LOCATION_X" />
 		<result property="reviewLocationY" column="REVIEW_LOCATION_Y" />
 		<result property="reviewContents" column="review_contents" />
 		<result property="reviewDate" column="review_date" />
-		
+
 		<result property="likeCount" column="like_count" />
-		
+
 		<association property="reviewPost"
 			javaType="org.kosa._musketeers.domain.ReviewPost">
 			<id property="reviewPostId" column="review_post_id" />
 		</association>
-		
+
 		<association property="user"
 			javaType="org.kosa._musketeers.domain.User">
 			<id property="userId" column="user_id" />
 		</association>
-		</resultMap>
+	</resultMap>
+
+	<resultMap id="ReviewGetMap"
+        type="org.kosa._musketeers.domain.Review">
+    <!-- 리뷰 기본 정보 -->
+    <id property="reviewId" column="review_id" />
+    <result property="reviewContents" column="review_contents" />
+
+    <!-- 리뷰 작성자 -->
+    <association property="user"
+        javaType="org.kosa._musketeers.domain.User">
+        <id property="userId" column="review_user_id" />
+        <result property="nickname" column="nickname" />
+    </association>
+
+    <!-- 리뷰가 달린 게시글 -->
+    <association property="reviewPost"
+        javaType="org.kosa._musketeers.domain.ReviewPost">
+        <id property="reviewPostId" column="review_post_id" />
+        <result property="title" column="title" />
+    </association>
+</resultMap>
 
 
-<select id="findMyReviewPost" parameterType="int" resultType="org.kosa._musketeers.domain.ReviewBoard">
-	select review_post_id, title, post_html,  view_count, create_date, like_count, user_id
-from review_post
-where user_id=#{userId};
-</select>
-<select id="findMyStudyPost" parameterType="int" >
-	select study_id, title, post_html, view_count, post_date, like_count, address, user_id
-from study_post
-where user_id=#{userId};
-</select>
 
-<select id="findMyReviewComment" parameterType="int" resultType="org.kosa._musketeers.domain.MyPageReviewComment">
-	select comments_id, comments_contents, comments_date, review_post_id as reviewId, user_id
-from review_post_comments
-where user_id=#{userId};
-</select>
+	<select id="findMyReviewPost" parameterType="int"
+		resultType="org.kosa._musketeers.domain.ReviewBoard">
+		select review_post_id, title, post_html, view_count,
+		create_date,
+		like_count, user_id
+		from review_post
+		where
+		user_id=#{userId};
+	</select>
+	<select id="findMyStudyPost" parameterType="int">
+		select study_id,
+		title, post_html, view_count, post_date, like_count,
+		address, user_id
+		from study_post
+		where user_id=#{userId};
+	</select>
 
-<select id="findMyStudyComment" parameterType="int" resultType="org.kosa._musketeers.domain.MyPageStudyComment">
-	select comments_id, comments_contents, comments_date, study_id, user_id
-from study_post_comments
-where user_id=#{userId};
-</select>
+	<select id="findMyReviewComment" parameterType="int"
+		resultType="org.kosa._musketeers.domain.MyPageReviewComment">
+		select comments_id, comments_contents, comments_date,
+		review_post_id as
+		reviewId, user_id
+		from review_post_comments
+		where
+		user_id=#{userId};
+	</select>
 
-<select id="findMyReview" parameterType="int" resultMap="ReviewMap">
-select review_id, REVIEW_LOCATION_X,REVIEW_LOCATION_Y,review_contents,review_date, like_count, review_post_id, user_id
-from review
-where user_id=#{userId}
-ORDER BY review_date DESC
-</select>
+	<select id="findMyStudyComment" parameterType="int"
+		resultType="org.kosa._musketeers.domain.MyPageStudyComment">
+		select comments_id, comments_contents, comments_date,
+		study_id, user_id
+		from study_post_comments
+		where user_id=#{userId};
+	</select>
+
+	<select id="findMyReview" parameterType="int"
+		resultMap="ReviewMap">
+		select review_id,
+		REVIEW_LOCATION_X,REVIEW_LOCATION_Y,review_contents,review_date,
+		like_count, review_post_id, user_id
+		from review
+		where user_id=#{userId}
+		ORDER BY review_date DESC
+	</select>
+
+	<select id="findMyReviewGet" parameterType="int"
+		resultMap="ReviewGetMap">
+		SELECT
+		rp.review_post_id,
+		rp.title,
+		ur.nickname,
+		r.review_contents
+		FROM review r
+		JOIN review_post rp
+		ON r.review_post_id = rp.review_post_id
+		JOIN users ur
+		ON r.user_id = ur.user_id
+		WHERE
+		rp.user_id = #{userId}
+	</select>
 </mapper>
