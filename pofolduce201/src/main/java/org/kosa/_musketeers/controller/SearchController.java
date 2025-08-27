@@ -10,6 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 /**
  * 검색 조회의 controller 입니다.
  */
@@ -26,23 +29,27 @@ public class SearchController {
 	// 검색 컨트롤러 입니다.
 	@GetMapping("/search")
 	// RequestParam(해당 input의 name) 으로 검색어를 받아옵니다.
-	public String search(@RequestParam("search") String search, Model model,
+	public String search(HttpServletRequest request, @RequestParam("search") String search, Model model,
 			@RequestParam(defaultValue = "1") int reviewPage, @RequestParam(defaultValue = "5") int reviewSize,
 			@RequestParam(defaultValue = "1") int studyPage, @RequestParam(defaultValue = "5") int studySize,
 			@RequestParam(defaultValue = "1") int recruitPage, @RequestParam(defaultValue = "8") int recruitSize) {
+		// 세션에서 userId 가져오기
+		HttpSession session = request.getSession(false);
+		Integer userId = (Integer) session.getAttribute("userId");
 
+		model.addAttribute("userId", userId);
 		// 첨삭 게시글 검색 결과를 가져옵니다. 이미지를 띄워줍니다.
 		List<Map<String, Object>> reviewBoardList = userService.getReviewSearchResult(search, reviewPage, reviewSize);
-		
+
 		// 3개씩 잘라서 chunkList 만들기
 		List<List<Map<String, Object>>> reviewChunks = new ArrayList<>();
-		
+
 		int chunkSize = 3;
 		for (int i = 0; i < reviewBoardList.size(); i += chunkSize) {
 			int end = Math.min(i + chunkSize, reviewBoardList.size());
 			reviewChunks.add(reviewBoardList.subList(i, end));
 		}
-		
+
 		List<Map<String, Object>> studyList = userService.getStudySearchResult(search, studyPage, studySize);
 		List<Map<String, Object>> recruitList = userService.getRecruitSearchResult(search, recruitPage, recruitSize);
 
@@ -57,7 +64,6 @@ public class SearchController {
 
 		model.addAttribute("reviewList", reviewChunks);
 		// System.out.println(reviewList);
-		
 
 		model.addAttribute("studyList", studyList);
 		// System.out.println(studyList);
