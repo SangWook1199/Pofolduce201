@@ -41,19 +41,20 @@ public class ReviewBoardController {
 		model.addAttribute("currentPage", page);
 		model.addAttribute("reviewPostList",reviewPostList);
 		model.addAttribute("bestReviewPostList", bestReviewPostList);
-		return "pages/review/review-board";
+		return "pages/review/review-post-board";
 	}
 	
 	@GetMapping("/review/post{reviewPostId}")
 	public String reviewViewPost(@RequestParam int reviewPostId, @RequestParam(defaultValue="1") int currentCommentPage, Model model) {
 		
-		int commentCount = 15;
+		int commentCount = 5;
 		int totalCommentPage = reviewBoardService.getTotalReviewCommentCount(reviewPostId) / commentCount + 1;
 		ReviewPost reviewPost = reviewBoardService.viewPost(reviewPostId);
-		List<ReviewPostComment> commentList = reviewBoardService.loadReviewPostCommentList(reviewPostId, (currentCommentPage - 1) * commentCount + 1, commentCount);
+		List<ReviewPostComment> commentList = reviewBoardService.loadReviewPostCommentList(reviewPostId, (currentCommentPage - 1) * commentCount, commentCount);
 		
+		System.out.println(reviewPost.getUser());
 		System.out.println(commentList);
-		System.out.println(reviewPost.getLikeCount());
+		
 		model.addAttribute("totalCommentPages", totalCommentPage);
 		model.addAttribute("currentCommentPage", currentCommentPage);
 		model.addAttribute("reviewPost", reviewPost);
@@ -63,17 +64,13 @@ public class ReviewBoardController {
 	
 	@GetMapping("/review/write")
 	public String reviewWritePost() {
-		return "pages/review/review-write";
+		return "pages/review/review-post-write";
 	}
 	
 	@PostMapping("/review/write/save")
 	public String saveReviewPost(@ModelAttribute ReviewPost reviewPost, HttpServletRequest request) {
 
 		reviewPost.setUser(new User((Integer)request.getSession().getAttribute("userId")));
-		System.out.println(reviewPost);
-		System.out.println(reviewPost);
-		System.out.println(reviewPost);
-		System.out.println(reviewPost);
 		reviewBoardService.createPost(reviewPost);
 		return "redirect:/review-post";
 	}
@@ -83,15 +80,13 @@ public class ReviewBoardController {
 
 		ReviewPost reviewPost = reviewBoardService.getReviewPostById(reviewPostId);
 		model.addAttribute("reviewPost", reviewPost);
-		return "pages/review/reviewpost-edit";
+		return "pages/review/review-post-edit";
 	}
 	
 	@PostMapping("/review/edit/save")
 	public String saveEditReviewPost(@ModelAttribute ReviewPost reviewPost) {
 		reviewBoardService.editReviewPost(reviewPost);
-		System.out.println("******");
-		System.out.println(reviewBoardService.getReviewPostById(reviewPost.getReviewPostId()));
-		return "redirect:/review-post";
+		return "redirect:/review/post?reviewPostId=" + reviewPost.getReviewPostId();
 	}
 	
 	@PostMapping("/review/post/{reviewPostId}/delete")
@@ -124,11 +119,11 @@ public class ReviewBoardController {
 	
 	@GetMapping("/my-portfolio")
 	public String selectPortfolio(HttpServletRequest request, Model model) {
-		int userId = (int) request.getSession().getAttribute("userId");
+		Integer userId = (Integer) request.getSession().getAttribute("userId");
 		List<Portfolio> myPortfolioList = userService.getPortfolioList(userId);
 		model.addAttribute("myPortfolioList", myPortfolioList);
 		
-		int repFolioId = userService.getRepPortfolio(userId);
+		Integer repFolioId = userService.getRepPortfolio(userId);
 		model.addAttribute("repFolioId", repFolioId);
 		return "pages/review/review-select-folio";
 	}

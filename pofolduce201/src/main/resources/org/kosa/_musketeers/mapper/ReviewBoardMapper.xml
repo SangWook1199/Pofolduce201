@@ -68,6 +68,7 @@
 		id="viewReviewPostResultMap">
 		<result column="user_id" property="user.userId" />
 		<result column="nickname" property="user.nickname" />
+		<result column="user_image_location" property="user.userImageLocation" />
 	</resultMap>
 
 	<update id="updateReviewPostViewCount" parameterType="int">
@@ -128,6 +129,7 @@
 		id="getReviewCommentListByReviewPostIdResultMap">
 		<result column="user_id" property="userId.userId" />
 		<result column="nickname" property="userId.nickname" />
+		<result column="user_image_location" property="userId.userImageLocation" />
 	</resultMap>
 	
 	<update id="updateReviewComment">

@@ -16,6 +16,17 @@
 					<div class="col-9">
 						<h3 class="h3" th:text="${reviewPost.title}"></h3>
 					</div>
+					<div
+						th:if="${session.userId != null and session.userId != reviewPost.user.userId}"
+						class="ms-auto">
+						<button type="button" class="btn p-0 border-0 bg-transparent"
+							data-bs-toggle="modal" data-bs-target="#reportPostModal">
+							<img alt="신고 버튼" class="report-img"
+								th:src="@{/svg/report-button.svg}">
+						</button>
+						<div
+							th:replace="fragments/html/report-modal :: reportModalFragment('reportPostModal', ${reviewPost.studyId}, ${reviewPost.user.userId})"></div>
+					</div>s
 					<div th:if="${session.userId == reviewPost.user.userId}"
 						class="col-3 d-flex justify-content-center">
 						<a class="btn btn-primary m-2"
@@ -26,9 +37,10 @@
 							<button class="btn btn-primary m-2" type="submit">삭제하기</button>
 						</form>
 					</div>
-					<div class="row justify-content-start">
-						<img class="col-3 col-md-2 col-xl-1 rounded-circle"
-							th:src="${reviewPost.user.userImageLocation}" />
+					<div class="row justify-content-around">
+						<img class="col-1 rounded-circle p-0 m-1"
+							th:src="${reviewPost.user.userImageLocation != null ? reviewPost.user.userImageLocation.split('static')[1] : '/svg/person.svg'}"
+							alt="user image" style="width: 50px" />
 						<div class="col-9 col-md-10 col-xl-11 row align-items-center">
 							<a class="fs-4 text-decoration-none text-dark" th:href="@{/}"
 								th:text="${reviewPost.user.nickname}"></a>
@@ -36,21 +48,26 @@
 						</div>
 					</div>
 				</div>
+				<!-- 포트폴리오 div -->
 				<div class="pt-3 border-top border-1 mt position-relative"
 					id="portfolio-div">
 					<p th:utext="${reviewPost.portfolioHtml}"></p>
 				</div>
+				<!-- 본문 div -->
 				<div class="pt-3 border-top border-1 mt">
 					<p th:utext="${reviewPost.postHtml}"></p>
 				</div>
 
 				<div
 					class="d-flex justify-content-center mt-3 border-bottom border-1">
-					<button class="btn btn-primary text-align-center m-5" id="like-button" th:text="|👍 ${reviewPost.likeCount}|" th:onclick="|pressLike(${reviewPost.reviewPostId})|">👍 1234</button>
+					<button class="btn btn-primary text-align-center m-5"
+						id="like-button" th:text="|👍 ${reviewPost.likeCount}|"
+						th:onclick="|pressLike(${reviewPost.reviewPostId})|">👍
+						1234</button>
 				</div>
 				<div class="d-flex justify-content-end m-3">
 					<button class="btn btn-primary" type="button"
-						onclick="location.href='/review'">목록보기</button>
+						onclick="location.href='/review-post'">목록보기</button>
 				</div>
 				<div class="p-3">
 					<h4 class="h4">댓글 목록</h4>
@@ -70,8 +87,9 @@
 					<!-- 댓글 목록 -->
 					<div class="row mt-3 border-top pt-3"
 						th:each="comments : ${commentsList}">
-						<img class="col-3 col-md-2 col-xl-1 rounded-circle"
-							th:src="${reviewPost.user.userImageLocation}">
+						<img class="rounded-circle p-0"
+							th:src="${comments.userId.userImageLocation != null ? comments.userId.userImageLocation.split('static')[1] : '/svg/person.svg'}"
+							alt="user image" style="width: 50px" />
 						<div class="col-10">
 							<div class="fw-bold" th:text="${comments.userId.nickname}"></div>
 							<div class="col-10 mt-2" th:text="${comments.commentsContents}"
@@ -90,7 +108,8 @@
 								<button th:if="${session.userId == comments.userId.userId}"
 									class="btn btn-primary ms-2" type="submit">삭제</button>
 							</form>
-							<button class="btn btn-primary ms-1">신고</button>
+							<button th:if="${session.userId != comments.userId.userId}"
+								class="btn btn-primary ms-1">신고</button>
 						</div>
 						<!-- 숨겨진 수정창 -->
 						<div th:id="|edit-box-${comments.commentsId}|"
@@ -107,28 +126,29 @@
 							</form>
 						</div>
 					</div>
-											<nav aria-label="Page navigation example">
-							<ul class="pagination justify-content-center m-3">
-								<!-- 이전 버튼 -->
-								<li class="page-item"
-									th:classappend="${currentCommentPage == 1} ? 'disabled'"><a
-									class="page-link"
-									th:href="@{/review(page=${currentCommentPage - 1})}">Previous</a></li>
+					<nav aria-label="Page navigation example">
+						<ul class="pagination justify-content-center m-3">
+							<!-- 이전 버튼 -->
+							<li class="page-item"
+								th:classappend="${currentCommentPage == 1} ? 'disabled'"><a
+								class="page-link"
+								th:href="@{/review(page=${currentCommentPage - 1})}">Previous</a></li>
 
-								<!-- 페이지 번호 반복 -->
-								<li class="page-item"
-									th:each="i : ${#numbers.sequence(1, totalCommentPages)}"
-									th:classappend="${i == currentCommentPage} ? 'active'"><a
-									class="page-link" th:href="@{/review/post(reviewPostId=${reviewPost.reviewPostId}, currentCommentPage=${i})}"
-									th:text="${i}"></a></li>
+							<!-- 페이지 번호 반복 -->
+							<li class="page-item"
+								th:each="i : ${#numbers.sequence(1, totalCommentPages)}"
+								th:classappend="${i == currentCommentPage} ? 'active'"><a
+								class="page-link"
+								th:href="@{/review/post(reviewPostId=${reviewPost.reviewPostId}, currentCommentPage=${i})}"
+								th:text="${i}"></a></li>
 
-								<!-- 다음 버튼 -->
-								<li class="page-item"
-									th:classappend="${currentCommentPage == totalCommentPages} ? 'disabled'"><a
+							<!-- 다음 버튼 -->
+							<li class="page-item"
+								th:classappend="${currentCommentPage == totalCommentPages} ? 'disabled'"><a
 								class="page-link"
 								th:href="@{/review(page=${currentCommentPage + 1})}">Next</a></li>
-							</ul>
-						</nav>
+						</ul>
+					</nav>
 				</div>
 			</div>
 		</div>

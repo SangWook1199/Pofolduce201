@@ -224,7 +224,7 @@ async function pressLike(reviewPostId){
 		console.log("fetch error: error");
 	}
 	document.getElementById('like-button').innerText= '👍 ' + likeCount;
-	document.getElementById('like-button').disabled = true;
+	document.getElementById('like-button').disabled;
 }
 		
 //댓글 수정
