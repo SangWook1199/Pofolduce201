@@ -1,77 +1,81 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout}">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
 <head>
-    <meta charset="UTF-8">
-    <title>공지사항</title>
-    <link th:href="@{/css/board-header.css}" rel="stylesheet">
-    <link th:href="@{/css/notice-css/notice-post.css}" rel="stylesheet">
+<meta charset="UTF-8">
+<title>공지사항</title>
+<link th:href="@{/css/board-header.css}" rel="stylesheet">
+<link th:href="@{/css/notice-css/notice-post.css}" rel="stylesheet">
+<link th:href="@{/css/banner.css}" rel="stylesheet">
 </head>
 
 <div layout:fragment="content" class="notice-content">
-    <!-- 상단 헤더 -->
-    <div th:replace="fragments/html/board-header :: board-header('공지사항')"></div>
+	<!-- 상단 헤더 -->
+	<div th:replace="fragments/html/board-header :: board-header('공지사항')"></div>
 
-    <!-- 공지사항 배너 -->
-    <div th:replace="fragments/html/notice_banner :: banner(
+	<!-- 공지사항 배너 -->
+	<div
+		th:replace="fragments/html/banner :: banner(
             '포폴듀스201의 공지사항 입니다.', 
-            '문의 사항은 하단의 고객센터 번호를 확인해 주세요.')">
-    </div>
+            '문의 사항은 하단의 고객센터 번호를 확인해 주세요.','')">
+	</div>
 
-    <div class="notice-post">
-        <table class="table table-hover">
-            <colgroup>
-                <col class="col-center" style="width: 5%">
-                <col class="col-center" style="width: 15%">
-                <col class="col-center" style="width: 60%">
-                <col class="col-center" style="width: 20%">
-            </colgroup>
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">작성자</th>
-                    <th scope="col">제목</th>
-                    <th scope="col">조회수</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="post, stat : ${posts}" style="cursor: pointer"
-                    th:onclick="|window.location.href='@{/notice/{id}(id=${post.noticeId})}'|">
-                    <td th:text="${stat.count}">#</td>
-                    <td th:text="${post.userId.nickname}">작성자</td>
-                    <td th:text="${post.title}">제목</td>
-                    <td th:text="${post.noticeCount}">조회수</td>
-                </tr>
-            </tbody>
-        </table>
+	<div class="notice-post">
+		<table class="table table-hover">
+			<colgroup>
+				<col class="col-center" style="width: 5%">
+				<col class="col-center" style="width: 15%">
+				<col class="col-center" style="width: 60%">
+				<col class="col-center" style="width: 20%">
+			</colgroup>
+			<thead>
+				<tr>
+					<th scope="col">#</th>
+					<th scope="col">작성자</th>
+					<th scope="col">제목</th>
+					<th scope="col">조회수</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="post, stat : ${posts}" style="cursor: pointer"
+					th:onclick="|window.location.href='@{/notice/{id}(id=${post.noticeId})}'|">
+					<td th:text="${stat.count}">#</td>
+					<td th:text="${post.userId.nickname}">작성자</td>
+					<td th:text="${post.title}">제목</td>
+					<td th:text="${post.noticeCount}">조회수</td>
+				</tr>
+			</tbody>
+		</table>
 
-        <!-- 관리자일 때만 글 작성 버튼 보이기 -->
-        <div class="notice_btn" type="button" th:if="${isAdmin}">
-            <button class="plus-btn"
-                th:onclick="|window.location.href='@{/notice/notice-post-create}'|">+</button>
-        </div>
+		<!-- 관리자일 때만 글 작성 버튼 보이기 -->
+		<div class="notice_btn" type="button" th:if="${isAdmin}">
+			<button class="plus-btn"
+				th:onclick="|window.location.href='@{/notice/notice-post-create}'|">+</button>
+		</div>
 
-        <!-- 페이징 -->
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-                <!-- 이전 페이지 -->
-                <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                    <a class="page-link" th:href="@{/(page=${currentPage - 1})}" tabindex="-1" aria-disaㅃbled="true">Previous</a>
-                </li>
+		<!-- 페이징 -->
+		<nav aria-label="Page navigation example">
+			<ul class="pagination justify-content-center">
+				<!-- 이전 페이지 -->
+				<li class="page-item"
+					th:classappend="${currentPage == 1} ? 'disabled'"><a
+					class="page-link" th:href="@{/(page=${currentPage - 1})}"
+					tabindex="-1" aria-disaㅃbled="true">Previous</a></li>
 
-                <!-- 페이지 번호 반복 -->
-                <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}" 
-                    th:classappend="${i == currentPage} ? 'active'">
-                    <a class="page-link" th:href="@{/(page=${i})}" th:text="${i}">1</a>
-                </li>
+				<!-- 페이지 번호 반복 -->
+				<li class="page-item"
+					th:each="i : ${#numbers.sequence(1, totalPages)}"
+					th:classappend="${i == currentPage} ? 'active'"><a
+					class="page-link" th:href="@{/(page=${i})}" th:text="${i}">1</a></li>
 
-                <!-- 다음 페이지 -->
-                <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                    <a class="page-link" th:href="@{/(page=${currentPage + 1})}">Next</a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+				<!-- 다음 페이지 -->
+				<li class="page-item"
+					th:classappend="${currentPage == totalPages} ? 'disabled'"><a
+					class="page-link" th:href="@{/(page=${currentPage + 1})}">Next</a>
+				</li>
+			</ul>
+		</nav>
+	</div>
 </div>
 </html>

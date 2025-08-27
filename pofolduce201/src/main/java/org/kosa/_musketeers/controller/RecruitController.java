@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 /**
  * 채용공고 컨트롤러 입니다.
  */
@@ -28,7 +30,7 @@ public class RecruitController {
 	// db에 저장된 공고 데이터를 불러옵니다.
 	@GetMapping("/recruit")
 	public String recruit(Model model, @RequestParam(defaultValue = "1") int page,
-			@RequestParam(defaultValue = "20") int size) throws InterruptedException {
+			@RequestParam(defaultValue = "20") int size, HttpServletRequest request) throws InterruptedException {
 
 		// 크롤링한 데이터가 없다면 크롤링을 실행합니다.
 		List<Map<String, String>> recruitList = recruitService.getRecruit(page, size);
@@ -59,6 +61,7 @@ public class RecruitController {
 		model.addAttribute("currentPage", page);
 		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("size", size);
+		model.addAttribute("currentUri", request.getRequestURI());
 
 		return "/pages/recruit/recruit";
 	}

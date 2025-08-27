@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+
+<head>
+<link th:href="@{/css/board-header.css}" rel="stylesheet">
+<link th:href="@{/css/banner.css}" rel="stylesheet">
+<link th:href="@{/css/review-css/review-board.css}" rel="stylesheet">
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="row justify-content-center m-5">
+			<div class="col-10">
+				<div
+					th:replace="fragments/html/board-header :: board-header('첨삭 게시판')"></div>
+				<div
+					th:replace="fragments/html/banner :: banner('이력서 및 자기소개서, 포트폴리오를 첨삭받을 수 있는 게시판 입니다.', '관련 없는 게시글 및 광고성 정보, 욕설이 포함된 게시글은 예고 없이 삭제될 수 있습니다.','첨삭 시 반드시 매너를 지켜주세요!')"></div>
+				<table class="table text-center table-hover review-table">
+					<colgroup>
+						<col class="col-center" style="width: 3%">
+						<col class="col-center" style="width: 10%">
+						<col class="col-center" style="width: 20%">
+						<col class="col-center" style="width: 37%">
+						<col class="col-center" style="width: 15%">
+						<col class="col-center" style="width: 15%">
+					</colgroup>
+					<thead>
+						<tr>
+							<th></th>
+							<th scope="col">#</th>
+							<th scope="col">작성자</th>
+							<th scope="col">제목</th>
+							<th scope="col">좋아요</th>
+							<th scope="col">조회수</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="clickable-row"
+							th:each="bestReviewPost, stat : ${bestReviewPostList}"
+							th:onclick="|window.location='@{/review/post(reviewPostId=${bestReviewPost.reviewPostId})}'|"
+							th:classappend="${stat.last} ? 'border-bottom-line'">
+							<th:block th:if="${stat.count == 1}">
+								<td><img th:src="@{/svg/crown.svg}" alt="crown"
+									style="width: 16px; height: 16px;" /></td>
+								<td><span th:text="${stat.count}"></span></td>
+							</th:block>
+							<th:block th:if="${stat.count == 2}">
+								<td><img th:src="@{/svg/2nd-crown.svg}" alt="crown"
+									style="width: 16px; height: 16px;" /></td>
+								<td><span th:text="${stat.count}"></span></td>
+							</th:block>
+							<th:block th:if="${stat.count == 3}">
+								<td><img th:src="@{/svg/3rd-crown.svg}" alt="crown"
+									style="width: 16px; height: 16px;" /></td>
+								<td><span th:text="${stat.count}"></span></td>
+							</th:block>
+							<td th:text="${bestReviewPost.user.nickname}"></td>
+							<td th:text="${bestReviewPost.title}"></td>
+							<td th:text="${bestReviewPost.likeCount}"></td>
+							<td th:text="${bestReviewPost.viewCount}"></td>
+						</tr>
+
+						<tr class="clickable-row"
+							th:each="reviewPost, stat : ${reviewPostList}"
+							th:onclick="|window.location='@{/review/post(reviewPostId=${reviewPost.reviewPostId})}'|">
+							<td>
+							<td th:text="${stat.count}"></td>
+							<td th:text="${reviewPost.user.nickname}"></td>
+							<td th:text="${reviewPost.title}"></td>
+							<td th:text="${reviewPost.likeCount}"></td>
+							<td th:text="${reviewPost.viewCount}"></td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(reviewPostList)}">
+							<td colspan="5" class="text-center non-data">등록된 게시글이 없습니다.</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<div class="d-flex justify-content-end">
+					<button class="btn btn-primary"
+						onclick="location.href='/review/write'">+</button>
+				</div>
+
+				<nav aria-label="Page navigation example">
+					<ul class="pagination justify-content-center">
+						<!-- 이전 버튼 -->
+						<li class="page-item"
+							th:classappend="${currentPage == 1} ? 'disabled'"><a
+							class="page-link" th:href="@{/review(page=${currentPage - 1})}">Previous</a></li>
+
+						<!-- 페이지 번호 반복 -->
+						<li class="page-item"
+							th:each="i : ${#numbers.sequence(1, totalPages)}"
+							th:classappend="${i == currentPage} ? 'active'"><a
+							class="page-link" th:href="@{/review(page=${i})}" th:text="${i}"></a></li>
+
+						<!-- 다음 버튼 -->
+						<li class="page-item"
+							th:classappend="${currentPage == totalPages} ? 'disabled'"><a
+							class="page-link" th:href="@{/review(page=${currentPage + 1})}">Next</a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
