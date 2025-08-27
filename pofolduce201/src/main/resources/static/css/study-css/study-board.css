@@ -43,7 +43,6 @@
 	pointer-events: none;
 	background-color: #ffffff; /* 비활성 배경색 */
 	border-color: #e9ecef;
-	margin-bottom: 40px;
 }
 .map-container {
 	width: 100%;
