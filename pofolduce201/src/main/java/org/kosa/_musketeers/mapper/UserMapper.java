@@ -70,4 +70,8 @@ public interface UserMapper {
 	// 포인트 추가
 	void updateUserPoint(int userId, int getPoint);
 
+	void insertUser(String string, String string2, String encodedPassword);
+
+	void insertAdmin(User admin);
+
 }

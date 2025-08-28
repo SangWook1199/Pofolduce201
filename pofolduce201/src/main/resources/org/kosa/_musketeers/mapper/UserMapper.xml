@@ -130,6 +130,13 @@
 		VALUES
 		(#{email}, #{nickname}, #{password})
 	</insert>
+	
+		<insert id="insertAdmin"
+		parameterType="org.kosa._musketeers.domain.User">
+		INSERT INTO users (email, nickname, password, user_type)
+		VALUES
+		(#{email}, #{nickname}, #{password}, #{userType})
+	</insert>
 
 	<update id="updateProfile" parameterType="map">
 		UPDATE users
