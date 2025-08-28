@@ -91,7 +91,7 @@ public class UserController {
 
 		// 관리자인 경우에는 관리자 페이지로 이동
 		if ("관리자".equals(userData.getUserType())) {
-			return "redirect:/admin-home";
+			return "redirect:/admin";
 		}
 
 		// 프로필 사진이 서버에 있는 지 확인합니다. 없으면 기본 프로필을 띄웁니다.

@@ -15,7 +15,7 @@ public class RecruitScheduler {
 	}
 
 // 5분마다 실행 (300000ms) 
-	@Scheduled(fixedRate = 300000)
+	@Scheduled(fixedRate = 36000000)
 	public void clearRecruitData() {
 		recruitMapper.deleteRecruit();
 		System.out.println("채용 공고 DB 초기화." + LocalDateTime.now());

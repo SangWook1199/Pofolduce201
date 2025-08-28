@@ -21,7 +21,7 @@ public class ReviewService {
 
 	public void addReview(Review review) {
 		reviewMapper.insertReview(review);
-		userMapper.updateUserPoint(review.getUser().getUserId(), 5);
+		userMapper.updateUserPoint(review.getUser().getUserId(), 5*2);
 	}
 
 	public List<Review> findReviewsByReviewPostId(int reviewPostId) {
