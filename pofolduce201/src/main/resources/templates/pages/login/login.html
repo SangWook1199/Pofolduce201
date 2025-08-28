@@ -13,53 +13,60 @@
 <div layout:fragment="content" class="d-flex justify-content-center">
 	<div class="container" id="login">
 		<h1 id="login-h1">LOGIN</h1>
-		<div class="row flex-wrap justify-content-center">
-			<div class="col flex-shrink-0  m-2">
-				<img src="/svg/pofolduce201Logo.svg" id="logo" >
+		<div class="login-container">
+			<div>
+				<img src="/svg/pofolduce201Logo.svg" id="logo">
 			</div>
-			
-			<div class="col flex-shrink-0 m-6 ">	
-			
-			
-				
-	
-				<form action="/login/processing" method="post">
-					<div class="form-floating mb-3">
-			
-				
-					<div class="col d-flex justify-content-end gap-2">
-						
-			
-						
+
+
+
+
+
+
+			<form action="/login/processing" method="post">
+
+
+				<div class="form-container">
+
+
+					<div class="input-custom">
+						<div class="input-text">Email</div>
+
+
 						<input type="email" class="form-control" id="floatingInput"
-							placeholder="email" name="email"><label
+							placeholder="이메일을 입력하세요" name="email"><label
 							for="floatingInput"></label>
-						</div>	
-							
+
 					</div>
-					<div class="form-floating">
+
+					<div class="input-custom">
+						<div class="input-text">Password</div>
 						<input type="password" class="form-control" id="floatingPassword"
-							placeholder="Password" name="password"><label
+							placeholder="비밀번호를 입력하세요" name="password"><label
 							for="floatingPassword"></label>
 					</div>
+
 					<br>
 
-					<div class="d-flex justify-content-end gap-2">
+					<div class="d-flex justify-content-end gap-2 buttonbox">
 						<!-- <a href="/findPassword" class="text-secondary">패스워드 찾기</a> -->
-						<button th:onclick="location.href='/signup'" type="button" class="btn btn-outline-primary btn-custom-header"  id="register">회원가입</button>
-						<button class="btn btn-outline-primary btn-custom-header" type="submit">로그인</button>
+						<button th:onclick="location.href='/signup'" type="button"
+							class="btn btn-outline-primary btn-custom-header" id="register">회원가입</button>
+						<button class="btn btn-outline-primary btn-custom-header"
+							type="submit">로그인</button>
 
 					</div>
-				</form>
-				
-				
-				
-			</div>
+				</div>
+			</form>
+
+
+
+
 		</div>
 	</div>
 	<div th:if="${loginFailMessage}" th:inline="javascript">
 		<script>
-        	alert('[[${loginFailMessage}]]');
+			alert('[[${loginFailMessage}]]');
 		</script>
 	</div>
 </div>

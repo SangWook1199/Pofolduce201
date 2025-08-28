@@ -21,7 +21,12 @@
 
 	<select id="getAllRecruit">
 		select count(*) from recruit
-		WHERE company IS NOT NULL AND company != '';
+		WHERE company IS NOT NULL
+		AND company != '';
 	</select>
+
+	<delete id="deleteRecruit">
+		DELETE FROM recruit
+	</delete>
 
 </mapper>

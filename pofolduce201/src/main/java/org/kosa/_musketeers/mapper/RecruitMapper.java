@@ -16,6 +16,8 @@ public interface RecruitMapper {
 
 	int getAllRecruit();
 
+	void deleteRecruit();
+
 	
 
 }
