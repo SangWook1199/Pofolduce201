@@ -6,6 +6,7 @@ public class Portfolio {
 	private int portfolioId;
 	private String portfolioName;
 	private User userId;
+	private String fileLocation;
 	private LocalDateTime uploadDate;
 
 	public Portfolio() {
@@ -25,6 +26,14 @@ public class Portfolio {
 		super();
 		this.portfolioName = portfolioName;
 		this.userId = userId;
+	}
+
+	
+	public Portfolio(String portfolioName, User userId, String fileLocation) {
+		super();
+		this.portfolioName = portfolioName;
+		this.userId = userId;
+		this.fileLocation = fileLocation;
 	}
 
 	public int getPortfolioId() {
@@ -59,12 +68,19 @@ public class Portfolio {
 		this.uploadDate = uploadDate;
 	}
 
+	public String getFileLocation() {
+		return fileLocation;
+	}
+
+	public void setFileLocation(String fileLocation) {
+		this.fileLocation = fileLocation;
+	}
+
 	@Override
 	public String toString() {
 		return "Portfolio [portfolioId=" + portfolioId + ", portfolioName=" + portfolioName + ", userId=" + userId
-				+ ", uploadDate=" + uploadDate + "]";
+				+ ", fileLocation=" + fileLocation + ", uploadDate=" + uploadDate + "]";
 	}
-
 	
 	
 }

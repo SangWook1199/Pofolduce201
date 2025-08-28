@@ -3,6 +3,7 @@ package org.kosa._musketeers.service;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,8 +34,8 @@ public class UserService {
 	private UserMapper userMapper;
 	private PortfolioMapper portfolioMapper;
 
-    // 비밀번호 암호화를 위한 BCryptPasswordEncoder 객체 직접 생성
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	// 비밀번호 암호화를 위한 BCryptPasswordEncoder 객체 직접 생성
+	private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 	public UserService(UserMapper userMapper, PortfolioMapper portfolioMapper) {
 		super();
@@ -42,12 +43,12 @@ public class UserService {
 		this.portfolioMapper = portfolioMapper;
 	}
 
-    // 로그인 로직 수정: 이메일로 사용자 조회 후 비밀번호 일치 여부 확인
+	// 로그인 로직 수정: 이메일로 사용자 조회 후 비밀번호 일치 여부 확인
 	public User login(String email, String password) {
-        // 1. 이메일로 사용자 정보 조회
+		// 1. 이메일로 사용자 정보 조회
 		User user = userMapper.findUserByEmail(email);
 
-        // 2. 사용자가 존재하고, 입력된 비밀번호와 DB의 암호화된 비밀번호가 일치하는지 확인
+		// 2. 사용자가 존재하고, 입력된 비밀번호와 DB의 암호화된 비밀번호가 일치하는지 확인
 		if (user != null && passwordEncoder.matches(password, user.getPassword())) {
 			return user;
 		}
@@ -92,9 +93,9 @@ public class UserService {
 
 	public Portfolio createPortfolio(MultipartFile file, String portfolioName, User user) throws IOException {
 		Portfolio portfolio = new Portfolio(portfolioName, user);
-		portfolioMapper.createPortfolio(portfolio);
-
-		Path uploadDir = Paths.get("src/main/resources/static/uploads/portfolio/");
+		String REPOPATH = System.getProperty("user.home") + File.separator + "pofolduce201" + File.separator
+				+ "uploads" + File.separator + "portfolio";
+		Path uploadDir = Paths.get(REPOPATH);
 		Files.createDirectories(uploadDir);
 
 		Path pdfPath = uploadDir.resolve(portfolio.getPortfolioId() + ".pdf");
@@ -109,7 +110,7 @@ public class UserService {
 			Path imgPath = uploadDir.resolve(portfolio.getPortfolioId() + ".png");
 			ImageIO.write(resizedImage, "PNG", imgPath.toFile());
 		}
-
+		portfolioMapper.createPortfolio(portfolio);
 		return portfolio;
 	}
 
@@ -124,11 +125,11 @@ public class UserService {
 	public User getUserById(int userId) {
 		return userMapper.getUserById(userId);
 	}
-    
+
 	public User getUserByEmail(String email) {
-        return userMapper.findUserByEmail(email);
-    }
-    
+		return userMapper.findUserByEmail(email);
+	}
+
 	public boolean isAdmin(int userId) {
 		User user = getUserById(userId);
 		return user != null && "관리자".equals(user.getUserType());
@@ -267,6 +268,7 @@ public class UserService {
 
 	/**
 	 * 유저의 회사 인증 상태와 회사 이름을 업데이트합니다.
+	 * 
 	 * @param userId               업데이트할 유저 ID
 	 * @param companyCertification 업데이트할 인증 상태 ('yes' 또는 'no')
 	 * @param companyName          업데이트할 회사 이름 (인증 안함일 경우 null)
