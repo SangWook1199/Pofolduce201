@@ -63,7 +63,7 @@ public class StudyBoardController {
 		// 5페이지 단위로 나눠서 표시
 		int startPage = ((page - 1) / 5) * 5 + 1;
 		int endPage = Math.min(startPage + 4, totalPages);
-		
+
 		model.addAttribute("currentPage", page);
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("endPage", endPage);
@@ -72,30 +72,31 @@ public class StudyBoardController {
 
 		return "pages/study/study-board";
 	}
-	
+
 	// 지도
 	@GetMapping("/study/api/map")
-    @ResponseBody
-    public List<Map<String, Object>> getAllPostData() {
-        List<StudyBoard> allPosts = studyBoardService.getAllPosts(); // 모든 게시글 가져오는 서비스 메서드
-        List<Map<String, Object>> result = new ArrayList<>();
-        
-        for (StudyBoard post : allPosts) {
-            if (post.getAddress() != null && !post.getAddress().isEmpty()) {
-                Map<String, Object> postData = new HashMap<>();
-                postData.put("address", post.getAddress());
-                postData.put("studyId", post.getStudyId());
-                postData.put("title", post.getTitle());
-                result.add(postData);
-            }
-        }
-        return result;
-    }
+	@ResponseBody
+	public List<Map<String, Object>> getAllPostData() {
+		List<StudyBoard> allPosts = studyBoardService.getAllPosts(); // 모든 게시글 가져오는 서비스 메서드
+		List<Map<String, Object>> result = new ArrayList<>();
+
+		for (StudyBoard post : allPosts) {
+			if (post.getAddress() != null && !post.getAddress().isEmpty()) {
+				Map<String, Object> postData = new HashMap<>();
+				postData.put("address", post.getAddress());
+				postData.put("studyId", post.getStudyId());
+				postData.put("title", post.getTitle());
+				result.add(postData);
+			}
+		}
+		return result;
+	}
+
 	// 스터디 게시글 상세 페이지
 	@GetMapping("/study/{studyId}")
 	public String studyBoardPost(@PathVariable int studyId, @RequestParam(defaultValue = "1") int page, Model model,
-			@SessionAttribute(name = "userId", required = false) Integer userId,
-			RedirectAttributes redirectAttributes, HttpServletRequest request) {
+			@SessionAttribute(name = "userId", required = false) Integer userId, RedirectAttributes redirectAttributes,
+			HttpServletRequest request) {
 		if (userId == null) {
 			return "redirect:/not-logined?msg=login_required";
 		}
@@ -107,7 +108,6 @@ public class StudyBoardController {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		model.addAttribute("postDateFormatted", post.getPostDate().format(formatter));
 		model.addAttribute("post", post);
-		System.out.println(post);
 		int pageSize = 5; // 한 페이지 댓글 수
 		List<StudyBoardComment> comments = studyBoardCommentService.getCommentsByStudyIdWithPage(studyId, page,
 				pageSize);
