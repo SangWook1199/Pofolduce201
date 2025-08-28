@@ -192,7 +192,9 @@
 			</nav>
 		</div>
 		<div id="data-container" th:data-post-id="${reviewPost.reviewPostId}"
-			th:data-session-userId="${session.userId}"></div>
+			th:data-session-userId="${session.userId}"
+			th:data-review-post-user-id="${reviewPost.user.userId}">
+			</div>
 	</div>
 	<th:block layout:fragment="script">
 		<script src="/js/review-post.js"></script>

@@ -300,4 +300,9 @@
 		#{userId}
 	</update>
 
+	<update id="updateUserPoint">
+		UPDATE users
+		SET point=point+#{getPoint}
+		WHERE user_id=#{userId}
+	</update>
 </mapper>

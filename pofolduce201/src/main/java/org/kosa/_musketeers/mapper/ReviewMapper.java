@@ -15,4 +15,6 @@ public interface ReviewMapper {
 	public void deleteReview(int reviewId);
 
 	public void updateReview(int reviewId, String reviewContents);
+
+	public void updateReviewLike(int reviewId);
 }
