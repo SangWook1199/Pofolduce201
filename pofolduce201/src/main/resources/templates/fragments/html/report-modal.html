@@ -12,7 +12,7 @@
 				</div>
 
 				<form th:action="@{/study/{studyId}/report(studyId=${studyId})}"
-					method="post">
+					method="post" class="report-form">
 					<div class="modal-body">
 						<div class="d-flex align-items-center mb-3">
 							<input type="hidden" th:value="|/study/${studyId}|"
@@ -26,7 +26,7 @@
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary"
 							data-bs-dismiss="modal">취소</button>
-						<button type="submit" class="btn btn-primary">확인</button>
+						<button type="submit" class="btn btn-primary" onclick="alert('신고가 접수되었습니다.'); return true;">확인</button>
 					</div>
 				</form>
 
@@ -34,16 +34,3 @@
 		</div>
 	</div>
 </div>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const forms = document.querySelectorAll(".report-form");
-
-    forms.forEach(form => {
-        form.addEventListener("submit", function (e) {
-            e.preventDefault(); 
-            alert("신고가 접수되었습니다.");
-            form.submit(); 
-        });
-    });
-});
-</script>
