@@ -65,4 +65,7 @@ public interface UserMapper {
 	void updateUserCompanyInfo(@Param("userId") int userId, @Param("companyCertification") String companyCertification,
 			@Param("companyName") String companyName);
 
+	// 포인트 추가
+	void updateUserPoint(int userId, int getPoint);
+
 }

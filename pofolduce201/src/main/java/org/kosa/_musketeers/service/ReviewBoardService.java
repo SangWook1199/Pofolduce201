@@ -16,6 +16,7 @@ import org.kosa._musketeers.domain.ReviewPost;
 import org.kosa._musketeers.domain.ReviewPostComment;
 import org.kosa._musketeers.domain.User;
 import org.kosa._musketeers.mapper.ReviewBoardMapper;
+import org.kosa._musketeers.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,8 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReviewBoardService {
 
 	private ReviewBoardMapper reviewBoardMapper;
-	public ReviewBoardService(ReviewBoardMapper reviewBoardMapper) {
+	private UserMapper userMapper;
+	public ReviewBoardService(ReviewBoardMapper reviewBoardMapper, UserMapper userMapper) {
 		this.reviewBoardMapper = reviewBoardMapper;
+		this.userMapper = userMapper;
 	}
 	
 	public List<ReviewPost> getReviewPostList(int page) {
@@ -42,6 +45,7 @@ public class ReviewBoardService {
 
 	public void createPost(ReviewPost reviewPost) {
 		reviewBoardMapper.createPost(reviewPost);
+		userMapper.updateUserPoint(reviewPost.getUser().getUserId(), 10);
 	}
 
 	@Transactional
@@ -65,6 +69,7 @@ public class ReviewBoardService {
 	public void writeComment(int userId, int reviewPostId, String comment) {
 		User user = new User(userId);
 		ReviewPostComment reviewPostComment = new ReviewPostComment(comment, user, reviewPostId);
+		userMapper.updateUserPoint(userId, 1);
 		reviewBoardMapper.createReviewPostComment(reviewPostComment);
 	}
 

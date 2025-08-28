@@ -51,4 +51,11 @@ public class ReviewController {
 		reviewService.removeReview(reviewId);
 		return ResponseEntity.ok("리뷰가 성공적으로 삭제되었습니다.");
 	}
+	
+	@PatchMapping("/review/{reviewId}/like")
+	public ResponseEntity<String> likeReview(@PathVariable Integer reviewId, @RequestBody String reviewUserId){
+		System.out.println("////////////reviewUserId:" + reviewUserId);
+		reviewService.plusReviewLike(reviewId, Integer.parseInt(reviewUserId));
+		return ResponseEntity.ok("리뷰의 좋아요가 성공적으로 처리되었습니다.");
+	}
 }
