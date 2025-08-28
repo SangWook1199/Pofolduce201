@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 	const reviews = await loadReviews(document
 		.getElementById('data-container').dataset.postId);
 	appendReviews(reviews);
+	toggleReviewContentDiv();
 })
 document.querySelector("#portfolio-div").addEventListener('mousedown',
 	function(event) {
@@ -56,14 +57,14 @@ function createReviewForm(event) {
 	// 2. 백틱을 사용해 전체 HTML 구조를 하나의 문자열로 만듭니다.
 	const formHTML = `
 	    <div class="row justify-content-center p-2 new-review-div" 
-	         style="position: absolute; z-index: 9998; left: ${x}px; top: ${y}px; transform:translate(-50%, 0);">
+	         style="position: absolute; z-index: 9998; left: ${x}px; top: ${y}px;">
 			<img class="col-3 p-0 img-fluid rounded-circle bg-white" src="${userImageLocation != null ? userImageLocation.split('static')[1] : '/svg/person.svg'}" style="border: 2px solid #FF4473; width:30px;"/>
-			<div class="row">
+			<div class="row" id="review-form-div">
 	        	<form id="review-form" class="col card p-2 text-center bg-light review m-0">
 					<div>
 	            		<input type="hidden" name="reviewLocationX" value="${intX}">
 	            		<input type="hidden" name="reviewLocationY" value="${intY}">
-	            		<textarea class="form-control border-0" name="reviewContents"></textarea>
+	            		<textarea class="form-control border-0" name="reviewContents" required></textarea>
 	            		<input type="hidden" name="reviewPost.reviewPostId" value="${postId}">
 	            
 	            		<button type="submit" class="btn btn-primary m-2">작성</button>
@@ -126,8 +127,6 @@ function appendReviews(reviews) {
 		let buttonsHTML = '';
 		let reportButton = '';
 		let reviewLikeButton = '';
-		console.log(reviewPostUserId);
-		console.log(sessionUserId);
 		if (sessionUserId == reviewPostUserId && review.likeCount == 0) {
 			reviewLikeButton = `
 				<button class="bg-transparent border-0" onclick="pressReviewLike(${review.reviewId}, ${review.user.userId})"><img id="review-like-button-${review.reviewId}" src="/svg/circle-like-off.svg" style="width:33px; border-color:#FF4473"></button>
@@ -161,9 +160,9 @@ function appendReviews(reviews) {
 		    <div class="row review-div justify-content-center"
 				 id="review-div-${review.reviewId}"
 		         style="position: absolute; z-index: 9998; left: ${review.reviewLocationX}px; top: ${review.reviewLocationY}px; transform:translate(-50%, 0);">
-				 <img class="col-3 p-0 img-fluid rounded-circle bg-white" src="${review.user.userImageLocation != null ? review.user.userImageLocation.split('static')[1] : '/svg/person.svg'}" style="border: 2px solid #FF4473; width:30px;"/>
-				 <div class="row">
-				 <div class="col card p-2 text-center bg-light review m-0">
+				 <img class="review-user-img col-3 p-0 img-fluid rounded-circle bg-white" src="${review.user.userImageLocation != null ? review.user.userImageLocation.split('static')[1] : '/svg/person.svg'}" style="border: 2px solid #FF4473; width:30px;"/>
+				 <div class="review-content-div row"  id="review-content-div-${review.reviewId}">
+				 <div class="review-content-inner-div col card p-2 text-center bg-light review m-0" id="review-content-inner-div-${review.reviewId}">
 					<div class="row m-1 justify-content-center">
 						<div class="row">
 							<span class="col-12 fs-6 fw-bold">${review.user.nickname}</span>
@@ -175,7 +174,7 @@ function appendReviews(reviews) {
 						${reportButton}
 						${buttonsHTML}
 					</div>
-					<div class="rounded-2 mt-2 bg-white">
+					<div class="review-contents-text rounded-2 mt-2 bg-white">
 						${review.reviewContents}
 					</div>
 				</div>
@@ -202,7 +201,10 @@ async function deleteReview(reviewId, reviewPostId) {
 }
 
 async function addUpdateForm(reviewId, reviewContents, reviewPostId) {
-	const reviewDiv = document.getElementById(`review-div-${reviewId}`);
+	if(document.querySelector('#update-review-div')){
+		return;
+	}
+	const reviewContentInnerDiv = document.getElementById(`review-content-inner-div-${reviewId}`);
 	const formHTML = `
 		<div class="card p-2 text-center bg-light" id="update-review-div">
 			<textarea id='update-review-textarea'></textarea>
@@ -210,10 +212,10 @@ async function addUpdateForm(reviewId, reviewContents, reviewPostId) {
 				<button class="btn btn-sm btn-primary" id="review-update-button">완료</button>
 				<button class="btn btn-sm btn-primary" onclick="cancelUpdate(${reviewId})">취소</button>
 			</div>
-			
 		</div>
 	`;
-	reviewDiv.insertAdjacentHTML('beforeend', formHTML);
+	reviewContentInnerDiv.insertAdjacentHTML('beforeend', formHTML);
+	reviewContentInnerDiv.removeChild(document.querySelector('.review-contents-text'));
 	document.getElementById('update-review-textarea').value = reviewContents;
 
 	const updateButton = document.getElementById('review-update-button');
@@ -234,12 +236,14 @@ async function addUpdateForm(reviewId, reviewContents, reviewPostId) {
 		}
 		appendReviews(await loadReviews(reviewPostId));
 	})
-
 }
 
-function cancelUpdate(reviewId) {
-	const reviewDiv = document.getElementById(`review-div-${reviewId}`);
-	reviewDiv.removeChild(document.getElementById('update-review-div'));
+// 수정 취소
+function cancelUpdate() {
+	const updateDiv = document.getElementById('update-review-div');
+	if (updateDiv) {
+		updateDiv.remove();
+	}
 }
 
 async function pressReviewLike(reviewId, reviewUserId) {
@@ -304,4 +308,25 @@ function prepareReviewReportModal(event) {
 	// 4. 찾은 input에 읽어온 데이터를 값으로 설정합니다.
 	reviewIdInput.value = reviewId;
 	userIdInput.value = reportedUserId;
+}
+
+//유저이미지 클릭하면 작성한 리뷰 보이게
+function toggleReviewContentDiv(){
+	const portfolioDiv = document.getElementById('portfolio-div');
+
+	portfolioDiv.addEventListener('click', function(e) {
+		
+	    // 1. 클릭된 것이 유저 이미지인지 확인
+	    if (e.target.matches('.review-user-img')) {
+	        const img = e.target;
+	        const contentDiv = img.nextElementSibling;
+			const reviewDiv = img.parentElement;
+
+	        if (contentDiv) {
+	            // 2. .visible 클래스를 추가하거나 제거 (토글)
+	            contentDiv.classList.toggle('visible');
+				reviewDiv.classList.toggle('visible');
+	        }
+	    }
+	});
 }

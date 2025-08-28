@@ -66,14 +66,16 @@ public class ReviewBoardController {
 		ReviewPost reviewPost = reviewBoardService.viewPost(reviewPostId);
 		List<ReviewPostComment> commentList = reviewBoardService.loadReviewPostCommentList(reviewPostId,
 				(currentCommentPage - 1) * commentCount, commentCount);
+		User user = userService.getUserById(userId);
+		String userImageLocation = user.getUserImageLocation();
+		String userType = user.getUserType();
 
-		System.out.println(reviewPost.getUser());
-		System.out.println(commentList);
-
+		model.addAttribute("userImageLocation", userImageLocation);
 		model.addAttribute("totalCommentPages", totalCommentPage);
 		model.addAttribute("currentCommentPage", currentCommentPage);
 		model.addAttribute("reviewPost", reviewPost);
 		model.addAttribute("commentsList", commentList);
+		model.addAttribute("userType", userType);
 		model.addAttribute("currentUri", request.getRequestURI());
 		return "pages/review/review-post";
 	}
