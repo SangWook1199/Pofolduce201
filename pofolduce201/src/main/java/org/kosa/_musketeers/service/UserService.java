@@ -103,7 +103,7 @@ public class UserService {
 
 		try (PDDocument document = PDDocument.load(pdfPath.toFile())) {
 			PDFRenderer pdfRenderer = new PDFRenderer(document);
-			BufferedImage image = pdfRenderer.renderImageWithDPI(0, 150);
+			BufferedImage image = pdfRenderer.renderImageWithDPI(0, 200);
 
 			BufferedImage resizedImage = resizeImage(image, 180);
 
