@@ -34,3 +34,16 @@
 		</div>
 	</div>
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const forms = document.querySelectorAll(".report-form");
+
+    forms.forEach(form => {
+        form.addEventListener("submit", function (e) {
+            e.preventDefault(); 
+            alert("신고가 접수되었습니다.");
+            form.submit(); 
+        });
+    });
+});
+</script>

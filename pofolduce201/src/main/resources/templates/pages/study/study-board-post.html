@@ -16,8 +16,8 @@
 		th:replace="fragments/html/board-header :: board-header('스터디 게시판 > 게시글 보기')"></div>
 	<div class="title-area mb-3">
 		<!-- 제목 -->
-		<div class="d-flex justify-content-between align-items-center mb-4"
-			id="study-post-title">
+		<div
+			class="d-flex justify-content-between align-items-center mb-4 study-post-title">
 			<h3 th:text="${post.title}" class="board-title mb-0">게시글 제목</h3>
 			<!-- 본인 게시물이면 수정,삭제 -->
 			<div
@@ -36,8 +36,8 @@
 		<div class="d-flex align-items-center gap-3">
 			<img th:if="${post.userId.userImageLocation != null}" alt="프로필"
 				th:src="@{/uploads/profile/{id}.png(id=${post.userId.userId})}"
-				class="profile">
-			<img th:unless="${post.userId.userImageLocation != null}"
+				class="profile"> <img
+				th:unless="${post.userId.userImageLocation != null}"
 				th:src="@{/svg/person.svg}" alt="기본 프로필 사진" class="profile">
 			<div class="d-flex flex-column">
 				<p th:text="${post.userId.nickname}"
@@ -65,8 +65,8 @@
 		<div th:utext="${post.postHtml}" class="board-content">content</div>
 		<!-- 지도 -->
 		<div class="map-area text-center">
-			<p class="map-title d-inline-block border-bottom border-secondary">위치
-				정보</p>
+			<p class="map-title d-inline-block border-bottom border-secondary"
+				th:text="|주소: ${post.address}|">위치 정보</p>
 			<div id="map" class="map-container"></div>
 		</div>
 		<!-- 좋아요 버튼 -->
@@ -94,24 +94,24 @@
 				th:action="@{/study/{studyId}/comments(studyId=${post.studyId})}"
 				method="post">
 				<input type="hidden" name="userId" th:value="${session.userId}">
-				<div class="mb-3">
-					<textarea class="form-control comment-content"
-						name="comment-content" placeholder="댓글을 입력하세요." rows="4" required></textarea>
-				</div>
-				<div class="col text-end">
-					<button class="btn btn-sm btn-primary" id="list-button"
-						type="submit">댓글 작성</button>
+				<div class="row">
+					<div class="col-10 mb-3">
+						<textarea class="form-control comment-content"
+							name="comment-content" placeholder="댓글을 입력하세요." rows="4" required></textarea>
+					</div>
+					<button class="col-2 btn btn-primary comment-button" type="submit">댓글
+						작성</button>
 				</div>
 			</form>
 		</div>
 		<!-- 댓글 리스트 -->
 		<div class="comment-list" th:each="comment : ${comments}">
-			<div class="d-flex align-items-center mb-1">
-			<img th:if="${comment.userId.userImageLocation != null}" alt="프로필"
-				th:src="@{/uploads/profile/{id}.png(id=${comment.userId.userId})}"
-				class="comment-profile">
-			<img th:unless="${comment.userId.userImageLocation != null}"
-				th:src="@{/svg/person.svg}" alt="기본 프로필 사진" class="comment-profile">
+			<div class="d-flex align-items-center mb-3">
+				<img th:if="${comment.userId.userImageLocation != null}" alt="프로필"
+					th:src="@{/uploads/profile/{id}.png(id=${comment.userId.userId})}"
+					class="comment-profile"> <img
+					th:unless="${comment.userId.userImageLocation != null}"
+					th:src="@{/svg/person.svg}" alt="기본 프로필 사진" class="comment-profile">
 				<strong th:text="${comment.userId.nickname}" tabindex="0"
 					th:attr="data-userid=${comment.userId.userId}"
 					data-bs-toggle="popover" data-bs-trigger="focus"

@@ -58,7 +58,11 @@ public class ReviewBoardController {
 		}
 
 		int commentCount = 5;
-		int totalCommentPage = reviewBoardService.getTotalReviewCommentCount(reviewPostId) / commentCount + 1;
+		int totalCommentCount = reviewBoardService.getTotalReviewCommentCount(reviewPostId); 
+		int totalCommentPage = totalCommentCount / commentCount;
+		if(totalCommentCount % commentCount > 0)
+			totalCommentPage += 1;
+		
 		ReviewPost reviewPost = reviewBoardService.viewPost(reviewPostId);
 		List<ReviewPostComment> commentList = reviewBoardService.loadReviewPostCommentList(reviewPostId,
 				(currentCommentPage - 1) * commentCount, commentCount);

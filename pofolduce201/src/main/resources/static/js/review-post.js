@@ -223,8 +223,13 @@ async function pressLike(reviewPostId){
 	} catch(error){
 		console.log("fetch error: error");
 	}
-	document.getElementById('like-button').innerText= '👍 ' + likeCount;
-	document.getElementById('like-button').disabled;
+	const likeBtn = document.getElementById('likeBtn');
+	const likeIcon = document.getElementById('likeImg');
+	const likeCountSpan = document.getElementById('likeCount');
+
+	likeCountSpan.innerText = likeCount;
+	likeIcon.src = "/svg/like-on.svg";
+	likeBtn.disabled = true;
 }
 		
 //댓글 수정
