@@ -62,7 +62,7 @@ public class RecruitService {
 
 		// 최신순 선택
 		select.selectByValue("recent"); // value 속성 기준
-		Thread.sleep(500); // 페이지 로딩 대기
+		Thread.sleep(700); // 페이지 로딩 대기
 
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 
@@ -112,7 +112,7 @@ public class RecruitService {
 
 			// 스크롤 내리기
 			js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-			Thread.sleep(500); // 로딩 대기
+			Thread.sleep(1000); // 로딩 대기
 		}
 		
 		driver.quit();
