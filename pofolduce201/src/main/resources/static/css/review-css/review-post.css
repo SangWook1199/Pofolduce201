@@ -1,12 +1,15 @@
 @charset "UTF-8";
+
 .main-content {
 	width: 1023px;
 	margin: auto;
 	margin-top: 5%;
 }
+
 .review-post-title {
 	margin-bottom: 20px;
 }
+
 .board-title {
 	margin-bottom: 30px;
 }
@@ -15,7 +18,7 @@
 	width: 45px;
 	height: 45px;
 	border-radius: 50%;
-	border:1px solid #ff4473;
+	border: 1px solid #ff4473;
 }
 
 .title-area {
@@ -31,7 +34,7 @@
 	width: 45px;
 	height: 45px;
 	border-radius: 50%;
-	border:1px solid #ff4473;
+	border: 1px solid #ff4473;
 }
 
 .title-area p {
@@ -101,16 +104,18 @@
 	height: 100px;
 	border-radius: 20px;
 }
-.comment-button{
-	height:100px;
-	border-radius:20px;
+
+.comment-button {
+	height: 100px;
+	border-radius: 20px;
 }
-.comment-profile{
+
+.comment-profile {
 	width: 35px;
 	height: 35px;
 	border-radius: 50%;
-	border:1px solid #ff4473;
-	margin-right:8px;	
+	border: 1px solid #ff4473;
+	margin-right: 8px;
 }
 
 .comment-userName {
@@ -130,11 +135,11 @@
 
 .comment-line {
 	border: none;
-	color:none;
+	color: none;
 	border-top: 1px solid #DEE2E6;
 	margin-top: 10px;
 	margin-bottom: 10px;
-	opacity:0.1;
+	opacity: 0.1;
 }
 
 .all-userName:hover {
@@ -160,4 +165,56 @@
 	pointer-events: none;
 	background-color: #ffffff;
 	border-color: #E9ECEF;
+}
+
+/* 새로운 리뷰 작성 div */
+.new-review-div {
+  transform: translate(-50%, 0); /* JS에서 가져온 transform 속성 */
+  animation: smooth-appear 0.4s ease-out;
+}
+
+/* 애니메이션 효과 정의 */
+@keyframes smooth-appear {
+  /* 시작 상태 */
+  from {
+    opacity: 0;
+  }
+  
+  /* 끝 상태 (opacity만 변경, transform은 .new-review-div의 것을 따름) */
+  to {
+    opacity: 1;
+  }
+}
+
+#review-form-div {
+	opacity: 0.95;
+}
+
+/* 안보이는 상태, 클릭 불가능 */
+.review-content-div {
+	opacity: 0;
+	transition: opacity 0.3s ease-in-out;
+}
+
+.review-div {
+	pointer-events: none; /* ★★★ 이 줄이 클릭을 통과시키는 핵심입니다! */
+}
+
+/* 보이는 상태 (불투명하고, '클릭 가능' 상태) */
+.review-content-div.visible {
+	opacity: 1;
+}
+
+.review-div.visible {
+	pointer-events: auto; /* ★★★ .visible일 때 다시 클릭을 받도록 복원하는 핵심입니다! */
+}
+
+/* 작성된 리뷰 유저 이미지 */
+.review-user-img {
+	pointer-events: auto;
+	opacity: 0.95;
+}
+
+#update-review-div{
+	border:0;
 }

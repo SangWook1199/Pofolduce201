@@ -19,7 +19,7 @@
 			<div
 				class="d-flex justify-content-between align-items-center mb-4 review-post-title">
 				<h3 class="board-title mb-0" th:text="${reviewPost.title}">제목</h3>
-				<div th:if="${session.userId == reviewPost.user.userId}"
+				<div th:if="${session.userId == reviewPost.user.userId || userType == '관리자'}"
 					class="col-3 d-flex justify-content-center gap-2">
 					<a class="btn btn-sm btn-outline-primary"
 						th:href="@{/review/post/{reviewPostId}/edit(reviewPostId=${reviewPost.reviewPostId})}">수정</a>
@@ -45,7 +45,7 @@
 						class="mb-0 text-muted small"></p>
 				</div>
 				<div
-					th:if="${session.userId != null and session.userId != reviewPost.user.userId}"
+					th:if="${(session.userId != null and session.userId != reviewPost.user.userId) and userType != '관리자'}"
 					class="ms-auto">
 					<button type="button" class="btn p-0 border-0 bg-transparent"
 						data-bs-toggle="modal" data-bs-target="#reportPostModal">
@@ -123,8 +123,8 @@
 
 				<div class="text-end">
 					<div class="d-flex justify-content-end align-items-center gap-2">
-						<button class="btn btn-sm btn-primary"
-							th:if="${session.userId == comments.userId.userId}"
+						<button class="btn btn-sm btn-outline-primary"
+							th:if="${session.userId == comments.userId.userId || userType == '관리자'}"
 							th:onclick="|toggleEdit(${comments.commentsId})|">수정</button>
 						<form
 							th:action="@{/review/comment/{reviewCommentId}/delete(reviewCommentId=${comments.commentsId})}"
@@ -133,7 +133,7 @@
 							<input type="hidden" th:value="${reviewPost.reviewPostId}"
 								name="reviewPostId">
 							<button th:if="${session.userId == comments.userId.userId}"
-								class="btn btn-sm btn-primary" type="submit">삭제</button>
+								class="btn btn-sm btn-outline-primary" type="submit">삭제</button>
 						</form>
 					</div>
 					<!-- 숨겨진 수정창 -->
@@ -152,7 +152,7 @@
 						</form>
 					</div>
 					<div
-						th:if="${session.userId != null and session.userId != comments.userId.userId}"
+						th:if="${(session.userId != null and session.userId != comments.userId.userId) and userType !='관리자'}"
 						class="ms-auto">
 						<button type="button" class="btn p-0 border-0 bg-transparent"
 							data-bs-toggle="modal" data-bs-target="#reportPostModal">
@@ -193,8 +193,8 @@
 		</div>
 		<div id="data-container" th:data-post-id="${reviewPost.reviewPostId}"
 			th:data-session-userId="${session.userId}"
-			th:data-review-post-user-id="${reviewPost.user.userId}">
-			</div>
+			th:data-review-post-user-id="${reviewPost.user.userId}"
+			th:data-user-image-location="${userImageLocation}"></div>
 	</div>
 	<th:block layout:fragment="script">
 		<script src="/js/review-post.js"></script>

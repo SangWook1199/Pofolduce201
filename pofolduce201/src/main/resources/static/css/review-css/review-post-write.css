@@ -1,30 +1,40 @@
 @charset "UTF-8";
 
-	.ck.ck-editor__editable{
-		min-height: 500px;
-	}
-	input::placeholder {
-    	text-align: center;
-	}
-  .btn-primary {
-    background-color: #FF4473 !important;
-    border-color: #FF4473 !important;
-    font-weight: bold;
+.ck.ck-editor__editable {
+	min-height: 500px;
+}
+
+input::placeholder {
+	text-align: center;
+}
+
+.btn-primary {
+	background-color: #FF4473 !important;
+	border-color: #FF4473 !important;
+	font-weight: bold;
 	font-size: 18px;
-  }
-  .btn-primary:hover {
-    background-color: #FF4473 !important;
-    border-color:#FF4473 !important;
-  }
-  .btn-outline-primary {
-    border:1px solid #FF4473 !important;
-    color: #FF4473 !important;
-    font-weight: bold;
+}
+
+.btn-primary:hover {
+	background-color: #FF4473 !important;
+	border-color: #FF4473 !important;
+}
+
+.btn-outline-primary {
+	border: 1px solid #FF4473 !important;
+	color: #FF4473 !important;
+	font-weight: bold;
 	font-size: 18px;
 	border-radius: 10px;
-  }
-  .btn-outline-primary:hover{
-  	background-color: #FF4473 !important;
-    border-color:#FF4473 !important;
-    color: #fff !important;
-  }
+}
+
+.btn-outline-primary:hover {
+	background-color: #FF4473 !important;
+	border-color: #FF4473 !important;
+	color: #fff !important;
+}
+
+#portfolio {
+	caret-color: transparent;	
+	background-color: #DEE2E6;
+}
