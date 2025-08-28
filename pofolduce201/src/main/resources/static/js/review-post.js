@@ -230,9 +230,6 @@ async function pressLike(reviewPostId) {
 	likeCountSpan.innerText = likeCount;
 	likeIcon.src = "/svg/like-on.svg";
 	likeBtn.disabled = true;
-	
-	/*document.getElementById('like-button').innerText = '👍 ' + likeCount;
-	document.getElementById('like-button').disabled = true;*/
 }
 
 

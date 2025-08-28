@@ -40,10 +40,6 @@ public class StudyBoardController {
 	@GetMapping("/study")
 	public String studyBoard(@SessionAttribute(name = "userId", required = false) Integer userId,
 			@RequestParam(defaultValue = "1") int page, Model model, HttpServletRequest request) {
-		if (userId == null) {
-			return "redirect:/not-logined?msg=login_required";
-		}
-
 		// 상위 3개 조회수
 		Map<String, StudyBoard> top3Map = studyBoardService.getTop3ByViewCount();
 		model.addAttribute("first", top3Map.get("first"));

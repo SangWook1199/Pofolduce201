@@ -59,7 +59,7 @@
 		</div>
 		<!-- 포트폴리오 div -->
 		<div class="content-area">
-			<div class="pt-3 border-top border-1 mt position-relative"
+			<div class="pt-3 justify-content-center mt position-relative d-flex"
 				id="portfolio-div">
 				<p th:utext="${reviewPost.portfolioHtml}"></p>
 			</div>
@@ -167,7 +167,7 @@
 			<div th:if="${not #lists.isEmpty(comments)}">
 				<hr class="comment-line">
 			</div>
-			<nav aria-label="Page navigation example">
+			<nav th:if="${totalCommentPages > 0}" aria-label="Page navigation">
 				<ul class="pagination justify-content-center m-3">
 					<!-- 이전 버튼 -->
 					<li class="page-item"
