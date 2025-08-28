@@ -21,6 +21,7 @@ import org.kosa._musketeers.domain.User;
 import org.kosa._musketeers.domain.Verification;
 import org.kosa._musketeers.mapper.PortfolioMapper;
 import org.kosa._musketeers.mapper.UserMapper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,14 +33,25 @@ public class UserService {
 	private UserMapper userMapper;
 	private PortfolioMapper portfolioMapper;
 
+    // 비밀번호 암호화를 위한 BCryptPasswordEncoder 객체 직접 생성
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
 	public UserService(UserMapper userMapper, PortfolioMapper portfolioMapper) {
 		super();
 		this.userMapper = userMapper;
 		this.portfolioMapper = portfolioMapper;
 	}
 
+    // 로그인 로직 수정: 이메일로 사용자 조회 후 비밀번호 일치 여부 확인
 	public User login(String email, String password) {
-		return userMapper.getUserIdByEmailPwd(email, password);
+        // 1. 이메일로 사용자 정보 조회
+		User user = userMapper.findUserByEmail(email);
+
+        // 2. 사용자가 존재하고, 입력된 비밀번호와 DB의 암호화된 비밀번호가 일치하는지 확인
+		if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+			return user;
+		}
+		return null; // 인증 실패 시 null 반환
 	}
 
 	public User getUserInformation(int userId) {
@@ -112,7 +124,11 @@ public class UserService {
 	public User getUserById(int userId) {
 		return userMapper.getUserById(userId);
 	}
-
+    
+	public User getUserByEmail(String email) {
+        return userMapper.findUserByEmail(email);
+    }
+    
 	public boolean isAdmin(int userId) {
 		User user = getUserById(userId);
 		return user != null && "관리자".equals(user.getUserType());

@@ -52,13 +52,14 @@
 		</association>
 	</resultMap>
 
-	<select id="getUserIdByEmailPwd" parameterType="map"
+	<select id="getUserByEmail" parameterType="string"
 		resultType="org.kosa._musketeers.domain.User">
-		SELECT user_id
-		FROM users
+		SELECT user_id, email, nickname, password, user_type,
+		company_name,
+		company_certification, point, user_image_location
+		FROM
+		users
 		WHERE email = #{email}
-		AND password
-		= #{password}
 	</select>
 
 	<select id="getUserInformation" parameterType="int"
@@ -154,11 +155,14 @@
 		company_name,
 		company_certification,
 		point,
+		sanction_count,
+		sanction_type, sanction_period,
 		date,
 		user_image_location
 		FROM
 		users
-		WHERE user_id = #{userId}
+		WHERE
+		user_id = #{userId}
 	</select>
 
 	<select id="getReviewSearchResult" parameterType="string"

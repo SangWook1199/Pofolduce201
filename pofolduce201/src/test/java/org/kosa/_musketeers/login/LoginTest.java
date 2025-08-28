@@ -67,7 +67,7 @@ public class LoginTest {
 		String password = "pass1234";
 		
 		//when
-		User user = mapper.getUserIdByEmailPwd(email, password);
+		User user = mapper.getUserByEmail(email, password);
 		
 		//then
 		assertThat(user).isNotNull();

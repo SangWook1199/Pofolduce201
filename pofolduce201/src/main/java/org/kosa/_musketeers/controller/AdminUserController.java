@@ -7,12 +7,15 @@ import java.util.Map;
 import org.kosa._musketeers.domain.*;
 import org.kosa._musketeers.service.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/admin")
@@ -44,11 +47,21 @@ public class AdminUserController {
 		return "pages/admin/admin-home";
 	}
 
+
 	@GetMapping("/user/{userId}")
-	public String userDetail(@PathVariable int userId, Model model, HttpServletRequest request) {
+	public String userDetail(@PathVariable int userId, Model model, HttpServletRequest request, HttpSession session) {
+		// 1. userData를 가져와 모델에 추가
 		User user = userService.getUserById(userId);
 		model.addAttribute("userData", user);
-		System.out.println(user);
+
+		// 2. 세션에서 로그인한 사용자의 ID를 가져와 모델에 추가
+		User loginUser = (User) session.getAttribute("loginUser");
+	    if (loginUser != null) {
+	        // 현재 페이지의 유저 ID가 로그인한 유저 ID와 같은지 확인
+	        boolean isSelfPage = (loginUser.getUserId() == userId);
+	        model.addAttribute("isSelfPage", isSelfPage);
+	    }
+
 		model.addAttribute("currentPath", request.getRequestURI());
 		return "pages/admin/admin-userpage";
 	}
@@ -76,51 +89,57 @@ public class AdminUserController {
 	@GetMapping("/reports/{reportId}")
 	public String reportDetail(@PathVariable int reportId, Model model, HttpServletRequest request) {
 		Report report = adminService.getReportById(reportId);
+
+		if (report != null) {
+			// 신고된 유저의 정보를 가져와서 제재 상태를 확인합니다.
+			int reportedUserId = report.getReportedId().getUserId();
+			User reportedUser = userService.getUserById(reportedUserId);
+
+			// 모델에 유저 정보를 추가하여 HTML에서 제재 상태를 확인할 수 있게 합니다.
+			model.addAttribute("reportedUser", reportedUser);
+		}
+
 		model.addAttribute("report", report);
 		model.addAttribute("currentPath", request.getRequestURI());
 		return "pages/admin/admin-reportpage";
 	}
 
-	@GetMapping("/reports/{reportId}/content")
-	public String getReportedContent(@PathVariable int reportId, Model model) {
+	@GetMapping(value = "/reports/{reportId}/content", produces = MediaType.TEXT_HTML_VALUE)
+	@ResponseBody
+	public String getReportedContent(@PathVariable int reportId) {
 		Report report = adminService.getReportById(reportId);
-		String postHtml = "(내용을 불러올 수 없습니다)";
+		String postHtml = "<p>(내용을 불러올 수 없습니다)</p>"; // 기본값
 
 		if (report != null && report.getLocation() != null) {
-			System.out.println("report.getLocation() = " + report.getLocation());
 			String[] parts = report.getLocation().split("/");
-			for (int i = 0; i < parts.length; i++) {
-				System.out.println("parts[" + i + "] = " + parts[i]);
-			}
+
 			if (parts.length >= 3) {
 				String type = parts[1];
 				int id = Integer.parseInt(parts[2]);
-
-				System.out.println("type = " + type + ", id = " + id);
 
 				switch (type) {
 				case "review":
 					ReviewPost review = reviewPostService.getReviewPostById(id);
 					if (review != null) {
-						postHtml = review.getPortfolioHtml() + "<hr/>" + review.getPostHtml();
+						postHtml = "<div>" + review.getPortfolioHtml() + "<hr/>" + review.getPostHtml() + "</div>";
 					}
 					break;
 				case "study":
 					StudyBoard study = studyBoardService.getPostById(id);
 					if (study != null) {
-						postHtml = study.getPostHtml();
+						postHtml = "<div>" + study.getPostHtml() + "</div>";
 					}
 					break;
 				case "study-comment":
 					StudyBoardComment sComment = studyBoardCommentService.getCommentById(id);
 					if (sComment != null) {
-						postHtml = sComment.getCommentsContents();
+						postHtml = "<p>" + sComment.getCommentsContents() + "</p>";
 					}
 					break;
 				case "review-comment":
 					ReviewPostComment rComment = reviewPostService.getReviewCommentById(id);
 					if (rComment != null) {
-						postHtml = rComment.getCommentsContents();
+						postHtml = "<p>" + rComment.getCommentsContents() + "</p>";
 					}
 					break;
 				case "portfolio":
@@ -130,14 +149,13 @@ public class AdminUserController {
 					}
 					break;
 				default:
-					postHtml = "(알 수 없는 게시물 유형입니다)";
+					postHtml = "<p>(알 수 없는 게시물 유형입니다)</p>";
 				}
 			}
 		}
 
-		System.out.println("postHtml = " + postHtml);
-		model.addAttribute("postHtml", postHtml);
-		return "pages/admin/admin-content-frame";
+		// 가져온 HTML 콘텐츠를 <body> 태그 내에 포함시켜 반환합니다.
+		return "<html><body>" + postHtml + "</body></html>";
 	}
 
 	@GetMapping("/reports/{reportId}/json")
@@ -237,7 +255,7 @@ public class AdminUserController {
 			// Verification 정보를 다시 가져와서 회사 이름을 얻음
 			Verification verification = userService.getUserCompanyVerification(userId);
 
-			//verification 객체 확인
+			// verification 객체 확인
 			System.out.println("가져온 Verification 객체: " + verification);
 
 			if (verification != null) {
