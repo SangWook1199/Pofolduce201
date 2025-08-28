@@ -135,7 +135,7 @@ function appendReviews(reviews) {
 		}
 		else if (sessionUserId == reviewPostUserId && review.likeCount == 1) {
 			reviewLikeButton = `
-				<img id="review-like-button-${review.reviewId}" src="/svg/like-on.svg" style="width:33px; border-color:#FF4473">
+				<img id="review-like-button-${review.reviewId}" src="/svg/circle-like-on.svg" style="width:33px; border-color:#FF4473">
 			`;
 		}
 		if (sessionUserId && sessionUserId == review.user.userId) {
@@ -256,7 +256,7 @@ async function pressReviewLike(reviewId, reviewUserId) {
 	} catch (error) {
 		console.log("fetch error: error");
 	}
-	document.getElementById(`review-like-button-${reviewId}`).src = "/svg/like-on.svg";
+	document.getElementById(`review-like-button-${reviewId}`).src = "/svg/circle-like-on.svg";
 }
 
 async function pressLike(reviewPostId) {
