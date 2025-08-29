@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.fit.pdfdom.PDFDomTree;
+import org.kosa._musketeers.config.WebConfig;
 import org.kosa._musketeers.domain.ReviewPost;
 import org.kosa._musketeers.domain.ReviewPostComment;
 import org.kosa._musketeers.domain.User;
@@ -91,7 +92,7 @@ public class ReviewBoardService {
 
 	public String convertPdfToHtml(int portfolioId) {
 		String html = "";
-		File file = new File("src/main/resources/static/uploads/portfolio/" + portfolioId + ".pdf");
+		File file = new File(WebConfig.REPO_PATH_PORTFOLIO + File.separator + portfolioId + ".pdf");
 		if(!file.exists()) {
 			return "<p style='color: red;'>해당 이력서 파일을 찾을 수 없습니다.</p>";
 		}
