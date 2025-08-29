@@ -221,7 +221,7 @@ public class StudyBoardController {
 		if (userId == null) {
 			return "redirect:/not-logined?msg=login_required";
 		}
-		int postUserId = studyBoardService.getStudyPostUserId(studyId); // 서비스에 메서드 추가 필요
+		int postUserId = studyBoardService.getStudyPostUserId(studyId);
 		if (postUserId != userId) {
 			return "redirect:/study/" + studyId;
 		}
@@ -239,7 +239,7 @@ public class StudyBoardController {
 		if (userId == null) {
 			return "redirect:/not-logined?msg=login_required";
 		}
-		int postUserId = studyBoardService.getStudyPostUserId(studyId); // 서비스에 메서드 추가 필요
+		int postUserId = studyBoardService.getStudyPostUserId(studyId);
 		if (postUserId != userId) {
 			redirectAttributes.addFlashAttribute("errorMessage", "게시글을 작성한 회원이 아닙니다.");
 			return "redirect:/study/" + studyId;
@@ -257,7 +257,7 @@ public class StudyBoardController {
 		if (userId == null) {
 			return "redirect:/not-logined?msg=login_required";
 		}
-		int postUserId = studyBoardService.getStudyPostUserId(studyId); // 서비스에 메서드 추가 필요
+		int postUserId = studyBoardService.getStudyPostUserId(studyId); 
 		if (postUserId != userId) {
 			redirectAttributes.addFlashAttribute("errorMessage", "게시글을 작성한 회원이 아닙니다.");
 			return "redirect:/study/" + studyId;

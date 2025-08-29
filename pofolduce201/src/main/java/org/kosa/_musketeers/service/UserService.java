@@ -186,6 +186,8 @@ public class UserService {
 
 		Path imagePath = uploadDir.resolve(userId + ".png");
 		Files.copy(file.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+		uploadDir = Paths.get("/uploads/profile");
+		imagePath = uploadDir.resolve(userId + ".png");
 		String imagePathStr = imagePath.toString();
 
 		userMapper.updateProfile(userId, imagePathStr);
@@ -281,7 +283,6 @@ public class UserService {
 	 * @param companyCertification 업데이트할 인증 상태 ('yes' 또는 'no')
 	 * @param companyName          업데이트할 회사 이름 (인증 안함일 경우 null)
 	 */
-	@Transactional
 	public void updateUserCompanyInfo(int userId, String companyCertification, String companyName) {
 		userMapper.updateUserCompanyInfo(userId, companyCertification, companyName);
 	}
