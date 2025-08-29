@@ -111,7 +111,6 @@ public class UserController {
 		model.addAttribute("hasProfileImage", hasProfileImage);
 		model.addAttribute("userData", userData);
 		model.addAttribute("userCompanyData", userCompanyData);
-		System.out.println(userCompanyData);
 
 		return "/pages/mypage/mypage-main";
 
@@ -149,9 +148,6 @@ public class UserController {
 		List<MyPagePost> myPagePostList = myBoardService.findMyPost(userId, page, size);
 		int totalCount = myBoardService.countMyPost(userId);
 		int totalPages = (int) Math.ceil((double) totalCount / size);
-//		System.out.println("총 개수: " + totalCount);
-//		System.out.println("페이지 크기: " + size);
-//		System.out.println("총 페이지 수: " + totalPages);
 
 		model.addAttribute("myPagePostList", myPagePostList);
 		model.addAttribute("currentPage", page);
@@ -180,7 +176,6 @@ public class UserController {
 		model.addAttribute("currentPage", page);
 		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("size", size);
-		System.out.println(myPageCommentList);
 
 		return "/pages/mypage/mypage-mycomment";
 
@@ -204,7 +199,6 @@ public class UserController {
 		int totalPages = (int) Math.ceil((double) totalCount / size);
 
 		model.addAttribute("myPageReviewList", myPageReviewList);
-		//System.out.println(myPageReviewList);
 		model.addAttribute("currentPage", page);
 		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("size", size);
@@ -231,7 +225,6 @@ public class UserController {
 			int totalPages = (int) Math.ceil((double) totalCount / size);
 
 			model.addAttribute("ReviewList", ReviewList);
-			System.out.println(ReviewList);
 			model.addAttribute("currentPage", page);
 			model.addAttribute("totalPages", totalPages);
 			model.addAttribute("size", size);

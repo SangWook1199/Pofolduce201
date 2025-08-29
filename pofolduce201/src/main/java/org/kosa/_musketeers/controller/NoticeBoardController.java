@@ -78,7 +78,6 @@ public class NoticeBoardController {
         NoticeBoard post = noticeBoardService.getPostById(noticeId);
         
         noticeBoardService.addViewCount(noticeId);
-        System.out.println(post);
         model.addAttribute("post", post);
         model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("currentUri", request.getRequestURI());
