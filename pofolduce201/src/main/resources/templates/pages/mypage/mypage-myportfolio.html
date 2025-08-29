@@ -29,7 +29,7 @@
 
 							<th:block th:unless="${#lists.isEmpty(portfolios)}">
 								<div class="col" th:each="portfolio : ${portfolios}">
-									<div class="card h-100 text-center">
+									<div class="h-100 text-center">
 										<a
 											th:href="@{/mypage/myportfolio/{portfolioId}(portfolioId=${portfolio.portfolioId})}">
 											<img class="card-img-top"

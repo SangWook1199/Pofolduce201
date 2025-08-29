@@ -16,11 +16,15 @@
 	</resultMap>
 
 	<insert id="createPortfolio"
-		parameterType="org.kosa._musketeers.domain.Portfolio"
-		useGeneratedKeys="true" keyProperty="portfolioId">
+		parameterType="org.kosa._musketeers.domain.Portfolio">
+		<selectKey keyProperty="portfolioId" resultType="int"
+			order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
 		INSERT INTO portfolio
 		(portfolio_name, user_id)
-		VALUES (#{portfolioName}, #{userId.userId})
+		VALUES
+		(#{portfolioName}, #{userId.userId})
 	</insert>
 
 	<select id="getPortfolio" parameterType="int"
