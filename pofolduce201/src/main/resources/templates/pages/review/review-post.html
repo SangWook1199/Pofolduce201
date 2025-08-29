@@ -33,7 +33,7 @@
 			</div>
 			<div class="d-flex align-items-center gap-3">
 				<img
-					th:src="${reviewPost.user.userImageLocation != null ? reviewPost.user.userImageLocation.split('static')[1] : '/svg/person.svg'}"
+					th:src="${reviewPost.user.userImageLocation != null ? reviewPost.user.userImageLocation : '/svg/person.svg'}"
 					alt="user image" class="profile" />
 				<div class="d-flex flex-column">
 					<p th:text="${reviewPost.user.nickname}"
@@ -107,7 +107,7 @@
 				<div class="d-flex align-items-center mb-3">
 					<!-- 댓글 유저 이미지 -->
 					<img class="comment-profile"
-						th:src="${comments.userId.userImageLocation != null ? comments.userId.userImageLocation.split('static')[1] : '/svg/person.svg'}"
+						th:src="${comments.userId.userImageLocation != null ? comments.userId.userImageLocation : '/svg/person.svg'}"
 						alt="user image" />
 					<!-- 댓글 유저 닉네임(팝오버 적용) -->
 

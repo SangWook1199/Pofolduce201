@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 	reviewPostId = document.getElementById('data-container').dataset.postId;
 	reviewPostUserId = document.getElementById('data-container').dataset.reviewPostUserId;
 	userImageLocation = document.getElementById('data-container').dataset.userImageLocation;
+	console.log(userImageLocation);
 
 	const reviews = await loadReviews(document
 		.getElementById('data-container').dataset.postId);
@@ -66,7 +67,7 @@ function createReviewForm(event) {
 	const formHTML = `
 	    <div class="row justify-content-center p-2 new-review-div" 
 	         style="position: absolute; z-index: 9998; left: ${x}px; top: ${y}px;">
-			<img class="col-3 p-0 img-fluid rounded-circle bg-white" src="${userImageLocation != null ? userImageLocation.split('static')[1] : '/svg/person.svg'}" style="border: 2px solid #FF4473; width:30px; height:30px;"/>
+			<img class="col-3 p-0 img-fluid rounded-circle bg-white" src="${userImageLocation != null ? userImageLocation : '/svg/person.svg'}" style="border: 2px solid #FF4473; width:30px; height:30px;"/>
 			<div class="row" id="review-form-div">
 	        	<form id="review-form" class="col card p-2 text-center bg-light review m-0">
 					<div>
@@ -169,7 +170,7 @@ function appendReviews(reviews) {
 		    <div class="row review-div justify-content-center"
 				 id="review-div-${review.reviewId}"
 		         style="position: absolute; z-index: 9998; left: ${review.reviewLocationX}px; top: ${review.reviewLocationY}px; transform:translate(-50%, 0);">
-				 <img class="review-user-img col-3 p-0 img-fluid rounded-circle bg-white" src="${review.user.userImageLocation != null ? review.user.userImageLocation.split('static')[1] : '/svg/person.svg'}" style="border: 2px solid #FF4473; width:30px; height:30px;"/>
+				 <img class="review-user-img col-3 p-0 img-fluid rounded-circle bg-white" src="${review.user.userImageLocation != null ? review.user.userImageLocation : '/svg/person.svg'}" style="border: 2px solid #FF4473; width:30px; height:30px;"/>
 				 <div class="review-content-div row"  id="review-content-div-${review.reviewId}">
 				 <div class="review-content-inner-div col card p-2 text-center bg-light review m-0" id="review-content-inner-div-${review.reviewId}">
 					<div class="row m-1 justify-content-center">
