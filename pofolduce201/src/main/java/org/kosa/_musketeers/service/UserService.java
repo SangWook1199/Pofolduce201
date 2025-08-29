@@ -94,8 +94,8 @@ public class UserService {
 	public Portfolio createPortfolio(MultipartFile file, String portfolioName, User user) throws IOException {
 		Portfolio portfolio = new Portfolio(portfolioName, user);
 		portfolioMapper.createPortfolio(portfolio);
-		String REPOPATH = System.getProperty("user.home") + File.separator + "pofolduce201" + File.separator
-				+ "uploads" + File.separator + "portfolio";
+		String REPOPATH = System.getProperty("user.home") + File.separator + "pofolduce201" + File.separator + "uploads"
+				+ File.separator + "portfolio";
 		Path uploadDir = Paths.get(REPOPATH);
 		Files.createDirectories(uploadDir);
 		Path pdfPath = uploadDir.resolve(portfolio.getPortfolioId() + ".pdf");
@@ -155,8 +155,8 @@ public class UserService {
 	}
 
 	public void deletePortfolio(int portfolioId) {
-		String REPOPATH = System.getProperty("user.home") + File.separator + "pofolduce201" + File.separator
-				+ "uploads" + File.separator + "portfolio";
+		String REPOPATH = System.getProperty("user.home") + File.separator + "pofolduce201" + File.separator + "uploads"
+				+ File.separator + "portfolio";
 		Path uploadDir = Paths.get(REPOPATH);
 		Path pdfPath = uploadDir.resolve(portfolioId + ".pdf");
 		Path pngPath = uploadDir.resolve(portfolioId + ".png");
@@ -175,20 +175,19 @@ public class UserService {
 		portfolioMapper.deletePortfolio(portfolioId);
 	}
 
-	//프로필 업로드
+	// 프로필 업로드
 	public void updateProfile(MultipartFile file, int userId) throws IOException {
-		
-		String REPOPATH = System.getProperty("user.home") + File.separator + "pofolduce201" + File.separator
-				+ "uploads" + File.separator + "profile";
+
+		String REPOPATH = System.getProperty("user.home") + File.separator + "pofolduce201" + File.separator + "uploads"
+				+ File.separator + "profile";
 		Path uploadDir = Paths.get(REPOPATH);
-		
+
 		Files.createDirectories(uploadDir);
 
 		Path imagePath = uploadDir.resolve(userId + ".png");
 		Files.copy(file.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
-		String imagePathStr = imagePath.toString();
 
-		userMapper.updateProfile(userId, imagePathStr);
+		userMapper.updateProfile(userId, File.separator + "uploads" + File.separator + "profile" + File.separator + userId + ".png");
 	}
 
 	public int getTotalPortfolioCountById(int userId) {
@@ -250,8 +249,8 @@ public class UserService {
 	}
 
 	public void insertCompany(MultipartFile file, int userId, String company) throws IOException {
-		String REPOPATH = System.getProperty("user.home") + File.separator + "pofolduce201" + File.separator
-				+ "uploads" + File.separator + "certification";
+		String REPOPATH = System.getProperty("user.home") + File.separator + "pofolduce201" + File.separator + "uploads"
+				+ File.separator + "certification";
 		Path uploadDir = Paths.get(REPOPATH);
 		Files.createDirectories(uploadDir);
 
