@@ -2,6 +2,8 @@ package org.kosa._musketeers.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.kosa._musketeers.domain.MyPageComment;
@@ -96,8 +98,11 @@ public class UserController {
 
 		// 프로필 사진이 서버에 있는 지 확인합니다. 없으면 기본 프로필을 띄웁니다.
 		String fileLocation = userData.getUserImageLocation();
-
-		String uploadDir = new ClassPathResource("static/uploads/profile/").getFile().getAbsolutePath();
+		String REPOPATH = System.getProperty("user.home") + File.separator + "pofolduce201" + File.separator
+				+ "uploads" + File.separator + "profile";
+		Path uploadDir = Paths.get(REPOPATH);
+		
+		//String uploadDir = new ClassPathResource("static/uploads/profile/").getFile().getAbsolutePath();
 
 		// 사용자 프로필 이미지 파일
 		File profileFile = new File(uploadDir + "/" + userData.getUserId() + ".png");
