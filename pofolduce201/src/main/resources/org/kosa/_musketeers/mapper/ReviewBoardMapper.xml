@@ -9,6 +9,7 @@
 		title,
 		view_count,
 		create_date,
+		like_count,
 		users.user_id,
 		users.nickname
 		FROM
@@ -37,6 +38,7 @@
 		title,
 		view_count,
 		create_date,
+		like_count,
 		users.user_id,
 		users.nickname
 		FROM
