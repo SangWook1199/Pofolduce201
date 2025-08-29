@@ -63,7 +63,7 @@ public class RecruitController {
 		model.addAttribute("size", size);
 		model.addAttribute("currentUri", request.getRequestURI());
 
-		return "/pages/recruit/recruit";
+		return "pages/recruit/recruit";
 	}
 
 }

@@ -74,7 +74,7 @@ public class SearchController {
 		model.addAttribute("recruitTotalPages", recruitTotalPages);
 		model.addAttribute("recruitSize", recruitSize);
 
-		return "/pages/search/search";
+		return "pages/search/search";
 	}
 
 	// 첨삭 게시판 검색 결과 입니다.
@@ -91,7 +91,7 @@ public class SearchController {
 		model.addAttribute("reviewTotalPages", reviewTotalPages);
 		model.addAttribute("reviewSize", reviewSize);
 
-		return "/pages/search/search-review";
+		return "pages/search/search-review";
 	}
 
 	// 스터디 게시판 검색 결과 입니다.
@@ -109,7 +109,7 @@ public class SearchController {
 		model.addAttribute("studyTotalPages", studyTotalPages);
 		model.addAttribute("studySize", studySize);
 
-		return "/pages/search/search-study";
+		return "pages/search/search-study";
 	}
 
 	// 채용 공고 검색 결과 입니다.
@@ -128,7 +128,7 @@ public class SearchController {
 		model.addAttribute("recruitTotalPages", recruitTotalPages);
 		model.addAttribute("recruitSize", recruitSize);
 
-		return "/pages/search/search-recruit";
+		return "pages/search/search-recruit";
 	}
 
 }

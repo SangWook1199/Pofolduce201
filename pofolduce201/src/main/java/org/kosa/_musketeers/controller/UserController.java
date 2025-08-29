@@ -117,7 +117,7 @@ public class UserController {
 		model.addAttribute("userData", userData);
 		model.addAttribute("userCompanyData", userCompanyData);
 
-		return "/pages/mypage/mypage-main";
+		return "pages/mypage/mypage-main";
 
 	}
 
@@ -136,7 +136,7 @@ public class UserController {
 			return "redirect:/"; // 권한 없음
 		}
 
-		return "/pages/admin/admin-home";
+		return "pages/admin/admin-home";
 	}
 
 	// 내 게시글 조회
@@ -158,7 +158,7 @@ public class UserController {
 		model.addAttribute("currentPage", page);
 		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("size", size);
-		return "/pages/mypage/mypage-mypost";
+		return "pages/mypage/mypage-mypost";
 	}
 
 	// 내 댓글 조회
@@ -182,7 +182,7 @@ public class UserController {
 		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("size", size);
 
-		return "/pages/mypage/mypage-mycomment";
+		return "pages/mypage/mypage-mycomment";
 
 	}
 
@@ -208,7 +208,7 @@ public class UserController {
 		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("size", size);
 
-		return "/pages/mypage/mypage-myreview";
+		return "pages/mypage/mypage-myreview";
 
 	}
 	
@@ -234,7 +234,7 @@ public class UserController {
 			model.addAttribute("totalPages", totalPages);
 			model.addAttribute("size", size);
 
-			return "/pages/mypage/mypage-myreviewget";
+			return "pages/mypage/mypage-myreviewget";
 
 		}
 
@@ -268,7 +268,7 @@ public class UserController {
 		Integer pofId = userService.getRepPortfolio(userId);
 		model.addAttribute("portfolios", portfolio);
 		model.addAttribute("repId", pofId);
-		return "/pages/mypage/mypage-myportfolio";
+		return "pages/mypage/mypage-myportfolio";
 	}
 
 	// 이력서 업로드
@@ -329,7 +329,7 @@ public class UserController {
 
 		model.addAttribute("portfolio", portfolio);
 
-		return "/pages/mypage/mypage-myportfolio-detail";
+		return "pages/mypage/mypage-myportfolio-detail";
 	}
 
 	// 대표 이력서 설정

@@ -64,7 +64,7 @@ public class HomeController {
 
 		model.addAttribute("recruitList", recruitList);
 
-		return "/pages/home/home";
+		return "pages/home/home";
 
 	}
 
