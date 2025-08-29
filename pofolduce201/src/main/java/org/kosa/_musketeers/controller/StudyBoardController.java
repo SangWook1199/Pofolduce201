@@ -140,7 +140,6 @@ public class StudyBoardController {
 
 		StudyBoardComment comment = new StudyBoardComment(content, studyBoard, user);
 		studyBoardCommentService.createStudyComment(comment);
-		redirectAttributes.addFlashAttribute("successMessage", "댓글을 성공적으로 작성하였습니다.");
 
 		return "redirect:/study/" + studyId;
 	}
@@ -166,7 +165,6 @@ public class StudyBoardController {
 		comment.setCommentsContents(content);
 
 		studyBoardCommentService.updateStudyComment(comment);
-		redirectAttributes.addFlashAttribute("successMessage", "댓글을 성공적으로 수정하였습니다.");
 		return "redirect:/study/" + studyId;
 	}
 
@@ -184,7 +182,6 @@ public class StudyBoardController {
 			return "redirect:/study/" + studyId;
 		}
 		studyBoardCommentService.deleteStudyComment(commentId);
-		redirectAttributes.addFlashAttribute("successMessage", "댓글을 성공적으로 삭제하였습니다.");
 
 		return "redirect:/study/" + studyId;
 	}
