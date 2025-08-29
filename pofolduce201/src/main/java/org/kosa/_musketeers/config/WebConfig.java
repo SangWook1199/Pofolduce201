@@ -17,7 +17,10 @@ public class WebConfig implements WebMvcConfigurer{
 			+ File.separator + "pofolduce201"
 			+ File.separator + "uploads"
 			+ File.separator + "profile";
-
+	private static final String REPO_PATH_COMPANY = System.getProperty("user.home")
+			+ File.separator + "pofolduce201"
+			+ File.separator + "uploads"
+			+ File.separator + "certification";
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploads/portfolio/**") 
@@ -25,5 +28,8 @@ public class WebConfig implements WebMvcConfigurer{
         
         registry.addResourceHandler("/uploads/profile/**") 
         .addResourceLocations("file:///" + REPO_PATH_PROFILE + "/");
+        
+        registry.addResourceHandler("/uploads/certification/**") 
+        .addResourceLocations("file:///" + REPO_PATH_COMPANY + "/");
     }
 }

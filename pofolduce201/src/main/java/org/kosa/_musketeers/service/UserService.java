@@ -175,10 +175,13 @@ public class UserService {
 		portfolioMapper.deletePortfolio(portfolioId);
 	}
 
+	//프로필 업로드
 	public void updateProfile(MultipartFile file, int userId) throws IOException {
+		
 		String REPOPATH = System.getProperty("user.home") + File.separator + "pofolduce201" + File.separator
-				+ "uploads" + File.separator + "portfolio";
-		Path uploadDir = Paths.get("src/main/resources/static/uploads/profile/");
+				+ "uploads" + File.separator + "profile";
+		Path uploadDir = Paths.get(REPOPATH);
+		
 		Files.createDirectories(uploadDir);
 
 		Path imagePath = uploadDir.resolve(userId + ".png");
@@ -247,7 +250,9 @@ public class UserService {
 	}
 
 	public void insertCompany(MultipartFile file, int userId, String company) throws IOException {
-		Path uploadDir = Paths.get("src/main/resources/static/uploads/company/");
+		String REPOPATH = System.getProperty("user.home") + File.separator + "pofolduce201" + File.separator
+				+ "uploads" + File.separator + "certification";
+		Path uploadDir = Paths.get(REPOPATH);
 		Files.createDirectories(uploadDir);
 
 		Path imagePath = uploadDir.resolve(userId + ".png");

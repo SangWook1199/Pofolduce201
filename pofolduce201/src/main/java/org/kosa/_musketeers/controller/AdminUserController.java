@@ -300,7 +300,7 @@ public class AdminUserController {
 		result.put("company", verification.getCompanyName());
 		result.put("date", verification.getDate().toString());
 		result.put("state", verification.getState());
-		result.put("imageUrl", "/uploads/company/" + userId + ".png");
+		result.put("imageUrl", "/uploads/certification/" + userId + ".png");
 
 		return result;
 	}
