@@ -248,21 +248,13 @@ public class AdminUserController {
 		// 1. 인증 상태 업데이트 (verification 테이블)
 		adminService.updateVerificationStatus(userId, status);
 
-		System.out.println("인증 상태 업데이트 요청: userId=" + userId + ", status=" + status);
-
 		// 2. 만약 상태가 '완료'라면, 유저 정보도 업데이트
 		if ("완료".equals(status)) {
 			// Verification 정보를 다시 가져와서 회사 이름을 얻음
 			Verification verification = userService.getUserCompanyVerification(userId);
 
-			// verification 객체 확인
-			System.out.println("가져온 Verification 객체: " + verification);
-
 			if (verification != null) {
 				String companyName = verification.getCompanyName();
-
-				// companyName 변수 값 확인
-				System.out.println("가져온 회사 이름: " + companyName);
 
 				// User 테이블의 companyCertification과 companyName을 업데이트
 				userService.updateUserCompanyInfo(userId, "yes", companyName);

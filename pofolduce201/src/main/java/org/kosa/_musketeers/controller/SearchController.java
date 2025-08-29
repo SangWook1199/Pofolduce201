@@ -63,10 +63,8 @@ public class SearchController {
 		model.addAttribute("search", search);
 
 		model.addAttribute("reviewList", reviewChunks);
-		// System.out.println(reviewList);
 
 		model.addAttribute("studyList", studyList);
-		// System.out.println(studyList);
 		model.addAttribute("studyCurrentPage", studyPage);
 		model.addAttribute("studyTotalPages", studyTotalPages);
 		model.addAttribute("studySize", studySize);
@@ -123,7 +121,6 @@ public class SearchController {
 
 		int recruitTotalCount = userService.countRecruitResult(search);
 		int recruitTotalPages = (int) Math.ceil((double) recruitTotalCount / recruitSize);
-		// System.out.println(recruitList);
 
 		model.addAttribute("search", search);
 		model.addAttribute("recruitList", recruitList);

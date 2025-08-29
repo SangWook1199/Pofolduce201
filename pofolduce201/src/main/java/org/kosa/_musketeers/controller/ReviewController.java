@@ -28,14 +28,12 @@ public class ReviewController {
 	public ResponseEntity<String> postReview(@ModelAttribute Review review, @SessionAttribute(name="userId") Integer userId) {
 		
 		review.setUser(new User(userId));
-		System.out.println(review);
 		reviewService.addReview(review);
 		return ResponseEntity.ok("리뷰가 성공적으로 등록되었습니다.");
 	}
 	
 	@GetMapping("/review/{reviewPostId}")
 	public List<Review> getReview(@PathVariable int reviewPostId) {
-		System.out.println("reviewPostId:" + reviewPostId);
 		return reviewService.findReviewsByReviewPostId(reviewPostId);
 	}
 	
@@ -54,7 +52,6 @@ public class ReviewController {
 	
 	@PatchMapping("/review/{reviewId}/like")
 	public ResponseEntity<String> likeReview(@PathVariable Integer reviewId, @RequestBody String reviewUserId){
-		System.out.println("////////////reviewUserId:" + reviewUserId);
 		reviewService.plusReviewLike(reviewId, Integer.parseInt(reviewUserId));
 		return ResponseEntity.ok("리뷰의 좋아요가 성공적으로 처리되었습니다.");
 	}
