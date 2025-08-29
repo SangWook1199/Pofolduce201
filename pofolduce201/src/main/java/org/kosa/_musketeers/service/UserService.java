@@ -93,11 +93,11 @@ public class UserService {
 
 	public Portfolio createPortfolio(MultipartFile file, String portfolioName, User user) throws IOException {
 		Portfolio portfolio = new Portfolio(portfolioName, user);
+		portfolioMapper.createPortfolio(portfolio);
 		String REPOPATH = System.getProperty("user.home") + File.separator + "pofolduce201" + File.separator
 				+ "uploads" + File.separator + "portfolio";
 		Path uploadDir = Paths.get(REPOPATH);
 		Files.createDirectories(uploadDir);
-
 		Path pdfPath = uploadDir.resolve(portfolio.getPortfolioId() + ".pdf");
 		Files.copy(file.getInputStream(), pdfPath, StandardCopyOption.REPLACE_EXISTING);
 
@@ -110,7 +110,6 @@ public class UserService {
 			Path imgPath = uploadDir.resolve(portfolio.getPortfolioId() + ".png");
 			ImageIO.write(resizedImage, "PNG", imgPath.toFile());
 		}
-		portfolioMapper.createPortfolio(portfolio);
 		return portfolio;
 	}
 
@@ -156,7 +155,9 @@ public class UserService {
 	}
 
 	public void deletePortfolio(int portfolioId) {
-		Path uploadDir = Paths.get("src/main/resources/static/uploads/portfolio/");
+		String REPOPATH = System.getProperty("user.home") + File.separator + "pofolduce201" + File.separator
+				+ "uploads" + File.separator + "portfolio";
+		Path uploadDir = Paths.get(REPOPATH);
 		Path pdfPath = uploadDir.resolve(portfolioId + ".pdf");
 		Path pngPath = uploadDir.resolve(portfolioId + ".png");
 
@@ -180,7 +181,6 @@ public class UserService {
 		String REPOPATH = System.getProperty("user.home") + File.separator + "pofolduce201" + File.separator
 				+ "uploads" + File.separator + "profile";
 		Path uploadDir = Paths.get(REPOPATH);
-		
 		
 		Files.createDirectories(uploadDir);
 
