@@ -1,6 +1,14 @@
 # 📌 TEAM 404총사 : POFOLDUCE201
 
-## 📖 소개 (Introduction / Overview)
+## 팀 소개
+<img src="https://github.com/user-attachments/assets/b8a21c3d-92c4-44d4-8a46-207210ff0b47" width="300" height="200">
+
+| 주순형         | 김혜경          | 전상욱          | 김기영          |
+|---------------|---------------|---------------|---------------|
+| 개발<br>이슈 관리<br>일정 관리|문서<br>디자인<br>프론트엔드|백엔드<br>버전 관리<br>|스터디<br>데이터베이스<br>|
+
+
+## 📖 프로젝트 개요 (Introduction / Overview)
 <p align="center">
   <img width="100" height="100" alt="Image" src="https://github.com/user-attachments/assets/22867c3d-91ea-4f76-ae04-9fd310379b26" />
 </p>
