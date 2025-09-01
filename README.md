@@ -37,6 +37,7 @@
 | **ETC** | Figma |
 
 ## 🏛️ 아키텍처 (Architecture)
+![pofolduce201-기술구조도](https://github.com/user-attachments/assets/d2876aa1-562e-4e20-a2f4-7266b59b007a)
 
 
 ## ✨ 주요 기능 (Features)
@@ -74,7 +75,11 @@
 <img width="1010" height="1100" alt="image" src="https://github.com/user-attachments/assets/e668f17d-dddb-4f6c-ae79-20d4cdd44b02" />
 <img width="1059" height="1248" alt="image" src="https://github.com/user-attachments/assets/da43e928-4ec7-41ce-8ce8-8f314d89b505" />
 
+## 📜 라이선스 (License)
 
+| pdf 업로드 | 웹 크롤링 | CSS |
+|-----|-----|-----|
+| <img width="225" height="225" alt="image" src="https://github.com/user-attachments/assets/6ef74828-8688-4c0d-8651-525a8066077d" /> | <img width="225" height="225" alt="image" src="https://github.com/user-attachments/assets/44a6fbc6-c2b1-40be-a984-8789cabcefce" /> | <img width="225" height="225" alt="image" src="https://github.com/user-attachments/assets/204245ba-ec89-4589-a604-bd8c9f04020c" /> |
 
 ## 💡 이슈 관리 (Issue)
 ***이슈 관리 규칙***
