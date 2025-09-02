@@ -44,12 +44,13 @@ public class UserController {
 		this.myBoardService = myBoardService;
 	}
     
-    // 로그인 페이지 URL 수정
+    // 로그인 페이지로 이동
     @GetMapping("/login")
 	public String login() {
 		return "pages/login/login";
 	}
 
+    // 로그인 요청 처리
 	@PostMapping("/login/processing")
 	public String loginProcessing(@RequestParam String email, @RequestParam String password, HttpServletRequest request,
 			RedirectAttributes redirectAttributes) {
@@ -68,6 +69,8 @@ public class UserController {
 		return page;
 	}
 
+
+	//로그아웃 요청 처리
 	@GetMapping("/logout")
 	public String logout(HttpServletRequest request) {
 
