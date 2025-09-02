@@ -37,6 +37,7 @@
 				</tr>
 			</thead>
 			<tbody>
+				<!-- 조회수 1~3위 리스트 -->
 				<tr class="clickable-row"
 					th:onclick="|window.location='/study/' + [[${first.studyId}]]|"
 					th:if="${first != null}">
@@ -48,6 +49,7 @@
 					<td th:text="${first.likeCount}"></td>
 					<td th:text="${first.viewCount}"></td>
 				</tr>
+				<!-- 모든 게시글 조회 리스트 -->
 				<tr class="clickable-row"
 					th:onclick="|window.location='/study/' + [[${second.studyId}]]|"
 					th:if="${second != null}">
@@ -87,10 +89,12 @@
 			</tbody>
 		</table>
 	</div>
+	<!-- 게시글 작성 버튼 -->
 	<div class="col text-end">
 		<a class="btn btn-primary" href="/study/write"
 			id="write-button">+</a>
 	</div>
+	<!-- 페이지네이션 -->
 	<nav aria-label="Page navigation example" th:if="${totalPages > 0}">
 		<ul class="pagination justify-content-center">
 			<li class="page-item"
@@ -109,7 +113,7 @@
 		</ul>
 	</nav>
 	<script>
-    // 카카오 지도 초기 설정
+    // 카카오 지도
         var mapContainer = document.getElementById('map');
         var mapOption = {
             center: new kakao.maps.LatLng(37.583743027310, 126.999963317959),
@@ -129,7 +133,7 @@
                 maximumAge: 0,
                 timeout: 10000 
             };
-
+			// 현재 위치 지정
             navigator.geolocation.getCurrentPosition(function(position) {
                 var lat = position.coords.latitude,
                     lon = position.coords.longitude;
@@ -158,7 +162,7 @@
             console.log("Geolocation API를 지원하지 않는 브라우저입니다.");
         }
         
-        // ⭐ 서버 API에서 게시글 데이터 가져오기
+        // 서버 API에서 게시글 데이터 가져오기
         fetch('/study/api/map')
             .then(response => {
                 if (!response.ok) {
@@ -197,36 +201,32 @@
             })
             .catch(error => console.error('주소 데이터를 불러오는 데 실패했습니다.', error));
 
-        // ⭐ 마커와 이벤트를 생성하는 함수
+        // 마커와 이벤트를 생성하는 함수
         function createMarkerWithEvents(coords, studyId, title) {
             var marker = new kakao.maps.Marker({
                 map: map,
                 position: coords
             });
 
-            // 마우스오버 이벤트: 인포윈도우 표시
             kakao.maps.event.addListener(marker, 'mouseover', function() {
                 var content = `<div class="map-hover">${title}</div>`;
                 infoWindow.setContent(content);
                 infoWindow.open(map, marker);
             });
 
-            // 마우스아웃 이벤트: 인포윈도우 닫기
             kakao.maps.event.addListener(marker, 'mouseout', function() {
                 infoWindow.close();
             });
 
-            // 클릭 이벤트: 게시글로 이동
+            // 게시글로 이동
             kakao.maps.event.addListener(marker, 'click', function() {
                 window.location.href = '/study/' + studyId;
             });
         }
 		document.addEventListener('DOMContentLoaded', function() {
-			// 성공 메시지 표시
 			if ('[[${successMessage}]]') {
 				alert('[[${successMessage}]]');
 			}
-			// 에러 메시지 표시
 			if ('[[${errorMessage}]]') {
 				alert('[[${errorMessage}]]');
 			}

@@ -73,7 +73,7 @@ public class StudyBoardController {
 		return "pages/study/study-board";
 	}
 
-	// 지도
+	// 지도 api
 	@GetMapping("/study/api/map")
 	@ResponseBody
 	public List<Map<String, Object>> getAllPostData() {

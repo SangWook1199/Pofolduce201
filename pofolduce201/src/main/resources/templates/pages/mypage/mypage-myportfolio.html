@@ -26,7 +26,7 @@
 								class="col-12 text-center mt-5">
 								<h3 class="non-data">등록된 포트폴리오가 없습니다.</h3>
 							</div>
-
+							<!-- 이력서 썸네일 리스트 -->
 							<th:block th:unless="${#lists.isEmpty(portfolios)}">
 								<div class="col" th:each="portfolio : ${portfolios}">
 									<div class="h-100 text-center">
@@ -49,11 +49,11 @@
 								</div>
 							</th:block>
 						</div>
-
+						<!-- 이력서 업로드 버튼 -->
 						<button type="button"
 							class="btn rounded-pill w-100 py-2 long-button"
 							data-bs-toggle="modal" data-bs-target="#resumeUploadModal">+</button>
-
+						<!-- 이력서 업로드 모달 -->
 						<div class="modal fade" id="resumeUploadModal" tabindex="-1"
 							aria-labelledby="resumeUploadModalLabel" aria-hidden="true">
 							<div class="modal-dialog">
@@ -96,11 +96,9 @@
 	</div>
 	<script type="text/javascript">
 		document.addEventListener('DOMContentLoaded', function() {
-			// 성공 메시지 표시
 			if ('[[${successMessage}]]') {
 				alert('[[${successMessage}]]');
 			}
-			// 에러 메시지 표시
 			if ('[[${errorMessage}]]') {
 				alert('[[${errorMessage}]]');
 			}
