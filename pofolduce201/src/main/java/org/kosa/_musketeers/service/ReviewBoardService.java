@@ -31,34 +31,40 @@ public class ReviewBoardService {
 		this.reviewBoardMapper = reviewBoardMapper;
 		this.userMapper = userMapper;
 	}
-	
+
+	// 첨삭 게시물 리스트를 반환합니다
 	public List<ReviewPost> getReviewPostList(int page) {
 		return reviewBoardMapper.getReviewPostList((page - 1) * 15, 15);
 	}
 	
+	// 전체 첨삭 게시물의 수를 반환합니다
 	public int getTotalReviewPostCount() {
 		return reviewBoardMapper.getTotalReviewPostCount();
 	}
 
+	// 베스트 첨삭 게시물 리스트를 반환합니다
 	public List<ReviewPost> getBestReviewPostList() {
 		return reviewBoardMapper.getBestReviewPostList();
 	}
 
+	// 첨삭 게시물을 생성합니다
 	public void createPost(ReviewPost reviewPost) {
 		reviewBoardMapper.createPost(reviewPost);
 		userMapper.updateUserPoint(reviewPost.getUser().getUserId(), 10);
 	}
 
-	@Transactional
+	// 첨삭 게시물을 조회합니다, 조회수를 함께 올립니다
 	public ReviewPost viewPost(int reviewPostId) {
 		reviewBoardMapper.updateReviewPostViewCount(reviewPostId);
 		return reviewBoardMapper.getReviewPostByReviewPostId(reviewPostId);
 	}
 
+	// 첨삭 게시물을 삭제합니다
 	public void deleteReviewPost(int reviewPostId) {
 		reviewBoardMapper.delteReviewPost(reviewPostId);
 	}
 
+	// 첨삭 게시
 	public ReviewPost getReviewPostById(int reviewPostId) {
 		return reviewBoardMapper.getReviewPostByReviewPostId(reviewPostId);
 	}
