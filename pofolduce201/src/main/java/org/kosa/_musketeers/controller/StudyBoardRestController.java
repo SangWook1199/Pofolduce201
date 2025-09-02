@@ -14,7 +14,8 @@ public class StudyBoardRestController {
 		super();
 		this.studyBoardService = studyBoardService;
 	}
-
+	
+	// 스터디 게시글 좋아요 수 증가
 	@PostMapping("/api/study/{studyId}/like")
     public ResponseEntity<Integer> addLike(@PathVariable("studyId") int studyId) {
         try {
@@ -22,7 +23,6 @@ public class StudyBoardRestController {
             int newLikeCount = studyBoardService.addLike(studyId);
             return ResponseEntity.ok(newLikeCount);
         } catch (Exception e) {
-            // 예외 발생 시 에러 응답
             return ResponseEntity.badRequest().body(-1);
         }
     }

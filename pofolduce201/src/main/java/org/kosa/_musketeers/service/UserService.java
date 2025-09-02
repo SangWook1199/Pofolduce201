@@ -189,7 +189,7 @@ public class UserService {
 
 		userMapper.updateProfile(userId, File.separator + "uploads" + File.separator + "profile" + File.separator + userId + ".png");
 	}
-
+	// 총 등록한 포트폴리오 수
 	public int getTotalPortfolioCountById(int userId) {
 		return userMapper.getTotalPortfolioCountById(userId);
 	}
@@ -260,7 +260,7 @@ public class UserService {
 
 		userMapper.insertCompany(userId, imagePathStr, company);
 	}
-
+	// 점수 순으로 유저 리스트 조회
 	public List<User> getUserListByPoint() {
 		return userMapper.getUserListByPoint();
 	}

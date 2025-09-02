@@ -189,16 +189,14 @@
 		<script src="/js/popover.js" defer></script>
 		<script>
 			document.addEventListener('DOMContentLoaded', function() {
-				// 성공 메시지 표시
 				if ('[[${successMessage}]]') {
 					alert('[[${successMessage}]]');
 				}
-				// 에러 메시지 표시
 				if ('[[${errorMessage}]]') {
 					alert('[[${errorMessage}]]');
 				}
 			});
-
+			// 댓글 수정
 			function toggleEdit(commentId) {
 				const editBox = document
 						.getElementById("edit-box-" + commentId);
@@ -213,43 +211,34 @@
 			function confirmDelete() {
 				return confirm('정말 삭제하시겠습니까?');
 			}
-			// Thymeleaf 변수에서 주소 데이터 가져오기
 			var address = '[[${post.address}]]';
 
-			// 카카오 지도 초기 설정
+			// 카카오 지도
 			var mapContainer = document.getElementById('map');
 			var mapOption = {
-				// 주소 검색 전 임시 중심 좌표
 				center : new kakao.maps.LatLng(37.566826, 126.9786567),
 				level : 1
 			};
 
-			// 지도를 생성합니다.
 			var map = new kakao.maps.Map(mapContainer, mapOption);
 
-			// 주소-좌표 변환 객체와 키워드 검색 객체를 생성합니다.
 			var geocoder = new kakao.maps.services.Geocoder();
 			var ps = new kakao.maps.services.Places();
 
-			// 주소-좌표 변환을 시도합니다.
 			geocoder.addressSearch(address,
 					function(result, status) {
-						// 정상적으로 검색이 완료되었을 경우
 						if (status === kakao.maps.services.Status.OK) {
 							var coords = new kakao.maps.LatLng(result[0].y,
 									result[0].x);
 
-							// 지도의 중심을 결과값으로 받은 위치로 이동시킵니다.
 							map.setCenter(coords);
-
-							// 마커를 생성하고 지도에 표시합니다.
+							
 							var marker = new kakao.maps.Marker({
 								map : map,
 								position : coords
 							});
 
 						} else {
-							// 주소 검색 실패 시, 키워드 검색을 시도
 							console.error("주소 검색 실패: " + address + ", 상태 코드: "
 									+ status);
 
@@ -259,10 +248,9 @@
 									var coords = new kakao.maps.LatLng(
 											data[0].y, data[0].x);
 
-									// 지도의 중심을 결과값으로 받은 위치로 이동시킵니다.
 									map.setCenter(coords);
 
-									// 마커를 생성하고 지도에 표시합니다.
+									// 게시글 주소를 마커로 지정
 									var marker = new kakao.maps.Marker({
 										map : map,
 										position : coords

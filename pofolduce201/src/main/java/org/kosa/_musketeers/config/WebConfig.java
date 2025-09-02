@@ -21,6 +21,7 @@ public class WebConfig implements WebMvcConfigurer{
 			+ File.separator + "pofolduce201"
 			+ File.separator + "uploads"
 			+ File.separator + "certification";
+	// 경로 재설정(외부 파일)
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploads/portfolio/**") 

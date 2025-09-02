@@ -48,7 +48,7 @@ public class StudyBoardCommentService {
 		return studyBoardCommentMapper.getStudyCommentUserId(commentId);
 	}
 	
-	// 댓글 불러오기
+	// 댓글을 조회하는 메서드입니다.
 	public StudyBoardComment getCommentById(int commentId) {
 	    return studyBoardCommentMapper.getStudyCommentById(commentId);
 	}

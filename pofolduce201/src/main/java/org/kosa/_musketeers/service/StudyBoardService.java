@@ -66,12 +66,13 @@ public class StudyBoardService {
 		studyBoardMapper.deletePost(studyId);
 	}
 	
-	//메인 화면에서 가져오는 스터디 게시글 입니다.
+	// 메인 화면에서 가져오는 스터디 게시글 입니다.
 	public List<Map<String, Object>> getStudyBoardByViewCount() {
 		List<Map<String, Object>> list = studyBoardMapper.getStudyBoardByViewCount();
 		return list;
 	}
-
+	
+	// 좋아요 수 증가 메서드입니다.
 	public int addLike(int studyId) {
         // 1. 좋아요 수 증가
         int likeCount = studyBoardMapper.updateLikeCount(studyId);
@@ -89,19 +90,23 @@ public class StudyBoardService {
         
         return newLikeCount;
     }
-
+	
+	// 게시글 id로 사용자 아이디를 구하는 메서드입니다.
 	public int getStudyPostUserId(int studyId) {
 		return studyBoardMapper.getStudyPostUserId(studyId);
 	}
-
+	
+	// 조회수 증가 메서드 입니다.
 	public void addViewCount(int studyId) {
 		studyBoardMapper.addViewCount(studyId);
 	}
-
+	
+	// 모든 주소 조회 메서드 입니다.
 	public List<String> getAllAddresses() {
 	    return studyBoardMapper.getAllAddresses();
 	}
-
+	
+	// 모든 게시글 조회 메서드입니다.
 	public List<StudyBoard> getAllPosts() {
 		return studyBoardMapper.getAllPosts();
 	}

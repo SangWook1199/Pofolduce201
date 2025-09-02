@@ -8,15 +8,12 @@
 <title>내 이력서</title>
 <script type="text/javascript">
 	document.addEventListener('DOMContentLoaded', function() {
-		// 성공 메시지 표시
 		if ('[[${successMessage}]]') {
 			alert('[[${successMessage}]]');
 		}
-		// 에러 메시지 표시
 		if ('[[${errorMessage}]]') {
 			alert('[[${errorMessage}]]');
 		}
-		// 경고 메시지 표시
 		if ('[[${alertMessage}]]') {
 			alert('[[${alertMessage}]]');
 		}
@@ -31,13 +28,13 @@
 			<div
 				th:replace="fragments/html/board-header :: board-header('내 이력서 > ' + ${portfolio.portfolioName})"></div>
 		</div>
+		<!-- 이력서 -->
 		<div class="embed-responsive embed-responsive-4by3 mb-3">
 			<embed class="pdf-viewer embed-responsive-item"
 				th:src="@{'/uploads/portfolio/' + ${portfolio.portfolioId} + '.pdf'}"
 				type="application/pdf" width="100%" height="1030px" />
 		</div>
-
-		<!-- 버튼 4개 오른쪽 정렬 -->
+		<!-- 이력서 상세페이지 버튼 -->
 		<div class="d-flex justify-content-end gap-2">
 			<a href="/mypage/myportfolio" class="btn btn-outline-primary">목록</a>
 			<form
