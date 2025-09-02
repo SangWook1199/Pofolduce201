@@ -66,7 +66,7 @@ function createReviewForm(event) {
 	// 2. 백틱을 사용해 전체 HTML 구조를 하나의 문자열로 만든다.
 	const formHTML = `
 	    <div class="row justify-content-center p-2 new-review-div" 
-	         style="position: absolute; z-index: 9998; left: ${x}px; top: ${y}px;">
+	         style="position: absolute; z-index: 9999; left: ${x}px; top: ${y}px;">
 			<img class="col-3 p-0 img-fluid rounded-circle bg-white" src="${userImageLocation != null ? userImageLocation : '/svg/person.svg'}" style="border: 2px solid #FF4473; width:30px; height:30px;"/>
 			<div class="row" id="review-form-div">
 	        	<form id="review-form" class="col card p-2 text-center bg-light review m-0">
@@ -337,6 +337,15 @@ function toggleReviewContentDiv(){
 			const reviewDiv = img.parentElement;
 
 	        if (contentDiv) {
+				
+				// 먼저, 모든 '.review-div'의 z-index를 기본값으로 리셋
+				document.querySelectorAll('.review-div').forEach(div => {
+				    div.style.zIndex = '9998';
+				});
+
+				// 그 다음, 방금 클릭한 div의 z-index만 더 높게 설정하여 최상단에 오도록 수정
+				reviewDiv.style.zIndex = '9999';
+				
 	            // 2. .visible 클래스를 추가하거나 제거 (토글)
 	            contentDiv.classList.toggle('visible');
 				reviewDiv.classList.toggle('visible');
