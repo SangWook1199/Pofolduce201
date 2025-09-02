@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+
 @Controller
 public class ReviewBoardController {
 
@@ -32,7 +33,8 @@ public class ReviewBoardController {
 		this.userService = userService;
 	}
 
-	// 첨삭게시판을 조회
+
+	// 첨삭 게시물 조회 요청을 처리합니다
 	@GetMapping("/review-post")
 	public String review(@RequestParam(defaultValue = "1") int page, Model model, HttpServletRequest request) {
 

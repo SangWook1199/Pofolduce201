@@ -69,7 +69,8 @@ public class UserController {
 		return page;
 	}
 
-	// 로그아웃 요청 처리
+
+	//로그아웃 요청 처리
 	@GetMapping("/logout")
 	public String logout(HttpServletRequest request) {
 
